@@ -1,0 +1,136 @@
+#include "fargo3d.h"
+
+void Init() {
+  int i,j,k;
+  real *v1;
+  real *v2;
+  real *v3;
+  real *e;
+  real *rho;
+  real H, cs2, smallp, smallq;
+  
+  real rhog, rhod, vert; 
+  real omega, omega_kep, omega_gas, vphi_gas, vphi_dust;
+  real r, R3, R, DeltaR, DeltaRin, DeltaRout, TaperRin, TaperRout, taper, sharp;
+
+  rho = Density->field_cpu;
+  e   = Energy->field_cpu;
+  v1  = Vx->field_cpu;
+  v2  = Vy->field_cpu;
+  v3  = Vz->field_cpu;
+
+
+  sharp     = 2.0; 
+  DeltaRin  = YMIN - R0;
+  DeltaRout = YMAX - R0;
+  TaperRin  = DUSTTAPER*DeltaRin;
+  TaperRout = DUSTTAPER*DeltaRout; 
+
+  smallp    = -(SIGMASLOPE + FLARINGINDEX + 1.0); 
+  smallq    = 3.0 - 2.0*(FLARINGINDEX + 1.0); 
+  
+  for (k=0; k<Nz+2*NGHZ; k++) {
+    for (j=0; j<Ny+2*NGHY; j++) {
+
+
+//setup below is for spherical coords only (taken from Nelson et al 2013, with p -> -p and q -> -q from their notation)
+
+      r = Ymed(j);
+      R = r*sin(Zmed(k));
+      H = ASPECTRATIO*pow(R/R0,FLARINGINDEX)*R;
+
+      R3 = R*R*R;
+      omega_kep = sqrt(G*MSTAR/R3);
+      cs2   = pow(omega_kep*H, 2.0); 
+      
+      rhog = SIGMA0*pow(R/R0,-SIGMASLOPE)/sqrt(2.0*M_PI)/H; //midplane gas density 
+      vert = (G*MSTAR/cs2)*(1.0/r - 1.0/R); 
+      rhog*= exp(vert); 
+
+      omega_gas = omega_kep*sqrt( -(smallp+smallq)*pow(H/R,2.0) + (1.0 - smallq) + smallq*R/r );
+      vphi_gas  = R*(omega_gas - OMEGAFRAME);
+
+
+       DeltaR = R - R0;
+       if(DeltaR <= TaperRin){
+        taper=pow( (DeltaR-DeltaRin)/(TaperRin - DeltaRin), sharp);
+       } else if(DeltaR >= TaperRout){
+        taper=pow( (DeltaR-DeltaRout)/(TaperRout - DeltaRout), sharp);
+       } else {
+        taper = 1.0;
+       }
+
+       rhod = EPSILON*rhog*taper; 
+
+       omega     = sqrt(G*MSTAR/r/r/r);   
+       vphi_dust = r*omega - R*OMEGAFRAME; 
+
+
+      for (i=0; i<Nx; i++) {
+
+        if (Fluidtype == GAS) {
+       
+        v2[l] = v3[l] = 0.0;
+        v1[l] = vphi_gas;
+
+        rho[l] = rhog;
+
+#ifdef ISOTHERMAL
+	e[l] = sqrt(cs2);
+#else
+	e[l] = rho[l]*cs2/(GAMMA-1.0);
+#endif
+
+        }
+
+       if (Fluidtype == DUST) {
+          rho[l]  = rhod;
+          v1[l]  = vphi_dust; 
+          v2[l]  = 0.0;
+          v3[l]  = 0.0;  
+          e[l]   = 0.0;
+        }
+
+
+      }
+    }
+  }
+}
+
+void CondInit() {
+
+  int id_gas = 0;
+  int feedback = YES;
+
+   Fluids[id_gas] = CreateFluid("gas",GAS);
+   SelectFluid(id_gas);
+   Init();
+
+
+  char dust_name[MAXNAMELENGTH];
+  int id_dust; 
+  real InvStokes1, rhog0, H0; 
+   
+   for(id_dust = 1; id_dust<NFLUIDS; id_dust++) {
+    sprintf(dust_name,"dust%d",id_dust); //We assign different names to the dust fluids
+
+    Fluids[id_dust]  = CreateFluid(dust_name, DUST);
+    SelectFluid(id_dust);
+    Init();
+
+  }
+
+
+#ifdef FIXPARTICLESIZE
+  H0         = ASPECTRATIO*R0; 
+  rhog0      = SIGMA0/sqrt(2.0*M_PI)/H0;
+  InvStokes1 = 1.0/(STOKES1*H0*rhog0); 
+#endif
+
+#ifdef STOKESNUMBER
+  InvStokes1 = 1.0/STOKES1; 
+#endif 
+
+  ColRate(InvStokes1, id_gas, 1, feedback);
+
+}

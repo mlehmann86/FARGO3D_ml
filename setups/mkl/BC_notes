@@ -1,0 +1,6 @@
+the boundary c files here are customized for "unpert" boundaries. 
+for some reasont the automatic BC parser can't process the variable "M_PI" properly. so we had
+to copy the faulty c files here it here to correct it; then use fargo's "HARDBOUNDARY" option during compile to use 
+these customized c files.
+
+need to repeat the above process if "unpert" is used for the density

@@ -1,0 +1,8 @@
+need to use python 2.7
+3D runs don't work with cuda 10.1, but works with cuda 9.2
+
+to run on GPU 0, first issue
+
+export CUDA_VISIBLE_DEVICES='0'
+
+in shell, or use fargo -D flag, ./fargo3d -D 0
