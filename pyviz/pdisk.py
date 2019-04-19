@@ -11,6 +11,8 @@ nghost = 3
 r0     = 1.0 
 bigG   = 1.0
 Mstar  = 1.0 
+omega0 = np.sqrt(bigG*Mstar/r0**3.0)
+period0= 2.0*np.pi/omega0 
 
 #plottig parameters 
 fontsize= 18
@@ -19,7 +21,6 @@ nclev   = 6
 cmap    = plt.cm.inferno
 nrad_lim   = 128
 ntheta_lim = 64
-
 
 #read sim parameters, by first converting to ini file, then use config parser
 svar =  open("variables.par","r").read()
@@ -71,8 +72,8 @@ for i in range(0,ntheta):
 
 
 #get time axis 
-#data   = np.loadtxt("planet0.dat")
-#time   = data[:,8]
+data   = np.loadtxt("planet0.dat")
+time   = data[:,8]
 
 def pdisk_2d(var='dens',
              loc     = './', 
@@ -200,8 +201,7 @@ def pdisk_rz(var='gas',
              log       = None,
              pert      = None,
              plotrange = None,
-             lowres    = None, 
-             title     = '',
+             lowres    = None 
     ):
       
 
@@ -216,26 +216,34 @@ def pdisk_rz(var='gas',
 
     if(var == 'vz'):
         data3d = get_vz(rad, theta, vrad, vtheta)
-              
+        title = '$v_{gz}/c_s$'
+
     if(var == 'dg'):
         fname = loc+"dust1dens"+str(start)+".dat"
         densd  = pylab.fromfile(fname).reshape(NZ,NY,NX)
         data3d = densd/dens
+        title = r'$\rho_\mathrm{d}/\rho_\mathrm{g}$'
         if(log != None):
             data3d = np.log10(data3d)
+            title = r'$\log{(\rho_\mathrm{d}/\rho_\mathrm{g})}$'
+
     if(var == 'gas'):
         data3d = dens 
         if(pert != None):
            fname  = loc+"gasdens0.dat"
            dens0  = pylab.fromfile(fname).reshape(NZ,NY,NX)
            data3d /= dens0
+           title = r'$\rho_\mathrm{g}/\rho_\mathrm{g,i}$'
            if(log != None):
               data3d  = np.log10(data3d) 
+              title = r'$\log{(\rho_\mathrm{g}/\rho_\mathrm{g,i})}$'
            else:
               data3d -= 1.0 
-           
-
-
+              title = r'$\Delta\rho_\mathrm{g}/\rho_\mathrm{g,i}$'
+        
+    tslice = time[start]/period0
+    tstring = "{:.0f}".format(tslice)
+    title +=', t='+tstring+r'$P_0$'
 
     #downsize data & coords  
 
@@ -256,6 +264,7 @@ def pdisk_rz(var='gas',
         theta_plot = theta
         nrad_plot  = nrad 
 
+    #take slice in azimuth. to add: take azi averages 
     nazislice = int(azislice*nphi)
     data2d  = data3d[...,nazislice]
 
@@ -304,14 +313,13 @@ def pdisk_rz(var='gas',
                          )
     
     plt.colorbar(cp,ticks=clevels,format='%.3f')
-    plt.title(title)
+    plt.title(title,weight='bold')
 
     plt.xticks(fontsize=fontsize,weight='bold')
     plt.xlabel('$R/r_0$',fontsize=fontsize)
 
     plt.yticks(fontsize=fontsize,weight='bold')
     plt.ylabel('$z/r_0$',fontsize=fontsize)
-
  
     fname = var+'rz_'+str(start).zfill(4)
     plt.savefig(fname,dpi=150)

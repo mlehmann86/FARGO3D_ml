@@ -6,20 +6,20 @@ AspectRatio     	0.05            Thickness over Radius in the disc
 Sigma0			6.3661977237e-4	Surface Density at r=1
 Nu			0.0		Uniform kinematic viscosity
 SigmaSlope		0.5		Slope of surface
-FlaringIndex		0.5
+FlaringIndex		0.0
 
 ### Dust parameters
 
-Stokes1                 1.0e-5	    Stokes number for dust1
+Stokes1                 1.0e-3	    Stokes number for dust1
 Epsilon                 1.0e-2      Dust-to-gas mass ratio
 DustTaper               1.8         Taper off initial dust/gas ratio near radial boundaries 
 
 ### Planet parameters
 
 PlanetConfig		planets/zero.cfg
-ThicknessSmoothing 	0.1		Smoothing parameters in disk thickness
-PTorqueMass             0.0             mplanet/mstar for torque prescription 
-PTorqueOn               200.0           when to switch on torque prescription 
+ThicknessSmoothing 	0.1  		Smoothing parameters in disk thickness
+PTorqueMass             0.0001           mplanet/mstar for torque prescription 
+PTorqueOn               0.0              when to switch on torque prescription 
 PTorqueTaper            1.0             switch on torque over this many orbits 
 
 ### Numerical method parameters
@@ -32,10 +32,10 @@ IndirectTerm		No
 ### Mesh parameters
 
 Nx			1		Azimuthal number of zones 
-Ny               	2048		Radial number of zones
-Nz		        2048		Number of zones in colatitude
-Ymin			0.9		Inner boundary radius
-Ymax			1.1		Outer boundary radius
+Ny               	256		Radial number of zones
+Nz		        128		Number of zones in colatitude
+Ymin			0.4		Inner boundary radius
+Ymax			2.5		Outer boundary radius
 Zmin			1.4219063791853994
 Zmax			1.7196862744043937
 Xmin			0.0

@@ -1,0 +1,10 @@
+in addition to files under setup/mkl
+
+modification were also made to (relative to the repo as of April 19, 2019)
+
+std/boundaries.txt
+std/collision_template.cu
+
+src/collision_kernel.h
+src/global.h
+src/prototypes.h

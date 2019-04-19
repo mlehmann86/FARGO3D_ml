@@ -37,11 +37,6 @@ void PTorque_cpu(real dt) {
   int size_y = Ny+2*NGHY-1;
   int size_z = Nz+2*NGHZ-1;
   real taper = planetmass_taper; 
-  real r0 = R0;
-  real bigg = G;
-  real mstar= MSTAR;
-  real aspectratio = ASPECTRATIO;
-  real ptorquemass = PTORQUEMASS;
 //<\EXTERNAL>
 
 //<INTERNAL>
@@ -55,8 +50,8 @@ void PTorque_cpu(real dt) {
   real lambda;
   real ex1;
   real ex2;
-  real h0 = aspectratio*r0;
-  real omega0 = sqrt(bigg*mstar/r0/r0/r0); 
+  real h0;
+  real omega0; 
 #ifdef PTORQUE_PROFILE_Q1
   real p1 = 0.0297597;
   real p2 = 1.09770;
@@ -84,6 +79,8 @@ void PTorque_cpu(real dt) {
 //<CONSTANT>
 // real ymin(Ny+2*NGHY+1);
 // real zmin(Nz+2*NGHZ+1);
+// real ASPECTRATIO(1);
+// real PTORQUEMASS(1);
 //<\CONSTANT>
 
 
@@ -92,8 +89,10 @@ void PTorque_cpu(real dt) {
     for (j=1; j<size_y; j++) {
       for (i=XIM; i<size_x; i++) {
 //<#>
+	h0 = ASPECTRATIO*R0;
+	omega0 = sqrt(G*MSTAR/R0/R0/R0);
 	bigrad = ymed(j)*sin(zmed(k));
-	x = (bigrad - r0)/h0;
+	x = (bigrad - R0)/h0;
 
 	ex1 = (x+p2)/p3;
 	ex1*= ex1;
@@ -101,9 +100,9 @@ void PTorque_cpu(real dt) {
 	ex2*= ex2;
 	curlyf = p1*exp(-ex1) + p4*exp(-ex2);
 	curlyf*= tanh(p7 - p8*x);
-	lambda =-curlyf*pow(omega0*r0, 2.0);
-	lambda*= pow(ptorquemass*taper, 2.0);
-	lambda*= pow(1.0/aspectratio, 4.0)/bigrad;
+	lambda =-curlyf*pow(omega0*R0, 2.0);
+	lambda*= pow(PTORQUEMASS*taper, 2.0);
+	lambda*= pow(R0/h0, 4.0)/bigrad;
 
 /*
         z = ymed(j)*cos(zmed(k));

@@ -105,7 +105,7 @@ ifndef CUDA
 CUDA           = /usr/local/cuda
 endif
 ifndef PYTHON_INCLUDE
-PYTHON_INCLUDE = python2.7 #/usr/include/python2.7
+PYTHON_INCLUDE = /usr/include/python2.7
 endif
 #---------------------------------------------------------------------
 #LINUX PLATFORM (GENERIC, default)
@@ -117,8 +117,7 @@ PARACC_LINUX  = mpicc
 LIBS_LINUX    = -lm
 INC_LINUX     = 
 NVCC_LINUX    = nvcc
-CUDAOPT_LINUX = -O3 -arch=sm_60 -w
-#CUDAOPT_LINUX = -O3 -w #-arch=sm_20 
+CUDAOPT_LINUX = -O3 -w #-arch=sm_20 
 PARAINC_LINUX = 
 PARALIB_LINUX =
 CUDAINC_LINUX = -I${CUDA}/include/

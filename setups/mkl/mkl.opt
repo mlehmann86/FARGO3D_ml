@@ -41,8 +41,11 @@ FARGO_OPT +=  -DISOTHERMAL
 #FARGO_OPT += -DVISCOSITY
 FARGO_OPT += -DPOTENTIAL
 
-#enable planet torque prescription?
+#enable planet torque prescription? 
+#profile Q1 for flaringindex = 0 , sigmaslope = 0.5; (locally isothermal disk)
+#profile Q0 for flaringindex = 0.5, sigmaslop = 1;   (globally isothermal disk - need special BC)
 FARGO_OPT += -DPTORQUE 
+FARGO_OPT += -DPTORQUE_PROFILE_Q1
 
 #Drag force between species
 FARGO_OPT += -DDRAGFORCE
