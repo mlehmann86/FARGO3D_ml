@@ -34,6 +34,8 @@ config = configparser.ConfigParser()
 config.read('variables.ini')
 smallh = float(config['params']['ASPECTRATIO'])
 flare  = float(config['params']['FLARINGINDEX'])
+sigma0 = float(config['params']['SIGMA0'])
+epsilon= float(config['params']['EPSILON'])
 smallq = 3.0 - 2.0*(flare + 1.0);
 NX     = int(config['params']['NX'])
 NY     = int(config['params']['NY'])
@@ -240,7 +242,50 @@ def pdisk_rz(var='gas',
            else:
               data3d -= 1.0 
               title = r'$\Delta\rho_\mathrm{g}/\rho_\mathrm{g,i}$'
-        
+        else:
+#            npl     = np.argmin(np.absolute(rad - r0))
+#            rho_ref = dens0[NZ/2,npl,0]              
+           rho_ref = sigma0/np.sqrt(2.0*np.pi)/(smallh*r0)
+           data3d /= rho_ref
+           if(log != None):
+              data3d = np.log10(data3d)
+              title = r'$\log{(\rho_\mathrm{g}/\rho_\mathrm{g,ref})}$'     
+           else:
+              data3d-=1.0
+              title = r'$\Delta\rho_\mathrm{g}/\rho_\mathrm{g,ref}$'    
+       
+    if(var == 'dust'):
+        fname = loc+"dust1dens"+str(start)+".dat"
+        densd  = pylab.fromfile(fname).reshape(NZ,NY,NX)
+        data3d = densd 
+ 
+        if(pert != None):
+           fname  = loc+"dust1dens0.dat"
+           densd0  = pylab.fromfile(fname).reshape(NZ,NY,NX)
+           data3d /= densd0
+           title = r'$\rho_\mathrm{d}/\rho_\mathrm{d,i}$'
+           if(log != None):
+              data3d  = np.log10(data3d)
+              title = r'$\log{(\rho_\mathrm{d}/\rho_\mathrm{d,i})}$'
+           else:
+              data3d -= 1.0
+              title = r'$\Delta\rho_\mathrm{d}/\rho_\mathrm{d,i}$'
+        else:
+#            npl     = np.argmin(np.absolute(rad - r0))
+#            rho_ref = dens0[NZ/2,npl,0]
+           rho_ref  = sigma0/np.sqrt(2.0*np.pi)/(smallh*r0)
+           rhod_ref = rho_ref*epsilon   
+           data3d /= rhod_ref
+           if(log != None):
+              data3d = np.log10(data3d)
+              title = r'$\log{(\rho_\mathrm{d}/\rho_\mathrm{d,ref})}$'
+           else:
+              data3d-=1.0
+              title = r'$\Delta\rho_\mathrm{d}/\rho_\mathrm{d,ref}$'
+
+
+ 
+
     tslice = time[start]/period0
     tstring = "{:.0f}".format(tslice)
     title +=', t='+tstring+r'$P_0$'

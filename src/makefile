@@ -111,13 +111,13 @@ endif
 #LINUX PLATFORM (GENERIC, default)
 #FARGO_ARCH must be set to LINUX
 CC_LINUX      = gcc 
-SEQOPT_LINUX  = -O3
+SEQOPT_LINUX  = -O3 -ffast-math
 PARAOPT_LINUX = ${SEQOPT_LINUX}
 PARACC_LINUX  = mpicc
 LIBS_LINUX    = -lm
 INC_LINUX     = 
 NVCC_LINUX    = nvcc
-CUDAOPT_LINUX = -O3 -w #-arch=sm_20 
+CUDAOPT_LINUX = -O3 -w -arch=sm_60 
 PARAINC_LINUX = 
 PARALIB_LINUX =
 CUDAINC_LINUX = -I${CUDA}/include/

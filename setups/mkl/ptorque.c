@@ -77,6 +77,7 @@ void PTorque_cpu(real dt) {
   real p7 =-0.181823;
   real p8 = 3.07328;
 #endif
+  real torque_vtaper_scale2 = pow(0.1*h0,2.0); 
   real delta=1.3;
   real cconst=0.798; 
 //<\INTERNAL>
@@ -107,7 +108,7 @@ void PTorque_cpu(real dt) {
 
 /*
         z = ymed(j)*cos(zmed(k));
-        lambda*= exp(-0.5*z*z/h0/h0);
+        lambda*= exp(-0.5*z*z/torque_vtaper_scale2);
 */
 
 /*
