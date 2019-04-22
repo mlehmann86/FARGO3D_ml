@@ -77,7 +77,7 @@ for i in range(0,ntheta):
 data   = np.loadtxt("planet0.dat")
 time   = data[:,8]
 
-def pdisk_2d(var='dens',
+def pdisk_2d(var='dg',
              loc     = './', 
              zslice  = 0.5, 
              start   = 0,
@@ -88,32 +88,87 @@ def pdisk_2d(var='dens',
       
     #prepare to read data 
     
-    if(var == 'vphi'):
-        var = 'vx'
-    if(var == 'vr'):
-        var = 'vy'
-    if(var == 'vtheta'):
-        var = 'vz'
+    fname = loc+"gasdens"+str(start)+".dat"
+    dens  = pylab.fromfile(fname).reshape(NZ,NY,NX) 
 
-    fname  = loc+"gas"+str(var)+"0.dat" 
-    data0  = pylab.fromfile(fname).reshape(NZ,NY,NX) 
+    fname = loc+"gasvy"+str(start)+".dat"
+    vrad  = pylab.fromfile(fname).reshape(NZ,NY,NX)
 
-    fname = loc+"gas"+str(var)+str(start)+".dat"
-    data  = pylab.fromfile(fname).reshape(NZ,NY,NX) 
+    fname   = loc+"gasvz"+str(start)+".dat"
+    vtheta  = pylab.fromfile(fname).reshape(NZ,NY,NX)
 
-    if(pert != None):
-        data /= data0
-        if(log  != None):
-            data  = log10(data) 
-        else:
-            data -= 1.0
-    elif(pert == None):
+    if(var == 'vz'):
+        data3d = get_vz(rad, theta, vrad, vtheta)
+        title = '$v_{gz}/c_s$'
+
+    if(var == 'dg'):
+        fname = loc+"dust1dens"+str(start)+".dat"
+        densd  = pylab.fromfile(fname).reshape(NZ,NY,NX)
+        data3d = densd/dens
+        title = r'$\rho_\mathrm{d}/\rho_\mathrm{g}$'
         if(log != None):
-            data = log10(data)
-    
+            data3d = np.log10(data3d)
+            title = r'$\log{(\rho_\mathrm{d}/\rho_\mathrm{g})}$'
+
+    if(var == 'gas'):
+        data3d = dens 
+        if(pert != None):
+           fname  = loc+"gasdens0.dat"
+           dens0  = pylab.fromfile(fname).reshape(NZ,NY,NX)
+           data3d /= dens0
+           title = r'$\rho_\mathrm{g}/\rho_\mathrm{g,i}$'
+           if(log != None):
+              data3d  = np.log10(data3d) 
+              title = r'$\log{(\rho_\mathrm{g}/\rho_\mathrm{g,i})}$'
+           else:
+              data3d -= 1.0 
+              title = r'$\Delta\rho_\mathrm{g}/\rho_\mathrm{g,i}$'
+        else:
+#            npl     = np.argmin(np.absolute(rad - r0))
+#            rho_ref = dens0[NZ/2,npl,0]              
+           rho_ref = sigma0/np.sqrt(2.0*np.pi)/(smallh*r0)
+           data3d /= rho_ref
+           if(log != None):
+              data3d = np.log10(data3d)
+              title = r'$\log{(\rho_\mathrm{g}/\rho_\mathrm{g,ref})}$'     
+           else:
+              data3d-=1.0
+              title = r'$\Delta\rho_\mathrm{g}/\rho_\mathrm{g,ref}$'    
+       
+    if(var == 'dust'):
+        fname = loc+"dust1dens"+str(start)+".dat"
+        densd  = pylab.fromfile(fname).reshape(NZ,NY,NX)
+        data3d = densd 
+ 
+        if(pert != None):
+           fname  = loc+"dust1dens0.dat"
+           densd0  = pylab.fromfile(fname).reshape(NZ,NY,NX)
+           data3d /= densd0
+           title = r'$\rho_\mathrm{d}/\rho_\mathrm{d,i}$'
+           if(log != None):
+              data3d  = np.log10(data3d)
+              title = r'$\log{(\rho_\mathrm{d}/\rho_\mathrm{d,i})}$'
+           else:
+              data3d -= 1.0
+              title = r'$\Delta\rho_\mathrm{d}/\rho_\mathrm{d,i}$'
+        else:
+#            npl     = np.argmin(np.absolute(rad - r0))
+#            rho_ref = dens0[NZ/2,npl,0]
+           rho_ref  = sigma0/np.sqrt(2.0*np.pi)/(smallh*r0)
+           rhod_ref = rho_ref*epsilon   
+           data3d /= rhod_ref
+           if(log != None):
+              data3d = np.log10(data3d)
+              title = r'$\log{(\rho_\mathrm{d}/\rho_\mathrm{d,ref})}$'
+           else:
+              data3d-=1.0
+              title = r'$\Delta\rho_\mathrm{d}/\rho_\mathrm{d,ref}$'
+
+
     nzslice = int(zslice*ntheta)
-    data2d  = data[nzslice,...].transpose()
+    data2d  = data3d[nzslice,...].transpose()
     
+
     #plot data 
 
     plt.figure(figsize=(7,9))
@@ -126,10 +181,10 @@ def pdisk_2d(var='dens',
 
     plt.rc('font',size=fontsize,weight='bold')
     plt.rc('axes',labelsize=fontsize)
-    plt.ylim(-1.0,1.0)
+    plt.ylim(0.0,1.0)
     plt.xlim(rmin, rmax)
     
-    cp = plt.contourf(rad/r0, azi/np.pi, data2d,
+    cp = plt.contourf(rad/r0, azi/(2.0*np.pi), data2d,
                       levels,
                       cmap=cmap
                       )
@@ -137,7 +192,7 @@ def pdisk_2d(var='dens',
     plt.colorbar(cp,ticks=clevels,format='%.3f')
     plt.title(title)
     plt.xlabel('$r/r_0$')
-    plt.ylabel('$\phi/\pi$')
+    plt.ylabel('$\phi/2\pi$')
 
     fname = var+'2d_'+str(start).zfill(4)
     plt.savefig(fname,dpi=150)
@@ -309,9 +364,12 @@ def pdisk_rz(var='gas',
         theta_plot = theta
         nrad_plot  = nrad 
 
-    #take slice in azimuth. to add: take azi averages 
-    nazislice = int(azislice*nphi)
-    data2d  = data3d[...,nazislice]
+    #take slice in azimuth or perform azi average
+    if(azislice >= 0.0):
+    	nazislice = int(azislice*nphi)
+    	data2d  = data3d[...,nazislice]
+    else:
+        data2d  = np.average(data3d,axis=2)
 
     #polar contour plot 
     angles = np.repeat(np.pi/2.0-theta_plot[...,np.newaxis], nrad_plot, axis=1)
