@@ -2,19 +2,19 @@
 #----------------------------------------------
 
 Density:
-	Ymin: SYMMETRIC
-	Ymax: SYMMETRIC
+	Ymin: UNPERTRBCDENS
+	Ymax: UNPERTRBCDENS
 	Zmin: PLUTOVBCDENS
 	Zmax: PLUTOVBCDENS
 
 Vx:
-	Ymin: PLUTORBCVPHI	
-	Ymax: PLUTORBCVPHI   
-	Zmin: PLUTOVBCVPHI	
+	Ymin: UNPERTRBCVPHI
+	Ymax: UNPERTRBCVPHI   
+	Zmin: PLUTOVBCVPHI
 	Zmax: PLUTOVBCVPHI
 
 Vy:
-	Ymin:   PLUTORBCVRAD	
+	Ymin:   PLUTORBCVRAD
 	Ymax:   PLUTORBCVRAD
 	Zmin:	PLUTOVBCVRAD
 	Zmax:   PLUTOVBCVRAD

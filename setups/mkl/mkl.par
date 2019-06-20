@@ -7,19 +7,22 @@ Sigma0			6.3661977237e-4	Surface Density at r=1
 Nu			0.0		Uniform kinematic viscosity
 SigmaSlope		0.5		Slope of surface
 FlaringIndex		0.0
+BUMP_AMP                0.0
+BUMP_WIDTH              1.0 
+
 
 ### Dust parameters
 
-Stokes1                 1.0e-3	    Stokes number for dust1
+Stokes1                 1.0e-2	    Stokes number for dust1
 Epsilon                 1.0e-2      Dust-to-gas mass ratio
-DustTaper               1.8         Taper off initial dust/gas ratio near radial boundaries 
+DustTaper               0.8         Taper off initial dust/gas ratio near radial boundaries 
 
 ### Planet parameters
 
 PlanetConfig		planets/zero.cfg
-ThicknessSmoothing 	0.1  		Smoothing parameters in disk thickness
-PTorqueMass             0.0001           mplanet/mstar for torque prescription 
-PTorqueOn               0.0              when to switch on torque prescription 
+ThicknessSmoothing 	0.1   		Smoothing parameters in disk thickness
+PTorqueMass             0.0            mplanet/mstar for torque prescription 
+PTorqueOn               0.0           when to switch on torque prescription 
 PTorqueTaper            1.0             switch on torque over this many orbits 
 
 ### Numerical method parameters
@@ -43,8 +46,8 @@ Xmax			6.283185307179586
 
 ### Output control parameters
 
-Ntot			201		Total number of time steps
-Ninterm	 		20		Time steps between outputs (for dt=pi/10, ninterm=20 is 1 orbit)
+Ntot			20001		Total number of time steps
+Ninterm	 		200		Time steps between outputs (for dt=pi/10, ninterm=20 is 1 orbit)
 DT			0.314159265359	Time step length. 2PI = 1 orbit
 OutputDir		@outputs/mkl
 

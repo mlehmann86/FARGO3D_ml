@@ -7,11 +7,11 @@ void Init() {
   real *v3;
   real *e;
   real *rho;
-  real H, cs2, smallp, smallq;
+  real H, cs2, smallp, smallp_eff, smallq;
   
-  real rhog, rhod, vert, rhog_c, rhod_c; 
+  real rhog, rhod, vert, rhog_c, rhod_c, bump, dbump, bump_amp; 
   real omega, omega_kep, omega_gas, vphi_gas, vphi_dust, vrad_gas, vrad_dust, vtheta_gas, vtheta_dust, vR_gas, vR_dust;
-  real r, R3, R, DeltaR, DeltaRin, DeltaRout, TaperRin, TaperRout, taper, sharp;
+  real r, R3, R, z, DeltaR, DeltaRin, DeltaRout, TaperRin, TaperRout, taper, sharp;
   real eta, St, StPrime, tstop, cs0, cs, rhog0, H0, omega_kep0, dgratio, gas_energy;
 
   rho = Density->field_cpu;
@@ -52,7 +52,17 @@ void Init() {
       cs    = omega_kep*H;
       cs2   = pow(cs, 2.0); 
       
+      z  = r*cos(Zmed(k));
+      bump_amp = BUMP_AMP;//*exp(-0.5*z*z/H0/H0);  
+
+      bump  = 1.0 + bump_amp*exp(-0.5*pow((R-R0)/(BUMP_WIDTH*H0),2.0));
+      dbump = -bump_amp*(R-R0)/pow(BUMP_WIDTH*H0,2.0)*(bump - 1.0);
+      dbump*=  R/bump;
+
+      smallp_eff = smallp  - dbump; //smallp  \equiv -dln Sigma/dln r
+
       rhog = SIGMA0*pow(R/R0,-SIGMASLOPE)/sqrt(2.0*M_PI)/H; //midplane gas density 
+      rhog*= bump; //gas surface density bump 
       vert = (G*MSTAR/cs2)*(1.0/r - 1.0/R); 
       rhog*= exp(vert); 
       rhog_c = rhog;
@@ -73,7 +83,7 @@ void Init() {
        St      = tstop*omega_kep;
        StPrime = St/(1.0 + dgratio);
 
-        eta       = 0.5*( (smallp+smallq)*pow(H/R,2.0)  + smallq - smallq*R/r);
+        eta       = 0.5*( (smallp_eff+smallq)*pow(H/R,2.0)  + smallq - smallq*R/r);
         omega_gas = omega_kep*sqrt(1.0 - 2.0*eta);
         vphi_gas  = R*(omega_gas - OMEGAFRAME);
         vphi_gas += eta*R*omega_kep*( (dgratio/(1.0+dgratio))/(StPrime*StPrime + 1.0) );
@@ -100,7 +110,18 @@ void Init() {
          cs    = omega_kep*H;
          cs2   = pow(cs, 2.0);
 
+
+         z  = r*cos(Zmed(k));
+         bump_amp = BUMP_AMP;//*exp(-0.5*z*z/H0/H0);
+
+         bump  = 1.0 + bump_amp*exp(-0.5*pow((R-R0)/(BUMP_WIDTH*H0),2.0));
+         dbump = -bump_amp*(R-R0)/pow(BUMP_WIDTH*H0,2.0)*(bump - 1.0);
+         dbump*=  R/bump;
+
+         smallp_eff = smallp  - dbump;
+
          rhog = SIGMA0*pow(R/R0,-SIGMASLOPE)/sqrt(2.0*M_PI)/H; //midplane gas density
+         rhog *= bump; 
          vert = (G*MSTAR/cs2)*(1.0/r - 1.0/R);
          rhog*= exp(vert);
 
@@ -118,7 +139,7 @@ void Init() {
           St      = tstop*omega_kep;
           StPrime = St/(1.0 + dgratio);
 
-          eta       = 0.5*( (smallp+smallq)*pow(H/R,2.0)  + smallq - smallq*R/r);
+          eta       = 0.5*( (smallp_eff+smallq)*pow(H/R,2.0)  + smallq - smallq*R/r);
         
           vR_gas  = 2.0*StPrime/(StPrime*StPrime+1.0);
           vR_gas *= dgratio/(1.0+dgratio);
@@ -140,7 +161,17 @@ void Init() {
          cs    = omega_kep*H;
          cs2   = pow(cs, 2.0);
 
+         z  = r*cos(Zmin(k));
+         bump_amp = BUMP_AMP;//*exp(-0.5*z*z/H0/H0); 
+
+         bump  = 1.0 + bump_amp*exp(-0.5*pow((R-R0)/(BUMP_WIDTH*H0),2.0));
+         dbump = -bump_amp*(R-R0)/pow(BUMP_WIDTH*H0,2.0)*(bump - 1.0);
+         dbump*=  R/bump;
+
+         smallp_eff = smallp  - dbump;
+
          rhog = SIGMA0*pow(R/R0,-SIGMASLOPE)/sqrt(2.0*M_PI)/H; //midplane gas density
+         rhog *= bump; 
          vert = (G*MSTAR/cs2)*(1.0/r - 1.0/R);
          rhog*= exp(vert);
 
@@ -158,7 +189,7 @@ void Init() {
           St      = tstop*omega_kep;
           StPrime = St/(1.0 + dgratio);
 
-          eta       = 0.5*( (smallp+smallq)*pow(H/R,2.0)  + smallq - smallq*R/r);
+          eta       = 0.5*( (smallp_eff+smallq)*pow(H/R,2.0)  + smallq - smallq*R/r);
 
           vR_gas  = 2.0*StPrime/(StPrime*StPrime+1.0);
           vR_gas *= dgratio/(1.0+dgratio);

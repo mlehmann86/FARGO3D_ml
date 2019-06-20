@@ -2,6 +2,7 @@
 bin/*
 outputs/*
 fargo3d
+fargo3d_iso
 arch/*
 scripts/bound_*.code
 src/rescale.c

@@ -57,6 +57,7 @@ void PTorque_cpu(real dt) {
   real ex2;
   real h0 = aspectratio*r0;
   real omega0 = sqrt(bigg*mstar/r0/r0/r0); 
+  real rhill  = r0*pow(ptorquemass/3.0, 1.0/3.0);
 #ifdef PTORQUE_PROFILE_Q1
   real p1 = 0.0297597;
   real p2 = 1.09770;
@@ -77,7 +78,9 @@ void PTorque_cpu(real dt) {
   real p7 =-0.181823;
   real p8 = 3.07328;
 #endif
-  real torque_vtaper_scale2 = pow(0.1*h0,2.0); 
+  real torque_vtaper_scale2 = pow(0.1*h0,2.0);
+  real torque_gaptaper_width = 0.1; 
+  real torque_gaptaper;  
   real delta=1.3;
   real cconst=0.798; 
 //<\INTERNAL>
@@ -94,8 +97,12 @@ void PTorque_cpu(real dt) {
       for (i=XIM; i<size_x; i++) {
 //<#>
 	bigrad = ymed(j)*sin(zmed(k));
+
 	x = (bigrad - r0)/h0;
 
+/*
+        x = (bigrad - r0)/rhill;    
+*/
 	ex1 = (x+p2)/p3;
 	ex1*= ex1;
 	ex2 = (x-p5)/p6;
@@ -123,6 +130,13 @@ void PTorque_cpu(real dt) {
         lambda *=0.0; 
         }
 */
+
+/*  
+        torque_gaptaper  = 0.5*(1.0 + tanh((x-1.0)/torque_gaptaper_width));
+        torque_gaptaper += 0.5*(1.0 - tanh((x+1.0)/torque_gaptaper_width)); 
+        lambda*=torque_gaptaper;
+*/
+
         vx_temp[l] += dt*lambda; 
 //<\#>
       }

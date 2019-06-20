@@ -133,18 +133,27 @@ PLUTORBCVPHI:
 
 
 UNPERTVBCDENS:
-	Centered: |'SIGMA0'*pow(Ymed(j)*sin(Zmed(kgh))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(kgh))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(j)*sin(Zmed(kgh))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*'MPI')/'ASPECTRATIO'/'R0'|ds|
+	Centered: |'SIGMA0'*pow(Ymed(j)*sin(Zmed(kgh))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(kgh))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(j)*sin(Zmed(kgh))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
 
 UNPERTVBCVPHI:
-	Centered:|sqrt('G'*'MSTAR'/('Ymed(j)*sin(Zmed(kgh))))*sqrt(1.0 - ('SIGMASLOPE'-'FLARINGINDEX'+2.0)*pow('ASPECTRATIO',2.0)*pow(Ymed(j)*sin(Zmed(kgh))/'R0',2.0*'FLARINGINDEX') + (1.0-2.0*'FLARINGINDEX')*(sin(Zmed(kgh))-1.0)) -  Ymed(j)*sin(Zmed(kgh))*'OMEGAFRAME'   |vphi|
+	Centered:|sqrt('G'*'MSTAR'/(Ymed(j)*sin(Zmed(kgh))))*sqrt(1.0 - ('SIGMASLOPE'-'FLARINGINDEX'+2.0)*pow('ASPECTRATIO',2.0)*pow(Ymed(j)*sin(Zmed(kgh))/'R0',2.0*'FLARINGINDEX') + (1.0-2.0*'FLARINGINDEX')*(sin(Zmed(kgh))-1.0)) -  Ymed(j)*sin(Zmed(kgh))*'OMEGAFRAME'   |vphi|
+
 
 UNPERTRBCDENS:
-	Centered: |'SIGMA0'*pow(Ymed(jgh)*sin(Zmed(k))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(k))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*'MPI')/'ASPECTRATIO'/'R0'|ds|
+	Centered: |'SIGMA0'*pow(Ymed(jgh)*sin(Zmed(k))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(k))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
 
 UNPERTRBCVPHI: 
-	Centered:|sqrt('G'*'MSTAR'/('Ymed(jgh)*sin(Zmed(k))))*sqrt(1.0 - ('SIGMASLOPE'-'FLARINGINDEX'+2.0)*pow('ASPECTRATIO',2.0)*pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX') + (1.0-2.0*'FLARINGINDEX')*(sin(Zmed(k))-1.0)) -  Ymed(jgh)*sin(Zmed(k))*'OMEGAFRAME'   |vphi|
+	Centered:|sqrt('G'*'MSTAR'/(Ymed(jgh)*sin(Zmed(k))))*sqrt(1.0 - ('SIGMASLOPE'-'FLARINGINDEX'+2.0)*pow('ASPECTRATIO',2.0)*pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX') + (1.0-2.0*'FLARINGINDEX')*(sin(Zmed(k))-1.0)) -  Ymed(jgh)*sin(Zmed(k))*'OMEGAFRAME'   |vphi|
 	       
 
+UNPERTRBCVPHIDUST:
+        Centered:|sqrt('G'*'MSTAR'/Ymed(jgh))-Ymed(jgh)*sin(Zmed(k))*'OMEGAFRAME'|vphi|
+
+
+RBCNODUST:
+        Centered:|1.0e-16*'SIGMA0'/'R0'/'ASPECTRATIO'|rhod| 
 
 #### Allow outflow only at inner mesh edge
 OPENINNER:
