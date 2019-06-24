@@ -35,8 +35,8 @@ IndirectTerm		No
 ### Mesh parameters
 
 Nx			1		Azimuthal number of zones 
-Ny               	256		Radial number of zones
-Nz		        128		Number of zones in colatitude
+Ny               	8000		Radial number of zones
+Nz		        1600		Number of zones in colatitude
 Ymin			0.4		Inner boundary radius
 Ymax			2.5		Outer boundary radius
 Zmin			1.4219063791853994
@@ -46,8 +46,8 @@ Xmax			6.283185307179586
 
 ### Output control parameters
 
-Ntot			20001		Total number of time steps
-Ninterm	 		200		Time steps between outputs (for dt=pi/10, ninterm=20 is 1 orbit)
+Ntot			20		Total number of time steps
+Ninterm	 		2		Time steps between outputs (for dt=pi/10, ninterm=20 is 1 orbit)
 DT			0.314159265359	Time step length. 2PI = 1 orbit
 OutputDir		@outputs/mkl
 
