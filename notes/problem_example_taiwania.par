@@ -12,7 +12,7 @@ BUMP_WIDTH              1.0             Width of  initial gas surface density bu
 
 ### Dust parameters
 
-Stokes1                 1.0e-2	    Stokes number for dust1
+Stokes1                 1.0e-3	    Stokes number for dust1
 Epsilon                 1.0e-2      Dust-to-gas mass ratio (initial, assume uniform) 
 DustTaper               0.8         Taper off initial dust/gas ratio near radial boundaries 
 
@@ -38,6 +38,7 @@ Ny               	4800			Radial number of zones
 Nz		        800			Number of zones in colatitude
 Ymin			0.4			Inner boundary radius
 Ymax			2.5			Outer boundary radius
+Spacing                 log                     Use log spacing in radius 
 Zmin			1.4219063791853994 	Minimum polar angle 
 Zmax			1.7196862744043937      Maximum polar angle  
 Xmin			0.0                     Minimum azimuth
