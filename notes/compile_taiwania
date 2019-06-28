@@ -1,0 +1,19 @@
+june 27, 2019
+
+compiling gpu version of fargo3d on taiwania:
+
+load modules 
+ 1) intel/2018_u1                   2) mpi/openmpi-3.0.0/intel2018u1   3) cuda/10.0.130
+
+compile with 
+
+make PARALLEL=1 GPU=1 MPICUDA=0 SETUP=mkl
+
+SETUP should be set to your own project (see setups/ folder)
+
+MPICUDA should be 1, but the resulting code doesn't work on the cluster.
+currently consulting technical support to resolve this problem. for the
+time being, use MPICUDA=0. this will give a code that perform indirect 
+GPU-GPU communications via the CPU, which somewhat costs performance. 
+
+once we fix the MPICUDA issue, we should use MPICUDA=1

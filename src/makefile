@@ -127,6 +127,25 @@ CUDALIB_LINUX = -L${CUDA}/lib64/  -lcudart -lstdc++
 CXX_LINUX     = g++ -stdlib=libstdc++
 CXXPARA_LINUX = mpic++ -stdlib=libstdc++
 #---------------------------------------------------------------------
+#TAIWANIA (testing mpicuda)
+#FARGO_ARCH must be set to TWNIA
+CC_TWNIA      = gcc
+SEQOPT_TWNIA  = -O3 -ffast-math
+PARAOPT_TWNIA = ${SEQOPT_TWNIA}
+PARACC_TWNIA  = /usr/mpi/gcc/openmpi-2.1.2-cuda-hfi/bin/mpicc 
+LIBS_TWNIA    = -lm
+ENVRANK_TWNIA = OMPI_COMM_WORLD_LOCAL_RANK
+INC_TWNIA     =
+NVCC_TWNIA    = nvcc
+CUDAOPT_TWNIA = -O3 -w -arch=sm_60
+PARAINC_TWNIA =
+PARALIB_TWNIA =
+CUDAINC_TWNIA = -I${CUDA}/include/
+CUDALIB_TWNIA = -L${CUDA}/lib64/  -lcudart
+CUDALIB_TWNIA = -L${CUDA}/lib64/  -lcudart -lstdc++
+CXX_TWNIA     = g++ -stdlib=libstdc++
+CXXPARA_TWNIA = /usr/mpi/gcc/openmpi-2.1.2-cuda-hfi/bin/mpic++ -stdlib=libstdc++
+#---------------------------------------------------------------------
 #KEPLER PLATFORM WITH OPENMPI-1.7.4 AT UNAM
 #FARGO_ARCH must be set to KEPLEROPENMPI
 CC_KEPLEROPENMPI      = gcc 
