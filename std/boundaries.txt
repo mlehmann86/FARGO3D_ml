@@ -153,10 +153,11 @@ UNPERTRBCVPHIDUST:
 
 
 RBCNODUST:
-        Centered:|1.0e-16*'SIGMA0'/'R0'/'ASPECTRATIO'|rhod| 
+        Centered:|1.0e-16*'SIGMA0'*pow(Ymed(jgh)*sin(Zmed(k))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(k))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|rhod| 
 
 VBCNODUST:
-        Centered:|1.0e-16*'SIGMA0'/'R0'/'ASPECTRATIO'|rhod|
+        Centered:|1.0e-16*'SIGMA0'*pow(Ymed(j)*sin(Zmed(kgh))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(kgh))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(j)*sin(Zmed(kgh))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|rhod|
+
 
 #### Allow outflow only at inner mesh edge
 OPENINNER:
