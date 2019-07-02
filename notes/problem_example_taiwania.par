@@ -18,11 +18,11 @@ DustTaper               0.8         Taper off initial dust/gas ratio near radial
 
 ### Planet parameters
 
-PlanetConfig		../zero.cfg     Location of planet file relative to location of fargo3d executable 
-ThicknessSmoothing 	0.1   		Smoothing parameters in disk thickness
-PTorqueMass             0.0             mplanet/mstar for torque prescription 
-PTorqueOn               0.0             when to switch on torque prescription 
-PTorqueTaper            1.0             switch on torque over this many orbits 
+PlanetConfig		planets/zero.cfg        Location of planet file relative to location of fargo3d executable 
+ThicknessSmoothing 	0.1  	  		Smoothing parameters in disk thickness
+PTorqueMass             0.0             	mplanet/mstar for torque prescription 
+PTorqueOn               0.0             	when to switch on torque prescription 
+PTorqueTaper            1.0             	switch on torque over this many orbits 
 
 ### Numerical method parameters
 
@@ -34,11 +34,11 @@ IndirectTerm		No              Indirect potential of disk and  planet?
 ### Mesh parameters
 
 Nx			1			Azimuthal number of zones 
-Ny               	4800			Radial number of zones
-Nz		        800			Number of zones in colatitude
+Ny               	1200			Radial number of zones
+Nz		        200			Number of zones in colatitude
 Ymin			0.4			Inner boundary radius
 Ymax			2.5			Outer boundary radius
-Spacing                 log                     Use log spacing in radius 
+Spacing                 uni                     Use log spacing or uniform spacing in radius 
 Zmin			1.4219063791853994 	Minimum polar angle 
 Zmax			1.7196862744043937      Maximum polar angle  
 Xmin			0.0                     Minimum azimuth
@@ -46,13 +46,13 @@ Xmax			6.283185307179586       Maximum azimuth
 
 ### Output control parameters
 
-Ntot			20001		Total number of time steps
-Ninterm	 		200		Time steps between outputs (for dt=pi/10, ninterm=20 is 1 orbit)
-DT			0.314159265359	Time step length. 2PI = 1 orbit
-OutputDir		./              Output directory relative to location of fargo3d executable
+Ntot			3			  Total number of time steps
+Ninterm	 		2			  Time steps between outputs (for dt=pi/10, ninterm=20 is 1 orbit)
+DT			0.314159265359		  Time step length. 2PI = 1 orbit
+OutputDir		@outputs/mkl              Output directory relative to location of fargo3d executable
 
 ###use customized func_arch file 
-FuncArchFile            ../func_arch.cfg  Location of func_arch file relative to location of fargo3d executable
+FuncArchFile            setups/mkl/func_arch.cfg  Location of func_arch file relative to location of fargo3d executable
 
 #Field 			gasdens
 #PlotLine		field[-1,:,:]

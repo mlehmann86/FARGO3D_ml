@@ -9,7 +9,7 @@ void Init() {
   real *rho;
   real H, cs2, smallp, smallp_eff, smallq;
   
-  real rhog, rhod, vert, rhog_c, rhod_c, bump, dbump, bump_amp; 
+  real rhog, rhod, vert, rhog_c, rhod_c, bump, dbump, bump_amp, dgmid, FR, bcoeff; 
   real omega, omega_kep, omega_gas, vphi_gas, vphi_dust, vrad_gas, vrad_dust, vtheta_gas, vtheta_dust, vR_gas, vR_dust;
   real r, R3, R, z, DeltaR, DeltaRin, DeltaRout, TaperRin, TaperRout, taper, sharp;
   real eta, St, StPrime, tstop, cs0, cs, rhog0, H0, omega_kep0, dgratio, gas_energy;
@@ -75,7 +75,12 @@ void Init() {
        } else {
         taper = 1.0;
        }
-       dgratio = EPSILON*taper; 
+       //set non-uniform dust-to-gas ratio according to Chen & Lin (2018) for steady state (assume epsilon < 1 here, and "xi" parameter = 1 (locally isothermal) 
+       FR      =( EPSILON/pow(1.0+EPSILON,2.0) )*pow(R/R0, smallq/2.0);
+       bcoeff  = 2.0 - 1.0/FR; 
+       dgmid   = -bcoeff - sqrt(bcoeff*bcoeff - 4.0);
+       dgmid  /= 2.0; 
+       dgratio = dgmid*taper;
        rhod = dgratio*rhog; 
        rhod_c = rhod; 
 
@@ -133,7 +138,13 @@ void Init() {
          } else {
          taper = 1.0;
          }
-         dgratio = EPSILON*taper;
+         //set non-uniform dust-to-gas ratio according to Chen & Lin (2018) for steady state (assume epsilon < 1 here, and "xi" parameter = 1 (locally isothermal)
+         FR      =( EPSILON/pow(1.0+EPSILON,2.0) )*pow(R/R0, smallq/2.0);
+         bcoeff  = 2.0 - 1.0/FR;
+         dgmid   = -bcoeff - sqrt(bcoeff*bcoeff - 4.0);
+         dgmid  /= 2.0;
+         dgratio = dgmid*taper;
+ 
 
           tstop   = (STOKES1/omega_kep0)*cs0*rhog0/cs/rhog;
           St      = tstop*omega_kep;
@@ -183,7 +194,12 @@ void Init() {
          } else {
          taper = 1.0;
          }
-         dgratio = EPSILON*taper;
+         //set non-uniform dust-to-gas ratio according to Chen & Lin (2018) for steady state (assume epsilon < 1 here, and "xi" parameter = 1 (locally isothermal)
+         FR      =( EPSILON/pow(1.0+EPSILON,2.0) )*pow(R/R0, smallq/2.0);
+         bcoeff  = 2.0 - 1.0/FR;
+         dgmid   = -bcoeff - sqrt(bcoeff*bcoeff - 4.0);
+         dgmid  /= 2.0;
+         dgratio = dgmid*taper;
 
           tstop   = (STOKES1/omega_kep0)*cs0*rhog0/cs/rhog;
           St      = tstop*omega_kep;

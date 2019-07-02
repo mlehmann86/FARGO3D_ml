@@ -1,0 +1,11 @@
+compile code in /home/username
+
+run sim in /work1/username
+
+download data to iaa (either working desktop, or to theory cluster)
+
+
+use rsync from working desktop or from gate.tiara.sinica.edu.tw (need to log on first) 
+
+rsync -avzr username@xdata1.twnia.nchc.org.tw:/work1/mklin924/FARGO_sims/* ./ 
+

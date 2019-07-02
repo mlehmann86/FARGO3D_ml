@@ -38,7 +38,7 @@ Ny               	1200			Radial number of zones
 Nz		        200			Number of zones in colatitude
 Ymin			0.4			Inner boundary radius
 Ymax			2.5			Outer boundary radius
-Spacing                 log                     Use log spacing in radius 
+Spacing                 uni                     Use log spacing or uniform spacing in radius 
 Zmin			1.4219063791853994 	Minimum polar angle 
 Zmax			1.7196862744043937      Maximum polar angle  
 Xmin			0.0                     Minimum azimuth
