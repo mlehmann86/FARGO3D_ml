@@ -62,7 +62,7 @@ for i in range(0,nrad):
     rad[i] = np.mean(data[beg:end]) 
     rmin = data[nghost]/r0
     rmax = data[ny - nghost-1]/r0
-    
+ 
 data   = np.loadtxt("domain_z.dat")
 nz     = data.size
 ntheta = nz - 2*nghost - 1
