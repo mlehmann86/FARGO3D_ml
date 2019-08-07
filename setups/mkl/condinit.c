@@ -9,7 +9,7 @@ void Init() {
   real *rho;
   real H, cs2, smallp, smallp_eff, smallq;
   
-  real rhog, rhod, vert, rhog_c, rhod_c, bump, dbump, bump_amp; 
+  real rhog, rhod, vert, rhog_c, rhod_c, bump, dbump, bump_amp, dgmid, FR, bcoeff; 
   real omega, omega_kep, omega_gas, vphi_gas, vphi_dust, vrad_gas, vrad_dust, vtheta_gas, vtheta_dust, vR_gas, vR_dust;
   real r, R3, R, z, DeltaR, DeltaRin, DeltaRout, TaperRin, TaperRout, taper, sharp;
   real eta, St, StPrime, tstop, cs0, cs, rhog0, H0, omega_kep0, dgratio, gas_energy;
@@ -56,10 +56,10 @@ void Init() {
       bump_amp = BUMP_AMP;//*exp(-0.5*z*z/H0/H0);  
 
       bump  = 1.0 + bump_amp*exp(-0.5*pow((R-R0)/(BUMP_WIDTH*H0),2.0));
-      dbump = -bump_amp*(R-R0)/pow(BUMP_WIDTH*H0,2.0)*(bump - 1.0);
+      dbump = -(R-R0)/pow(BUMP_WIDTH*H0,2.0)*(bump - 1.0);
       dbump*=  R/bump;
 
-      smallp_eff = smallp  - dbump; //smallp  \equiv -dln Sigma/dln r
+      smallp_eff = smallp  - dbump; //smallp  \equiv -dln rhog_mid/dln r
 
       rhog = SIGMA0*pow(R/R0,-SIGMASLOPE)/sqrt(2.0*M_PI)/H; //midplane gas density 
       rhog*= bump; //gas surface density bump 
@@ -75,7 +75,17 @@ void Init() {
        } else {
         taper = 1.0;
        }
-       dgratio = EPSILON*taper; 
+       //set non-uniform dust-to-gas ratio according to Chen & Lin (2018) for steady state (assume epsilon < 1 here, and "xi" parameter = 1 (locally isothermal) 
+       //now also accoutning for surface density (or midplane density)  bump (CL18 assumed power law pressure profile) 
+       //however, this modifiation assumes dP/dr \neq 0 everywhere, which can't be the case if we want a pressure bump. 
+       //so this modis commented out 
+       FR      =( EPSILON/pow(1.0+EPSILON,2.0) )*pow(R/R0, smallq/2.0);
+//       FR     *=(smallq + smallp);
+//       FR     /=(smallq + smallp_eff);   
+       bcoeff  = 2.0 - 1.0/FR; 
+       dgmid   = -bcoeff - sqrt(bcoeff*bcoeff - 4.0);
+       dgmid  /= 2.0; 
+       dgratio = dgmid*taper;
        rhod = dgratio*rhog; 
        rhod_c = rhod; 
 
@@ -115,7 +125,7 @@ void Init() {
          bump_amp = BUMP_AMP;//*exp(-0.5*z*z/H0/H0);
 
          bump  = 1.0 + bump_amp*exp(-0.5*pow((R-R0)/(BUMP_WIDTH*H0),2.0));
-         dbump = -bump_amp*(R-R0)/pow(BUMP_WIDTH*H0,2.0)*(bump - 1.0);
+         dbump = -(R-R0)/pow(BUMP_WIDTH*H0,2.0)*(bump - 1.0);
          dbump*=  R/bump;
 
          smallp_eff = smallp  - dbump;
@@ -133,7 +143,15 @@ void Init() {
          } else {
          taper = 1.0;
          }
-         dgratio = EPSILON*taper;
+         //set non-uniform dust-to-gas ratio according to Chen & Lin (2018) for steady state (assume epsilon < 1 here, and "xi" parameter = 1 (locally isothermal)
+         FR      =( EPSILON/pow(1.0+EPSILON,2.0) )*pow(R/R0, smallq/2.0);
+//     	   FR     *=(smallq + smallp);
+//         FR     /=(smallq + smallp_eff); 
+         bcoeff  = 2.0 - 1.0/FR;
+         dgmid   = -bcoeff - sqrt(bcoeff*bcoeff - 4.0);
+         dgmid  /= 2.0;
+         dgratio = dgmid*taper;
+ 
 
           tstop   = (STOKES1/omega_kep0)*cs0*rhog0/cs/rhog;
           St      = tstop*omega_kep;
@@ -165,7 +183,7 @@ void Init() {
          bump_amp = BUMP_AMP;//*exp(-0.5*z*z/H0/H0); 
 
          bump  = 1.0 + bump_amp*exp(-0.5*pow((R-R0)/(BUMP_WIDTH*H0),2.0));
-         dbump = -bump_amp*(R-R0)/pow(BUMP_WIDTH*H0,2.0)*(bump - 1.0);
+         dbump = -(R-R0)/pow(BUMP_WIDTH*H0,2.0)*(bump - 1.0);
          dbump*=  R/bump;
 
          smallp_eff = smallp  - dbump;
@@ -183,7 +201,14 @@ void Init() {
          } else {
          taper = 1.0;
          }
-         dgratio = EPSILON*taper;
+         //set non-uniform dust-to-gas ratio according to Chen & Lin (2018) for steady state (assume epsilon < 1 here, and "xi" parameter = 1 (locally isothermal)
+         FR      =( EPSILON/pow(1.0+EPSILON,2.0) )*pow(R/R0, smallq/2.0);
+//         FR     *=(smallq + smallp);
+//         FR     /=(smallq + smallp_eff); 
+         bcoeff  = 2.0 - 1.0/FR;
+         dgmid   = -bcoeff - sqrt(bcoeff*bcoeff - 4.0);
+         dgmid  /= 2.0;
+         dgratio = dgmid*taper;
 
           tstop   = (STOKES1/omega_kep0)*cs0*rhog0/cs/rhog;
           St      = tstop*omega_kep;
