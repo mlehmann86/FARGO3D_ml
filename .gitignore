@@ -1,8 +1,7 @@
 *TEST/*
 bin/*
 outputs/*
-fargo3d
-fargo3d_iso
+fargo3d*
 arch/*
 scripts/bound_*.code
 src/rescale.c
@@ -19,3 +18,6 @@ std/.lastflags.old
 *tests.log
 mp.pro
 scratch
+bin/.tmp
+scripts/par.pyc
+std/.lastflags

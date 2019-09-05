@@ -17,3 +17,17 @@ time being, use MPICUDA=0. this will give a code that perform indirect
 GPU-GPU communications via the CPU, which somewhat costs performance. 
 
 once we fix the MPICUDA issue, we should use MPICUDA=1
+
+
+須使用有支援GPU Direct的OpenMPI: /usr/mpi/gcc/openmpi-2.1.2-cuda-hfi/
+ 
+編譯範例:
+module load cuda/10.0.130
+export PATH=/usr/mpi/gcc/openmpi-2.1.2-cuda-hfi/bin/:$PATH
+make SETUP=fargo PARALLEL=1 GPU=1 CUDA=/pkg/cuda/10.0.130
+ 
+跨多台GPU計算節點的執行範例:
+module load cuda/10.0.130
+export PATH=/usr/mpi/gcc/openmpi-2.1.2-cuda-hfi/bin/:$PATH
+mpirun -mca pml cm -mca mtl psm2 -H cn1024,cn1024,cn1027,cn1027 -x LD_LIBRARY_PATH -x PSM2_CUDA=1 -x PSM2_GPUDIRECT=1 ./fargo3d in/fargo.par
+
