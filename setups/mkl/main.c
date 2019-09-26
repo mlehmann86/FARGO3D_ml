@@ -358,9 +358,11 @@ OMEGAFRAME (which is used afterwards to build the initial Vx field. */
       MULTIFLUID(Floor());
 #endif
 
+//new from MKL
 #ifdef DGFLOOR
       FARGO_SAFE(dgfloor());
 #endif
+//end new from MKL
 
 #ifdef MHD
   if (Resistivity_Profiles_Filled == NO) {
@@ -397,6 +399,10 @@ OMEGAFRAME (which is used afterwards to build the initial Vx field. */
       FARGO_SAFE(Collisions(dt, 1)); // 1 --> V_temp is used.
 #endif
 
+#ifdef DUSTDIFFUSION
+      FARGO_SAFE(DustDiffusion_Main(dt));
+#endif
+      
       MULTIFLUID(Transport(dt));
 
       PhysicalTime+=dt;

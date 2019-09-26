@@ -86,6 +86,13 @@ void ChangeArch() {
 
   SetupHook1 = SetupHook1_cpu;
 
+  //DUST DIFFUSION---------------------------------------
+  DustDiffusion_Core         = DustDiffusion_Core_cpu;
+  DustDiffusion_Coefficients = DustDiffusion_Coefficients_cpu;
+  //-----------------------------------------------------
+
+  copy_field = copy_field_cpu;
+
   //MHD------------------------------------------------
   ComputeSlopes = ComputeSlopes_cpu;
   _ComputeStar = _ComputeStar_cpu;
@@ -108,9 +115,6 @@ void ChangeArch() {
   VanLeerX_PPA_c    = VanLeerX_PPA_c_cpu;
   VanLeerX_PPA_d    = VanLeerX_PPA_d_cpu;
   VanLeerX_PPA_d_2d = VanLeerX_PPA_d_2d_cpu;
-
-  PTorque = PTorque_cpu; 
-  dgfloor = dgfloor_cpu;
 
   while (fgets(s, MAXLINELENGTH-1, func_arch) != NULL) {
     success = sscanf(s, "%s", name);
@@ -228,6 +232,12 @@ void ChangeArch() {
 	if(strval[0] == 'g'){
 	  copy_velocities = copy_velocities_gpu;
 	  printf("Copy velocities runs on the GPU\n");
+	}
+      }
+      if (strcmp(name, "copyfield") == 0) {
+	if(strval[0] == 'g'){
+	  copy_field = copy_field_gpu;
+	  printf("Copy field runs on the GPU\n");
 	}
       }
       if (strcmp(name, "reduction") == 0) {
@@ -367,6 +377,13 @@ void ChangeArch() {
 	  printf("Monitoring runs on the GPU\n");
 	}
       }
+      if (strcmp(name, "dustdiffusion") == 0) {
+	if(strval[0] == 'g'){
+	  DustDiffusion_Core         = DustDiffusion_Core_gpu;
+	  DustDiffusion_Coefficients = DustDiffusion_Coefficients_gpu;
+	  printf("Dust diffusion runs on the GPU\n");
+	}
+      }
       if (strcmp(name, "communications") == 0) {
 	if(strval[0] == 'g'){
 #ifdef MPICUDA
@@ -436,7 +453,8 @@ if (strcmp(name, "computetotaldensity") == 0) {
 	}
       }
 
-     if (strcmp(name, "ptorque") == 0) {
+//new from MKL 
+    if (strcmp(name, "ptorque") == 0) {
        if(strval[0] == 'g'){
          PTorque = PTorque_gpu;
          printf("PTorque runs on the GPU\n");
@@ -449,6 +467,7 @@ if (strcmp(name, "computetotaldensity") == 0) {
          printf("dgfloor runs on the GPU\n");
        }
      }
+//end new from MKL 
 
 #endif
     }

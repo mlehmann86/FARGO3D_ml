@@ -20,8 +20,10 @@ ex void Explode(void);
 
 
 ex void init_var(char*, char*, int, int, char*);
-ex void PTorque_cpu(real); 
+//new from MKL
+ex void PTorque_cpu(real);
 ex void dgfloor_cpu(void);
+//end new from MKL
 ex void ReadVarFile(char*);
 ex void var_assign(void);
 ex void ListVariables(char*);
@@ -341,6 +343,13 @@ ex void ComputeResidual_cpu(real);
 ex void AdvectSHIFT_cpu(Field*, FieldInt2D*);
 ex void ChangeFrame_cpu(int, Field*, Field2D*);
 
+ex void copy_field_cpu(Field*,Field*);
+
+//Dust Diffusion module Prototypes
+ex void DustDiffusion_Main(real);
+ex void DustDiffusion_Core_cpu(real);
+ex void DustDiffusion_Coefficients_cpu();
+
 //mhd.c Prototypes
 ex void ComputeSlopes_cpu(int, int, int, Field *, Field *);
 ex void _ComputeStar_cpu(real, int, int, int, int,  int, int, int,
@@ -518,6 +527,11 @@ ex void CheckMuteY_gpu(void);
 ex void CheckMuteZ_gpu(void);
 ex void SetupHook1_gpu (void);
 
+ex void copy_field_gpu(Field*,Field*);
+
+//DIFFUSION-----------------------------------------------
+ex void DustDiffusion_Core_gpu(real);
+ex void DustDiffusion_Coefficients_gpu();
 
 //MHD-----------------------------------------------------
 
@@ -550,8 +564,10 @@ ex void visctensor_cyl_gpu(void);
 ex void addviscosity_cyl_gpu(real);
 ex void visctensor_sph_gpu(void);
 ex void addviscosity_sph_gpu(real);
+//new from MKL
 ex void PTorque_gpu(real);
 ex void dgfloor_gpu(void);
+//end new from MKL
 
 ex void Reset_field_gpu(Field *);
 ex void ComputeTotalDensity_gpu(void);
