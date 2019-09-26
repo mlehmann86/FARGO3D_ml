@@ -116,6 +116,9 @@ void ChangeArch() {
   VanLeerX_PPA_d    = VanLeerX_PPA_d_cpu;
   VanLeerX_PPA_d_2d = VanLeerX_PPA_d_2d_cpu;
 
+  PTorque = PTorque_cpu;
+  dgfloor = dgfloor_cpu;
+
   while (fgets(s, MAXLINELENGTH-1, func_arch) != NULL) {
     success = sscanf(s, "%s", name);
     if(name[0]!='#' && success == 1){
