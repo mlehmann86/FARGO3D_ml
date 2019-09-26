@@ -1,0 +1,660 @@
+commit 21ae203caf2c3d09f826059444c0119e44c4b4fe
+Author: Philipp_Weber <philipppweber@gmail.com>
+Date:   Thu Sep 12 17:43:39 2019 +0000
+
+    Dust diffusion module as described in Weber et al. 2019 (see appendix in arXiv:1909.01661). See also https://fargo3d.bitbucket.io/multifluid.html#dust-diffusion-module
+    
+    Merged in release/public (pull request #18)
+
+diff --git a/setups/fargo_multifluid/fargo_multifluid.opt b/setups/fargo_multifluid/fargo_multifluid.opt
+index 39c40b9..f63d4bf 100644
+--- a/setups/fargo_multifluid/fargo_multifluid.opt
++++ b/setups/fargo_multifluid/fargo_multifluid.opt
+@@ -37,6 +37,7 @@ FARGO_OPT += -DVISCOSITY
+ #Drag force between species
+ FARGO_OPT += -DDRAGFORCE
+ FARGO_OPT += -DSTOKESNUMBER
++FARGO_OPT += -DDUSTDIFFUSION
+ 
+ #Damping conditions
+ FARGO_OPT += -DSTOCKHOLM
+diff --git a/src/LowTasks.c b/src/LowTasks.c
+index efcbd88..af73b59 100644
+--- a/src/LowTasks.c
++++ b/src/LowTasks.c
+@@ -615,6 +615,15 @@ void CreateFields() {
+   LapPPA  = CreateField("LapPPA", 0,0,0,0);
+ #endif
+ 
++#ifdef DUSTDIFFUSION
++  Sdiffyczc = CREATEFIELDALIAS("Sdiffyczc",Mpx,0);
++  Sdiffyfzc = CREATEFIELDALIAS("Sdiffyfzc",Mmx,0);
++#ifdef Z
++  Sdiffyczf = CREATEFIELDALIAS("Sdiffyczf",Mmy,0);
++  Sdiffyfzf = CREATEFIELDALIAS("Sdiffyfzf",Mpy,0);
++#endif
++#endif
++  
+ #ifdef MHD
+   Bx      = CreateField("bx", BX,1,0,0);
+   By      = CreateField("by", BY,0,1,0);
+diff --git a/src/change_arch.c b/src/change_arch.c
+index 3e8b17f..ad876ea 100644
+--- a/src/change_arch.c
++++ b/src/change_arch.c
+@@ -86,6 +86,13 @@ void ChangeArch() {
+ 
+   SetupHook1 = SetupHook1_cpu;
+ 
++  //DUST DIFFUSION---------------------------------------
++  DustDiffusion_Core         = DustDiffusion_Core_cpu;
++  DustDiffusion_Coefficients = DustDiffusion_Coefficients_cpu;
++  //-----------------------------------------------------
++
++  copy_field = copy_field_cpu;
++
+   //MHD------------------------------------------------
+   ComputeSlopes = ComputeSlopes_cpu;
+   _ComputeStar = _ComputeStar_cpu;
+@@ -227,6 +234,12 @@ void ChangeArch() {
+ 	  printf("Copy velocities runs on the GPU\n");
+ 	}
+       }
++      if (strcmp(name, "copyfield") == 0) {
++	if(strval[0] == 'g'){
++	  copy_field = copy_field_gpu;
++	  printf("Copy field runs on the GPU\n");
++	}
++      }
+       if (strcmp(name, "reduction") == 0) {
+ 	if(strval[0] == 'g'){
+ 	  reduction_SUM = reduction_SUM_gpu;
+@@ -364,6 +377,13 @@ void ChangeArch() {
+ 	  printf("Monitoring runs on the GPU\n");
+ 	}
+       }
++      if (strcmp(name, "dustdiffusion") == 0) {
++	if(strval[0] == 'g'){
++	  DustDiffusion_Core         = DustDiffusion_Core_gpu;
++	  DustDiffusion_Coefficients = DustDiffusion_Coefficients_gpu;
++	  printf("Dust diffusion runs on the GPU\n");
++	}
++      }
+       if (strcmp(name, "communications") == 0) {
+ 	if(strval[0] == 'g'){
+ #ifdef MPICUDA
+diff --git a/src/copy_field.c b/src/copy_field.c
+new file mode 100644
+index 0000000..a0e5f7c
+--- /dev/null
++++ b/src/copy_field.c
+@@ -0,0 +1,38 @@
++#include "fargo3d.h"
++
++void copy_field_cpu(Field *Dst, Field *Src) {
++
++  real *dst = Dst->field_cpu;
++  real *src = Src->field_cpu;
++  
++  INPUT(Src);
++  OUTPUT(Dst);
++  memcpy (dst, src, sizeof(real)*(Nx+2*NGHX)*(Ny+2*NGHY)*(Nz+2*NGHZ));
++
++}
++
++void copy_field_gpu(Field *Dst, Field *Src) {
++
++#ifdef GPU
++  int width, height, pitch;
++
++  real *dst = Dst->field_gpu;
++  real *src = Src->field_gpu;
++
++  Input_GPU(Src, __LINE__, __FILE__);
++  Output_GPU(Dst, __LINE__, __FILE__);
++  
++  if (Nx+2*NGHX == 1) { //Actually we need something like check mute in x direction also
++    pitch = Stride_gpu * sizeof(real);
++    width = (Ny+2*NGHY)*sizeof(real);
++    height = Nz+2*NGHZ;
++  } else {
++    pitch = Pitch_gpu * sizeof(real);
++    width = (Nx+2*NGHX)*sizeof(real);
++    height = (Ny+2*NGHY)*(Nz+2*NGHZ);
++  }
++
++  cudaMemcpy2D (dst, pitch, src, pitch, width, height ,cudaMemcpyDeviceToDevice);
++#endif
++
++}
+diff --git a/src/dust_diffusion_coefficients.c b/src/dust_diffusion_coefficients.c
+new file mode 100644
+index 0000000..0337b2a
+--- /dev/null
++++ b/src/dust_diffusion_coefficients.c
+@@ -0,0 +1,143 @@
++//<FLAGS>
++//#define __GPU
++//#define __NOPROTO
++//<\FLAGS>
++
++//<INCLUDES>
++#include "fargo3d.h"
++//<\INCLUDES>
++
++void DustDiffusion_Coefficients_cpu() {
++
++//<USER_DEFINED>
++#ifdef ALPHAVISCOSITY
++  INPUT(Energy);
++#ifdef ADIABATIC
++  INPUT(Density);
++#endif
++#endif
++  OUTPUT(Sdiffyczc);
++  OUTPUT(Sdiffyfzc);
++#ifdef Z
++  OUTPUT(Sdiffyczf);
++  OUTPUT(Sdiffyfzf);
++#endif
++//<\USER_DEFINED>
++
++//<EXTERNAL>
++  real* sdiff_yfzc = Sdiffyfzc->field_cpu;
++  real* sdiff_yczc = Sdiffyczc->field_cpu;
++#ifdef Z
++  real* sdiff_yczf = Sdiffyczf->field_cpu;
++  real* sdiff_yfzf = Sdiffyfzf->field_cpu;
++#endif
++#ifdef ALPHAVISCOSITY  
++#ifdef ISOTHERMAL
++  real* cs = Fluids[0]->Energy->field_cpu;
++#endif
++#ifdef ADIABATIC
++  real* e = Fluids[0]->Energy->field_cpu;
++  real* rhog = Fluids[0]->Density->field_cpu;
++  real gamma = GAMMA;
++#endif
++  real alphavisc = ALPHA;
++#else
++  real nu = NU;
++#endif
++  int pitch  = Pitch_cpu;
++  int stride = Stride_cpu;
++  int size_x = Nx+2*NGHX;
++  int size_y = Ny+2*NGHY;
++  int size_z = Nz+2*NGHZ;
++//<\EXTERNAL>
++  
++//<INTERNAL>
++  int i;
++  int j;
++  int k;
++  int ll;
++  int llym;
++  int llzm;
++#ifdef ALPHAVISCOSITY
++  real r3yczc;
++  real r3yfzc;
++  real soundspeed2;
++  real soundspeedf2;
++  real soundspeedfz2;
++#endif
++//<\INTERNAL>
++
++//<CONSTANT>
++// real ymin(Ny+2*NGHY+1);
++//<\CONSTANT>
++
++//<MAIN_LOOP>
++  i = j = k = 0;
++#ifdef Z
++  for (k=0; k<size_z; k++) {
++#endif
++#ifdef Y
++    for (j=0; j<size_y; j++) {
++#endif
++#ifdef X
++      for (i=0; i<size_x; i++ ) {
++#endif
++//<#>
++	ll = l;
++#ifdef Y
++	llym = lym;
++#endif
++#ifdef Z
++	llzm = lzm;
++#endif
++#ifdef ALPHAVISCOSITY
++#ifdef ISOTHERMAL
++	soundspeed2 = cs[ll]*cs[ll];
++	if(j==0)
++	  soundspeedf2 = soundspeed2;
++	else
++	  soundspeedf2 = 0.5*(cs[ll]+cs[llym])*0.5*(cs[ll]+cs[llym]);
++#ifdef Z
++	if(k==0)
++          soundspeedfz2 = soundspeed2;
++        else
++          soundspeedfz2 = 0.5*(cs[ll]+cs[llzm])*0.5*(cs[ll]+cs[llzm]);
++#endif //Z
++#endif
++#ifdef ADIABATIC
++	soundspeed2 = gamma*(gamma-1.0)*e[ll]/rhog[ll];
++	if(j==0)
++	  soundspeedf2 = soundspeed2;
++	else
++	  soundspeedf2 = gamma*(gamma-1.0)*(e[ll]+e[llym])/(rhog[ll]+rhog[llym]);
++#endif
++	r3yczc = ymed(j)*ymed(j)*ymed(j);
++	r3yfzc = ymin(j)*ymin(j)*ymin(j);
++
++	sdiff_yczc[ll] = alphavisc*soundspeed2/sqrt(G*MSTAR/r3yczc);
++	sdiff_yfzc[ll] = alphavisc*soundspeedf2/sqrt(G*MSTAR/r3yfzc);
++#ifdef Z
++	sdiff_yczf[ll] = alphavisc*soundspeedfz2/sqrt(G*MSTAR/r3yczc);
++	sdiff_yfzf[ll] = alphavisc*soundspeedfz2/sqrt(G*MSTAR/r3yfzc);
++#endif //Z
++#endif
++#ifdef VISCOSITY
++	sdiff_yczc[ll] = nu;
++	sdiff_yfzc[ll] = nu;
++#ifdef Z
++	sdiff_yczf[ll] = nu;
++	sdiff_yfzf[ll] = nu;
++#endif
++#endif
++//<\#>
++#ifdef X
++      }
++#endif
++#ifdef Y
++    }
++#endif
++#ifdef Z
++  }
++#endif
++//<\MAIN_LOOP>
++}
+diff --git a/src/dust_diffusion_core.c b/src/dust_diffusion_core.c
+new file mode 100644
+index 0000000..d280331
+--- /dev/null
++++ b/src/dust_diffusion_core.c
+@@ -0,0 +1,191 @@
++//<FLAGS>
++//#define __GPU
++//#define __NOPROTO
++//<\FLAGS>
++
++//<INCLUDES>
++#include "fargo3d.h"
++//<\INCLUDES>
++
++void DustDiffusion_Core_cpu(real dt) {
++  
++//<USER_DEFINED>
++  INPUT(Sdiffyczc);
++  INPUT(Sdiffyfzc);
++#ifdef Z
++  INPUT(Sdiffyczf);
++  INPUT(Sdiffyfzf);
++#endif
++  INPUT(Density);
++  INPUT(Fluids[0]->Density);
++  OUTPUT(Pressure);// we use the pressure field for temporal storage.
++//<\USER_DEFINED>
++
++  //Arrays Mmx, Mpx, Mmy and Mpy were filled with the dust diffusion coefficients in DustDiffusion_Coefficients()
++  
++//<EXTERNAL>
++  real* sdiff_yfzc = Sdiffyfzc->field_cpu;
++  real* sdiff_yczc = Sdiffyczc->field_cpu;
++#ifdef Z
++  real* sdiff_yczf = Sdiffyczf->field_cpu;
++  real* sdiff_yfzf = Sdiffyfzf->field_cpu;
++#endif
++  real* rhod  = Density->field_cpu;
++  real* rhog  = Fluids[0]->Density->field_cpu;
++  real* temp  = Pressure->field_cpu;
++#ifdef __GPU
++  real* alpha = Alpha_d;
++#else
++  real* alpha = Alpha;
++#endif
++  real dx    = Dx;
++  int pitch  = Pitch_cpu;
++  int stride = Stride_cpu;
++  int size_x = Nx+2*NGHX;
++  int size_y = Ny+2*NGHY-1;
++  int size_z = Nz+2*NGHZ-1;
++//<\EXTERNAL>
++
++//<INTERNAL>
++  int i;
++  int j;
++  int k;
++  int ll;
++  real c;
++  real update;
++#ifdef X
++  real d1;
++  real d2;
++  real cxp;
++  real cxm;
++  int llxm;
++  int llxp;
++#endif
++#ifdef Y
++  real cyp;
++  real cym;
++  real d3;
++  real d4;
++  int llyp;
++  int llym;
++#endif
++#ifdef Z
++  real czp;
++  real czm;
++  real d5;
++  real d6;
++  int llzp;
++  int llzm;
++#endif
++//<\INTERNAL>
++
++//<CONSTANT>
++// real xmin(Nx+1);
++// real ymin(Ny+2*NGHY+1);
++// real zmin(Nz+2*NGHZ+1);
++//<\CONSTANT>
++
++//<MAIN_LOOP>
++
++  i = j = k = 0;
++
++#ifdef Z
++  for (k=1; k<size_z; k++) {
++#endif
++#ifdef Y
++    for (j=1; j<size_y; j++) {
++#endif
++#ifdef X
++      for (i=0; i<size_x; i++ ) {
++#endif
++//<#>
++#ifdef X
++	ll = l;
++	llxm = lxm;
++	llxp = lxp;
++#endif
++#ifdef Y
++	llyp = lyp;
++	llym = lym;
++#endif
++#ifdef Z
++	llzp = lzp;
++	llzm = lzm;
++#endif
++
++	update = 0.0;
++	c    = rhod[ll]/(rhod[ll] + rhog[ll]); //Cell centered
++	
++	// DUST DIFFUSION ALONG X-DIRECTION
++	
++#ifdef X
++        d1   = 0.25*(rhod[ll] + rhog[ll] + rhod[llxp] + rhog[llxp])*(sdiff_yczc[llxp]+sdiff_yczc[ll]); //face centered in X
++        d2   = 0.25*(rhod[ll] + rhog[ll] + rhod[llxm] + rhog[llxm])*(sdiff_yczc[llxm]+sdiff_yczc[ll]); //face centered in X
++	cxp  = rhod[llxp]/(rhod[llxp] + rhog[llxp]);                                                   //Cell centered
++        cxm  = rhod[llxm]/(rhod[llxm] + rhog[llxm]);                                                   //Cell centered
++	
++#ifdef CARTESIAN
++	update += 1.0/(dx)*(d1*(cxp-c)/(dx) - (d2*(c-cxm))/(dx));
++#endif
++	
++#ifdef CYLINDRICAL
++        update += 1.0/ymed(j)/ymed(j)/(dx)*(d1*(cxp-c)/(dx) - (d2*(c-cxm))/(dx));
++#endif
++	
++#ifdef SPHERICAL
++        update += 1.0/ymed(j)/ymed(j)/sin(zmed(k))/sin(zmed(k))/(dx)*(d1*(cxp-c)/(dx) - (d2*(c-cxm))/(dx));
++#endif
++#endif //X
++	
++	// DUST DIFFUSION ALONG Y-DIRECTION
++#ifdef Y
++	d3   = 0.5*(rhod[ll] + rhog[ll] + rhod[llyp] + rhog[llyp])*sdiff_yfzc[llyp];//face centered in Y
++	d4   = 0.5*(rhod[ll] + rhog[ll] + rhod[llym] + rhog[llym])*sdiff_yfzc[ll];  //face centered in Y
++	cyp  = rhod[llyp]/(rhod[llyp] + rhog[llyp]);                                //Cell centered
++	cym  = rhod[llym]/(rhod[llym] + rhog[llym]);                                //Cell centered
++	
++#ifdef CARTESIAN
++	update += 1.0/(ymin(j+1)-ymin(j))*(d3*(cyp-c)/(ymed(j+1)-ymed(j)) - (d4*(c-cym))/(ymed(j)-ymed(j-1)));
++#endif
++	
++#ifdef CYLINDRICAL
++        update += 1.0/ymed(j)/(ymin(j+1)-ymin(j))*(ymin(j+1)*d3*(cyp-c)/(ymed(j+1)-ymed(j)) -
++						   (ymin(j)*d4*(c-cym))/(ymed(j)-ymed(j-1)));
++#endif
++	
++#ifdef SPHERICAL
++	update += 1.0/ymed(j)/ymed(j)/(ymin(j+1)-ymin(j))*(ymin(j+1)*ymin(j+1)*d3*(cyp-c)/(ymed(j+1)-ymed(j)) -
++							   (ymin(j)*ymin(j)*d4*(c-cym))/(ymed(j)-ymed(j-1)));
++#endif
++#endif //Y
++
++        // DUST DIFFUSION ALONG Z-DIRECTION
++#ifdef Z
++	d5   = 0.5*(rhod[ll] + rhog[ll] + rhod[llzp] + rhog[llzp])*sdiff_yczf[llzp]; // face centered in Z
++	d6   = 0.5*(rhod[ll] + rhog[ll] + rhod[llzm] + rhog[llzm])*sdiff_yczf[ll];   // face centered in Z
++	czp  = rhod[llzp]/(rhod[llzp] + rhog[llzp]);                                 // Cell centered
++	czm  = rhod[llzm]/(rhod[llzm] + rhog[llzm]);                                 // Cell centered
++#ifdef CARTESIAN
++	update += 1.0/(zmin(k+1)-zmin(k))*(d5*(czp-c)/(zmed(k+1)-zmed(k)) - (d6*(c-czm))/(zmed(k)-zmed(k+1)));
++#endif
++#ifdef CYLINDRICAL
++        update += 1.0/(zmin(k+1)-zmin(k))*(d5*(czp-c)/(zmed(k+1)-zmed(k)) - (d6*(c-czm))/(zmed(k)-zmed(k+1)));
++#endif
++#ifdef SPHERICAL
++	update += 1.0/ymed(j)/ymed(j)/sin(zmed(k))/(zmin(k+1)-zmin(k))*(sin(zmin(k+1))*d5*(czp-c)/(zmed(k+1)-zmed(k)) -
++									(sin(zmin(k))*d6*(c-czm))/(zmed(k)-zmed(k-1)));
++#endif
++#endif // Z
++      	temp[ll] = rhod[ll] + dt*update; // Density update
++//<\#>
++#ifdef X
++      }
++#endif
++#ifdef Y
++    }
++#endif
++#ifdef Z
++  }
++#endif
++//<\MAIN_LOOP>
++}
+diff --git a/src/dust_diffusion_main.c b/src/dust_diffusion_main.c
+new file mode 100644
+index 0000000..5b8b15d
+--- /dev/null
++++ b/src/dust_diffusion_main.c
+@@ -0,0 +1,27 @@
++#include "fargo3d.h"
++
++void DustDiffusion_Main(real dt) {
++
++  int init = 0;
++
++  if (init == 0) {
++    if (Fluids[0]->Fluidtype != GAS) {
++      mastererr("ERROR -  Dust diffusion module assumes that Fluids[0] is of type GAS.\n");
++      mastererr("ERROR -  You can fix this by defining the Fluid with:\n");
++      mastererr("Fluids[0] = CreateFluid(<label>,GAS);");
++      prs_exit (1);      
++    }
++    
++    init = 1;
++  }
++
++  // In principle, Diffusion_Coefficients() does not need to be called every time step
++  // for temporary constant viscosity.
++  FARGO_SAFE(DustDiffusion_Coefficients());
++  
++  MULTIFLUID(
++	     if(Fluidtype == DUST) {
++	       FARGO_SAFE(DustDiffusion_Core(dt));        // Updated density is stored in Pressure field.
++	       FARGO_SAFE(copy_field(Density,Pressure));  // We update dust densities from the Pressure field.
++	     });
++}
+diff --git a/src/global.h b/src/global.h
+index 0f3e892..c6320f2 100644
+--- a/src/global.h
++++ b/src/global.h
+@@ -116,6 +116,12 @@ Field *QL;
+ Field *QR;
+ Field *LapPPA;
+ 
++Field *Sdiffyczc;
++Field *Sdiffyfzc;
++Field *Sdiffyczf;
++Field *Sdiffyfzf;
++
++
+ // Below: fields specific to FARGO algorithms
+ Field2D *VxMed;
+ Field2D *Vxhy;
+@@ -328,6 +334,10 @@ void (*mon_bxflux)();
+ void (*comm)();
+ void (*Reset_field)(Field*);
+ void (*ComputeTotalDensity)();
++void (*copy_field)(Field*,Field*);
++//DUST DIFFUSION
++void (*DustDiffusion_Core)(real);
++void (*DustDiffusion_Coefficients)();
+ //MHD..........................................
+ void (*ComputeSlopes)(int,int,int,Field*,Field*);
+ void (*_ComputeStar)(real,int,int,int,int,int,int,int,int,int,Field*,Field*,Field*,Field*,Field*,Field*,Field*,Field*,Field*,Field*);
+diff --git a/src/main.c b/src/main.c
+index 55b8290..498b1e4 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -393,6 +393,10 @@ OMEGAFRAME (which is used afterwards to build the initial Vx field. */
+       FARGO_SAFE(Collisions(dt, 1)); // 1 --> V_temp is used.
+ #endif
+ 
++#ifdef DUSTDIFFUSION
++      FARGO_SAFE(DustDiffusion_Main(dt));
++#endif
++      
+       MULTIFLUID(Transport(dt));
+ 
+       PhysicalTime+=dt;
+diff --git a/src/makefile b/src/makefile
+index 50fdc55..128955b 100644
+--- a/src/makefile
++++ b/src/makefile
+@@ -333,7 +333,9 @@ MAINOBJ  = LowTasks.o psys.o main.o param.o var.o usage.o   	    \
+ 	   redefoptions.o setuphook1.o				\
+            fill_ghostsx.o cfl_fluids_min.o colrate.o 		\
+ 	   collisions.o resetfield.o totaldens.o		\
+-	   floor.o ShearingPeriodicBC.o summary.o
++	   floor.o ShearingPeriodicBC.o summary.o		\
++	   dust_diffusion_main.o dust_diffusion_core.o		\
++	   dust_diffusion_coefficients.o copy_field.o
+ #-----------------------#Cuda objects---------------------------------
+ GPU_OBJ  =  reduction_sum_device.o reduction_min_device.o	\
+ 	   	lowtasks_gpu.o 
+@@ -371,7 +373,8 @@ GPU_OBJBLOCKS =  CompPresIso_gpu.o CompPresAd_gpu.o 		\
+ 	   fargo_ppa_steep_gpu.o setuphook1_gpu.o		\
+            fill_ghostsx_gpu.o collisions_gpu.o                  \
+            totaldens_gpu.o floor_gpu.o		                \
+-	   resetfield_gpu.o                                     
++	   resetfield_gpu.o dust_diffusion_core_gpu.o		\
++	   dust_diffusion_coefficients_gpu.o
+ 
+ #</CUDA OBJECTS>
+ #---------------------------------------------------------------------
+diff --git a/src/param.c b/src/param.c
+index 83f8296..ca338c2 100644
+--- a/src/param.c
++++ b/src/param.c
+@@ -267,7 +267,6 @@ void var_assign(){
+   }
+ #endif
+   
+-
+ #ifndef ALPHAVISCOSITY
+   if (ALPHA != 0.0) {
+     mastererr ("ERROR - You have defined a non-vanishing value for\n");
+@@ -292,6 +291,14 @@ void var_assign(){
+ #endif
+ 
+ 
++#if defined(DUSTDIFFUSION) && defined(ALPHAVISCOSITY) && !defined(Y)
++  mastererr("ERROR - Direction Y (-DY in the .opt file) must be activated\n");
++  mastererr("\tfor the dust diffusion module with Alpha Viscosity.\n");
++  prs_exit (1);
++#endif
++
++
++
+   if (NGHX > NX) {
+     mastererr ("\n\n\nERROR\n\nThe buffer zones in X are wider than the active mesh\n");
+     mastererr ("This is not permitted.\n");
+diff --git a/src/prototypes.h b/src/prototypes.h
+index 974d5b0..640a778 100644
+--- a/src/prototypes.h
++++ b/src/prototypes.h
+@@ -339,6 +339,13 @@ ex void ComputeResidual_cpu(real);
+ ex void AdvectSHIFT_cpu(Field*, FieldInt2D*);
+ ex void ChangeFrame_cpu(int, Field*, Field2D*);
+ 
++ex void copy_field_cpu(Field*,Field*);
++
++//Dust Diffusion module Prototypes
++ex void DustDiffusion_Main(real);
++ex void DustDiffusion_Core_cpu(real);
++ex void DustDiffusion_Coefficients_cpu();
++
+ //mhd.c Prototypes
+ ex void ComputeSlopes_cpu(int, int, int, Field *, Field *);
+ ex void _ComputeStar_cpu(real, int, int, int, int,  int, int, int,
+@@ -516,6 +523,11 @@ ex void CheckMuteY_gpu(void);
+ ex void CheckMuteZ_gpu(void);
+ ex void SetupHook1_gpu (void);
+ 
++ex void copy_field_gpu(Field*,Field*);
++
++//DIFFUSION-----------------------------------------------
++ex void DustDiffusion_Core_gpu(real);
++ex void DustDiffusion_Coefficients_gpu();
+ 
+ //MHD-----------------------------------------------------
+ 
+diff --git a/std/func_arch.cfg b/std/func_arch.cfg
+index 0871a02..a61b555 100644
+--- a/std/func_arch.cfg
++++ b/std/func_arch.cfg
+@@ -37,7 +37,9 @@ Communications		     GPU
+ Monitor			     GPU
+ CheckMute		     GPU
+ SetupHook		     GPU
+-#MHD-------------------------G-----------------
++CopyField                    GPU
++DustDiffusion                GPU
++#MHD-------------------------------------------
+ ComputeSlopes		     GPU
+ ComputeStar		     GPU
+ ComputeEmf		     GPU
+@@ -45,8 +47,8 @@ UpdateMagneticField	     GPU
+ LorentzForce		     GPU
+ Resistivity		     GPU
+ FargoMHD		     GPU
++#----------------------------------------------
+ Resetfield		     GPU
+-#Boundaries (Stockholm (-e))
+ Stockholmboundary	     GPU
+-collisions		     GPU
++Collisions		     GPU
+ Floor			     GPU
+\ No newline at end of file
