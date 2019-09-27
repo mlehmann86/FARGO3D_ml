@@ -19,13 +19,22 @@ idm = lxm*id1 + lym*id2 + lzm*id3;
 
 
 if(id1 == 1){
-bigrad = ymed(j)*sin(zmed(k));
+bigrad = ymed(j);
+#ifdef Z
+bigrad*= sin(zmed(k));
+#endif
 }
 if(id2 == 1){
-bigrad = ymin(j)*sin(zmed(k));
+bigrad = ymin(j);
+#ifdef Z
+bigrad*= sin(zmed(k));
+#endif
 }
 if(id3 == 1){
-bigrad = ymed(j)*sin(zmin(k));
+bigrad = ymed(j);
+#ifdef Z
+bigrad*= sin(zmin(k));
+#endif
 }
 
 omega = sqrt(G*MSTAR/bigrad/bigrad/bigrad);

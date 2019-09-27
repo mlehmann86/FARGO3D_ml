@@ -77,7 +77,7 @@ void CondInit() {
    If feedback=NO, gas does not feel the drag force.*/
   
   ColRate(INVSTOKES1, id_gas, 1, feedback);
-  ColRate(INVSTOKES2, id_gas, 2, feedback);
-  ColRate(INVSTOKES3, id_gas, 3, feedback);
+//  ColRate(INVSTOKES2, id_gas, 2, feedback);
+//  ColRate(INVSTOKES3, id_gas, 3, feedback);
 
 }

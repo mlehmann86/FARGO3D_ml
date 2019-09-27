@@ -6,7 +6,7 @@ AspectRatio     	0.05            Thickness over Radius in the disc
 Sigma0			1.0e-4 		Surface Density at r=1
 SigmaSlope		0.5		Slope of the surface density
 FlaringIndex		0.0		Flare of the disk
-Nu			1.0e-5		Uniform kinematic viscosity
+Nu			1.0e-6		Uniform kinematic viscosity
 
 ### Dust parameters
 
@@ -18,7 +18,7 @@ Epsilon                 1.0    Dust-to-gas mass ratio
 
 ### Planet parameters
 
-PlanetConfig		planets/jupiter.cfg
+PlanetConfig		planets/zero.cfg
 ThicknessSmoothing 	0.6
 Eccentricity		0.0
 IndirectTerm		no
