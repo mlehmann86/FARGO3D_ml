@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import configparser
 import pylab 
 from scipy import ndimage 
+from scipy import integrate 
 
 #simulation hardwired parameters (unlikely to change)
 nghost = 3 
@@ -251,6 +252,7 @@ def get_vz(rad,
             
     return vz
 
+
 def pdisk_rz(var='gas',
              loc       = './', 
              azislice  = 0.0, 
@@ -427,4 +429,104 @@ def pdisk_rz(var='gas',
     fname = var+'rz_'+str(start).zfill(4)
     plt.savefig(fname,dpi=150)
 
+    return
+
+def get_surfdust(rad,
+                 theta,
+                 rhod,
+                 hdust):
+    #hdust is for setting the theta integration limits 
+
+    sigma_d   = np.zeros([nrad,nphi])
+    theta_min = np.pi/2.0 - hdust
+    theta_max = np.pi/2.0 + hdust
+    t1        = np.argmin(np.absolute(theta - theta_min))
+    t2        = np.argmin(np.absolute(theta - theta_max))
+
+    for j in range(0,nrad):
+        for k in range(0,nphi):
+            sigma_d[j,k] = integrate.simps(rhod[t1:t2,j,k], theta[t1:t2])
+            
+    return sigma_d
+
+def get_surfgas(rad,
+                 theta,
+                 rhog,
+                 hdust):
+    #hdust is for setting the theta integration limits 
+
+    sigma_g   = np.zeros([nrad,nphi])
+    theta_min = np.pi/2.0 - hdust
+    theta_max = np.pi/2.0 + hdust
+    t1        = np.argmin(np.absolute(theta - theta_min))
+    t2        = np.argmin(np.absolute(theta - theta_max))
+    
+    for j in range(0,nrad):
+        for k in range(0,nphi):
+            sigma_g[j,k] = integrate.simps(rhog[t1:t2,j,k], theta[t1:t2])
+           
+    return sigma_g
+
+def metallicity(loc      = './', 
+                start    = 0, 
+                title    = '',
+                plotrange=None, 
+     ):
+    '''
+    measure the vertically-integrated dust-to-gas ratio
+    IN THE DUST LAYER ONLY
+    '''
+
+    fname = loc+"gasdens"+str(start)+".dat"
+    rhog  = pylab.fromfile(fname).reshape(NZ,NY,NX) 
+
+    fname = loc+"dust1dens"+str(start)+".dat"
+    rhod  = pylab.fromfile(fname).reshape(NZ,NY,NX) 
+
+    '''
+    need upper and lower limits to theta integration
+    we assume dust has settled to a thin layer (so integrating over theta is similar to over z)
+    here we set the integration to dust disk aspect ratio (hdust), which we guess 
+    eventually need to replace  by actual measurement of dust disk aspect ratio (Hdust/r)
+    '''
+    hdust = 0.01 
+
+    sigma_d = get_surfdust(rad, theta, rhod, hdust)
+    sigma_g = get_surfgas(rad, theta, rhog, hdust)
+
+    sigd = np.mean(sigma_d,axis=1)
+    sigg = np.mean(sigma_g,axis=1)
+
+    metal = sigd/sigg
+    
+    plt.figure(figsize=(9,4.5))
+    plt.subplots_adjust(left=0.15, right=0.95, top=0.9, bottom=0.15)
+
+    
+    if(plotrange == None):
+        ymin = np.amin(metal)
+        ymax = np.amax(metal)
+    else:
+        ymin = plotrange[0]
+        ymax = plotrange[1]
+
+    plt.ylim(ymin,ymax)
+    plt.xlim(rmin,rmax)
+
+    plt.plot(rad,metal)
+
+    plt.rc('font',size=fontsize,weight='bold')
+
+    plt.title(title,weight='bold')
+
+    plt.xticks(fontsize=fontsize,weight='bold')
+    plt.xlabel('$R/r_0$',fontsize=fontsize)
+
+    
+    plt.yticks(fontsize=fontsize,weight='bold')
+    plt.ylabel('$(\Sigma_d/\Sigma_g)_{dust\,layer}$',fontsize=fontsize)
+ 
+    fname = 'metal_'+str(start).zfill(4)
+    plt.savefig(fname,dpi=150)
+    
     return
