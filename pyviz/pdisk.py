@@ -1,4 +1,5 @@
 import numpy as np
+import math
 import matplotlib as mpl 
 import matplotlib.tri as tri 
 import matplotlib.pyplot as plt 
@@ -6,6 +7,7 @@ import configparser
 import pylab 
 from scipy import ndimage 
 from scipy import integrate 
+from scipy import interpolate 
 
 #simulation hardwired parameters (unlikely to change)
 nghost = 3 
@@ -16,7 +18,7 @@ omega0 = np.sqrt(bigG*Mstar/r0**3.0)
 period0= 2.0*np.pi/omega0 
 
 #plottig parameters 
-fontsize= 18
+fontsize= 24
 nlev    = 128
 nclev   = 6 
 cmap    = plt.cm.inferno
@@ -61,8 +63,8 @@ for i in range(0,nrad):
     beg = i+3 
     end = beg+2
     rad[i] = np.mean(data[beg:end]) 
-    rmin = data[nghost]/r0
-    rmax = data[ny - nghost-1]/r0
+rmin = data[nghost]/r0
+rmax = data[ny - nghost-1]/r0
  
 data   = np.loadtxt("domain_z.dat")
 nz     = data.size
@@ -72,13 +74,26 @@ for i in range(0,ntheta):
     beg = i+3 
     end = beg+2
     theta[i] = np.mean(data[beg:end]) 
+thetamin = data[nghost]
+thetamax = data[nz - nghost-1]
 
 
 #get time axis 
 data   = np.loadtxt("planet0.dat")
 time   = data[:,8]
 
-def pdisk_2d(var='dg',
+#get corresponding cylindrical domain 
+#atm just take nRad = nrad and nZ = ntheta, but may need larger nZ to resolve inner disk 
+Rmin  = rmin
+Rmax  = rmax*np.sin(thetamin)
+zmin  = rmax*np.cos(thetamax)
+zmax  = rmax*np.cos(thetamin)
+nRad  = nrad
+nzcyl = ntheta*2
+Raxis = np.linspace(Rmin, Rmax, nRad)
+zaxis = np.linspace(zmin, zmax, nzcyl)
+
+def rphi(var='dg',
              loc     = './', 
              zslice  = 0.5, 
              start   = 0,
@@ -253,7 +268,7 @@ def get_vz(rad,
     return vz
 
 
-def pdisk_rz(var='gas',
+def rz(var='gas',
              loc       = './', 
              azislice  = 0.0, 
              start     = 0,
@@ -387,7 +402,7 @@ def pdisk_rz(var='gas',
     triang.set_mask(mask)
   
     plt.figure(figsize=(9,4.5))
-    plt.subplots_adjust(left=0.15, right=0.95, top=0.9, bottom=0.15)
+    plt.subplots_adjust(left=0.15, right=0.95, top=0.9, bottom=0.18)
 
     ymin = np.amin(yaxis)
     ymax = np.amax(yaxis)
@@ -417,7 +432,7 @@ def pdisk_rz(var='gas',
                          cmap=cmap
                          )
     
-    plt.colorbar(cp,ticks=clevels,format='%.3f')
+    plt.colorbar(cp,ticks=clevels,format='%.2f')
     plt.title(title,weight='bold')
 
     plt.xticks(fontsize=fontsize,weight='bold')
@@ -431,50 +446,78 @@ def pdisk_rz(var='gas',
 
     return
 
-def get_surfdust(rad,
-                 theta,
-                 rhod,
-                 hdust):
-    #hdust is for setting the theta integration limits 
 
-    sigma_d   = np.zeros([nrad,nphi])
-    theta_min = np.pi/2.0 - hdust
-    theta_max = np.pi/2.0 + hdust
-    t1        = np.argmin(np.absolute(theta - theta_min))
-    t2        = np.argmin(np.absolute(theta - theta_max))
+def cyl_to_sph_coords(z, R, phi):
+    psi = math.atan2(z, R)
+    t   = np.pi/2.0 - psi 
+    r   = np.sqrt(z*z + R*R)
+    p   = phi 
+    return (t,r,p)
 
-    for j in range(0,nrad):
-        for k in range(0,nphi):
-            sigma_d[j,k] = integrate.simps(rhod[t1:t2,j,k], theta[t1:t2])
-            
-    return sigma_d
+def sph_to_cyl_regrid(data_spherical):
 
-def get_surfgas(rad,
-                 theta,
-                 rhog,
-                 hdust):
-    #hdust is for setting the theta integration limits 
+    data_cylindrical = np.zeros([nzcyl, nRad, nphi])
 
-    sigma_g   = np.zeros([nrad,nphi])
-    theta_min = np.pi/2.0 - hdust
-    theta_max = np.pi/2.0 + hdust
-    t1        = np.argmin(np.absolute(theta - theta_min))
-    t2        = np.argmin(np.absolute(theta - theta_max))
+    for k in range(0,nphi):
+        phi = azi[k]
+        data2d = data_spherical[...,k]
+        f = interpolate.interp2d(rad, theta, data2d, kind='cubic')
+        for j in range(0, nRad):
+            R = Raxis[j]
+            for i in range(0, nzcyl):
+                z = zaxis[i]        
+                t, r, p = cyl_to_sph_coords(z, R, phi)
+                if(thetamin <= t <= thetamax):
+                    data_cylindrical[i,j,k] = f(r, t)
     
-    for j in range(0,nrad):
-        for k in range(0,nphi):
-            sigma_g[j,k] = integrate.simps(rhog[t1:t2,j,k], theta[t1:t2])
-           
-    return sigma_g
+    return data_cylindrical
+    
+def get_surfdens(data_spherical):
+    data_vintegrated = np.zeros([nRad,nphi])
 
-def metallicity(loc      = './', 
+    data_cylindrical = sph_to_cyl_regrid(data_spherical)
+
+    for j in range(0, nRad):
+        for k  in range(0, nphi):
+            data_vintegrated[j,k] = integrate.simps(data_cylindrical[:,j,k], zaxis)
+
+    return data_vintegrated
+
+'''
+def test(start = 0,
+         loc = './',
+     ):
+
+    fname = loc+"dust1dens"+str(start)+".dat"
+    rhod  = pylab.fromfile(fname).reshape(NZ,NY,NX)
+    
+    rhod_cylindrical = sph_to_cyl_regrid(rhod)
+    rhod_cylindrical_axi = np.mean(rhod_cylindrical, axis=2)
+
+    fname = loc+"gasdens"+str(start)+".dat"
+    rhog  = pylab.fromfile(fname).reshape(NZ,NY,NX)
+    
+    rhog_cylindrical = sph_to_cyl_regrid(rhog)
+    rhog_cylindrical_axi = np.mean(rhog_cylindrical, axis=2)
+  
+    dg  = np.zeros([nzcyl, nRad])
+    res = np.divide(rhod_cylindrical_axi, rhog_cylindrical_axi, out=dg, where=rhog_cylindrical_axi>0.0)
+
+    cp = plt.contourf(Raxis, zaxis, dg)
+    plt.colorbar(cp)
+
+    plt.show()
+'''
+
+def metal(loc      = './', 
                 start    = 0, 
                 title    = '',
                 plotrange=None, 
      ):
+
     '''
     measure the vertically-integrated dust-to-gas ratio
-    IN THE DUST LAYER ONLY
+    we interpolate to a cylindrical grid, then integrate vertically 
     '''
 
     fname = loc+"gasdens"+str(start)+".dat"
@@ -483,26 +526,17 @@ def metallicity(loc      = './',
     fname = loc+"dust1dens"+str(start)+".dat"
     rhod  = pylab.fromfile(fname).reshape(NZ,NY,NX) 
 
-    '''
-    need upper and lower limits to theta integration
-    we assume dust has settled to a thin layer (so integrating over theta is similar to over z)
-    here we set the integration to dust disk aspect ratio (hdust), which we guess 
-    eventually need to replace  by actual measurement of dust disk aspect ratio (Hdust/r)
-    '''
-    hdust = 0.01 
-
-    sigma_d = get_surfdust(rad, theta, rhod, hdust)
-    sigma_g = get_surfgas(rad, theta, rhog, hdust)
+    sigma_d = get_surfdens(rhod)
+    sigma_g = get_surfdens(rhog)
 
     sigd = np.mean(sigma_d,axis=1)
     sigg = np.mean(sigma_g,axis=1)
 
     metal = sigd/sigg
     
-    plt.figure(figsize=(9,4.5))
-    plt.subplots_adjust(left=0.15, right=0.95, top=0.9, bottom=0.15)
+    plt.figure(figsize=(8,4.5))
+    plt.subplots_adjust(left=0.18, right=0.95, top=0.95, bottom=0.18)
 
-    
     if(plotrange == None):
         ymin = np.amin(metal)
         ymax = np.amax(metal)
@@ -513,7 +547,7 @@ def metallicity(loc      = './',
     plt.ylim(ymin,ymax)
     plt.xlim(rmin,rmax)
 
-    plt.plot(rad,metal)
+    plt.plot(rad,metal,linewidth=2)
 
     plt.rc('font',size=fontsize,weight='bold')
 
@@ -521,12 +555,71 @@ def metallicity(loc      = './',
 
     plt.xticks(fontsize=fontsize,weight='bold')
     plt.xlabel('$R/r_0$',fontsize=fontsize)
-
     
     plt.yticks(fontsize=fontsize,weight='bold')
-    plt.ylabel('$(\Sigma_d/\Sigma_g)_{dust\,layer}$',fontsize=fontsize)
+    plt.ylabel('$\Sigma_d/\Sigma_g$',fontsize=fontsize)
  
     fname = 'metal_'+str(start).zfill(4)
     plt.savefig(fname,dpi=150)
     
+    return
+
+def dgmid(loc      = './', 
+                start    = 0, 
+                title    = '',
+                plotrange=None, 
+     ):
+
+    '''
+    measure the dust-to-gas ratio at the disk midplane 
+    '''
+
+    fname = loc+"gasdens"+str(start)+".dat"
+    rhog  = pylab.fromfile(fname).reshape(NZ,NY,NX) 
+
+    fname = loc+"dust1dens"+str(start)+".dat"
+    rhod  = pylab.fromfile(fname).reshape(NZ,NY,NX) 
+
+    t1    = np.argmin(np.absolute(theta - np.pi/2.0))
+
+    rhod_mid = np.mean(rhod[t1,...],axis=1)
+    rhog_mid = np.mean(rhog[t1,...],axis=1)
+
+    dg = rhod_mid/rhog_mid
+        
+    
+    plt.figure(figsize=(8,4.5))
+    plt.subplots_adjust(left=0.18, right=0.95, top=0.95, bottom=0.18)
+
+    
+    if(plotrange == None):
+        ymin = np.amin(dg)
+        ymax = np.amax(dg)
+    else:
+        ymin = plotrange[0]
+        ymax = plotrange[1]
+
+    plt.ylim(ymin,ymax)
+    plt.xlim(rmin,rmax)
+
+    
+    plt.plot(rad,dg,linewidth=2)
+
+    plt.rc('font',size=fontsize,weight='bold')
+
+    plt.title(title,weight='bold')
+
+    
+    plt.xticks(fontsize=fontsize,weight='bold')
+    plt.xlabel('$R/r_0$',fontsize=fontsize)
+    
+    
+    plt.yticks(fontsize=fontsize,weight='bold')
+    plt.ylabel(r'$\rho_{d0}/\rho_{g0}$',fontsize=fontsize)
+ 
+    
+    fname = 'dgmid_'+str(start).zfill(4)
+    plt.savefig(fname,dpi=150)
+    
+
     return
