@@ -8,6 +8,7 @@ import pylab
 from scipy import ndimage 
 from scipy import integrate 
 from scipy import interpolate 
+from scipy.optimize import curve_fit 
 
 #simulation hardwired parameters (unlikely to change)
 nghost = 3 
@@ -251,6 +252,12 @@ def get_cs(bigR):
     cs0 = smallh*np.sqrt(bigG*Mstar/r0)
     cs  = cs0*np.power(bigR/r0, -smallq/2.0)
     return cs
+
+def get_Hgas(bigR):
+    cs     = get_cs(bigR)
+    omegak = np.sqrt(bigG*Mstar/bigR**3)
+    Hgas = cs/omegak
+    return Hgas
 
 def get_vz(rad, 
            theta, 
@@ -619,6 +626,83 @@ def dgmid(loc      = './',
  
     
     fname = 'dgmid_'+str(start).zfill(4)
+    plt.savefig(fname,dpi=150)
+    
+
+    return
+
+def gaussian_dust(z, dmid, Hdust):
+
+    return dmid*np.exp(-0.5*z*z/Hdust/Hdust)
+    
+
+def get_hdust(data_cylindrical_axi):
+    '''
+    calculate Hdust/Hgas as function of cylindrical radius
+    we regrid dust density to cylindrical coordinates
+    then fit vertical gaussian 
+    '''
+    Hdust = np.zeros(nRad)
+    Hgas  = get_Hgas(Raxis)
+
+    for j in range(0,nRad):
+        y        = data_cylindrical_axi[:,j]
+        ynonzero = y[np.where(y>0.0)]
+        xnonzero = zaxis[np.where(y>0.0)]
+#        hdmax    = Hgas[j];
+        popt, pcov = curve_fit(gaussian_dust, xnonzero, ynonzero, bounds=(0.0,[np.inf,np.inf]))
+        Hdust[j]   = popt[1]
+        
+    return Hdust/Hgas
+
+def hdust(loc      = './', 
+                start    = 0, 
+                title    = '',
+                plotrange=None, 
+     ):
+
+    '''
+    measure and plot Hdust/Hgas as function of cylindrical radius 
+    '''
+
+    fname = loc+"dust1dens"+str(start)+".dat"
+    rhod  = pylab.fromfile(fname).reshape(NZ,NY,NX) 
+
+    rhod_cylindrical = sph_to_cyl_regrid(rhod)
+    rhod_cylindrical_axi = np.mean(rhod_cylindrical, axis=2)
+    
+    hdust = get_hdust(rhod_cylindrical_axi)
+
+    plt.figure(figsize=(8,4.5))
+    plt.subplots_adjust(left=0.18, right=0.95, top=0.95, bottom=0.18)
+
+    
+    if(plotrange == None):
+        ymin = np.amin(hdust)
+        ymax = np.amax(hdust)
+    else:
+        ymin = plotrange[0]
+        ymax = plotrange[1]
+
+    plt.ylim(ymin,ymax)
+    plt.xlim(rmin,rmax)
+    
+    plt.plot(rad,hdust,linewidth=2)
+
+    plt.rc('font',size=fontsize,weight='bold')
+
+    plt.title(title,weight='bold')
+
+    
+    plt.xticks(fontsize=fontsize,weight='bold')
+    plt.xlabel('$R/r_0$',fontsize=fontsize)
+    
+    
+    plt.yticks(fontsize=fontsize,weight='bold')
+    plt.ylabel(r'$H_{d}/H_{g}$',fontsize=fontsize)
+ 
+    
+    fname = 'hdust_'+str(start).zfill(4)
     plt.savefig(fname,dpi=150)
     
 
