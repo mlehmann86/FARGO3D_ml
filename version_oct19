@@ -1,0 +1,50 @@
+commit 003ae51fc3f6f0e029866edb37a1b4e138d2b0b9
+Author: Leonardo Krapp <krappleo@nbi.ku.dk>
+Date:   Tue Oct 1 18:08:01 2019 +0000
+
+    Missing values for the viscosity coefficient when ALPHAVISCOSITY is enabled. It only affects 3D cylindrical and spherical ADIABATIC runs.  (pull request #21)
+
+diff --git a/src/visctensor_cyl.c b/src/visctensor_cyl.c
+index 6eb0b22..fcf1313 100644
+--- a/src/visctensor_cyl.c
++++ b/src/visctensor_cyl.c
+@@ -136,12 +136,13 @@ void visctensor_cyl_cpu(){
+ //<#>
+ #ifdef ALPHAVISCOSITY
+ #ifdef ISOTHERMAL
+-	viscosity    = ALPHA*energy[l]*energy[l]*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
+-	viscositym   = ALPHA*.25*((energy[l]+energy[lym])*(energy[l]+energy[lym]))*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscosity     = ALPHA*energy[l]*energy[l]*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
++	viscositym    = ALPHA*.25*((energy[l]+energy[lym])*(energy[l]+energy[lym]))*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
+ 	viscosityzmym = ALPHA*0.0625*((energy[l]+energy[lym]+energy[lzm]+energy[lym-stride])*(energy[l]+energy[lym]+energy[lzm]+energy[lym-stride]))*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
+ #else
+-	viscosity = ALPHA*GAMMA*(GAMMA-1.0)*energy[l]/rho[l]*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
+-	viscositym= ALPHA*GAMMA*(GAMMA-1.0)*(energy[l]+energy[lym])/(rho[l]+rho[lym])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscosity     = ALPHA*GAMMA*(GAMMA-1.0)*energy[l]/rho[l]*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
++	viscositym    = ALPHA*GAMMA*(GAMMA-1.0)*(energy[l]+energy[lym])/(rho[l]+rho[lym])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscosityzmym = ALPHA*GAMMA*(GAMMA-1.0)*(e[l]+e[lxm]+e[lym]+e[lxm-pitch])/(rho[l]+rho[lxm]+rho[lym]+rho[lxm-pitch]) *sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
+ #endif
+ #else
+ 	viscosityzmym = viscositym = viscosity = NU;
+diff --git a/src/visctensor_sph.c b/src/visctensor_sph.c
+index d9e3599..1af88c4 100644
+--- a/src/visctensor_sph.c
++++ b/src/visctensor_sph.c
+@@ -142,12 +142,15 @@ void visctensor_sph_cpu(){
+ 	viscosity     = ALPHA*energy[l]*energy[l]*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
+ 	viscositym    = ALPHA*0.25*(energy[l]+energy[lym])*(energy[l]+energy[lym])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
+ #else
+-	viscosity  = ALPHA*GAMMA*(GAMMA-1.0)*energy[l]/rho[l]*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
+-	viscositym = ALPHA*GAMMA*(GAMMA-1.0)*(energy[l]+energy[lym])/(rho[l]+rho[lym])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscosity     = ALPHA*GAMMA*(GAMMA-1.0)*energy[l]/rho[l]*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
++	viscositym    = ALPHA*GAMMA*(GAMMA-1.0)*(e[l]+e[lxm]+e[lym]+e[lxm-pitch])/(rho[l]+rho[lxm]+rho[lym]+rho[lxm-pitch])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscosityzm   = ALPHA*GAMMA*(GAMMA-1.0)*(e[l]+e[lzm]+e[lxm]+e[lxm-stride])/(rho[l]+rho[lzm]+rho[lxm]+rho[lxm-stride])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscosityzmym = ALPHA*GAMMA*(GAMMA-1.0)*(e[l]+e[lym]+e[lzm]+e[lym-stride])/(rho[l]+rho[lym]+rho[lzm]+rho[lym-stride])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
+ #endif
+ #else
+ 	viscosityzmym =  viscosityzm = viscositym = viscosity = NU;
+ #endif
++	
+ //Evaluate centered divergence.
+ 	div_v = 0.0;
+ #ifdef X
