@@ -517,9 +517,10 @@ def test(start = 0,
 '''
 
 def metal(loc      = './', 
-                start    = 0, 
-                title    = '',
-                plotrange=None, 
+          start    = 0, 
+          title    = '',
+          plotrange= None, 
+          xbounds  = None,
      ):
 
     '''
@@ -540,19 +541,40 @@ def metal(loc      = './',
     sigg = np.mean(sigma_g,axis=1)
 
     metal = sigd/sigg
-    
-    plt.figure(figsize=(8,4.5))
-    plt.subplots_adjust(left=0.18, right=0.95, top=0.95, bottom=0.18)
-
+       
     if(plotrange == None):
         ymin = np.amin(metal)
         ymax = np.amax(metal)
     else:
         ymin = plotrange[0]
         ymax = plotrange[1]
+        
+    if(xbounds == None):
+        xmin  = rmin
+        xmax  = rmax 
+    else:
+        xmin  = xbounds[0]
+        xmax  = xbounds[1]
+
+    x1 = np.argmin(np.absolute(rad - xmin))
+    x2 = np.argmin(np.absolute(rad - xmax))
+
+    if(plotrange == None):
+        ymin = np.amin(metal[x1:x2])
+        ymax = np.amax(metal[x1:x2])
+    else:
+        ymin = plotrange[0]
+        ymax = plotrange[1]
+        
+    tslice  = time[start]/period0
+    tstring = "{:.0f}".format(tslice)
+    title   ='t='+tstring+r'$P_0$'
+
+    plt.figure(figsize=(8,4.5))
+    plt.subplots_adjust(left=0.18, right=0.95, top=0.9, bottom=0.18)
 
     plt.ylim(ymin,ymax)
-    plt.xlim(rmin,rmax)
+    plt.xlim(xmin,xmax)
 
     plt.plot(rad,metal,linewidth=2)
 
@@ -572,9 +594,10 @@ def metal(loc      = './',
     return
 
 def dgmid(loc      = './', 
-                start    = 0, 
-                title    = '',
-                plotrange=None, 
+          start    = 0, 
+          title    = '',
+          plotrange= None, 
+          xbounds  = None,
      ):
 
     '''
@@ -594,33 +617,41 @@ def dgmid(loc      = './',
 
     dg = rhod_mid/rhog_mid
         
-    
-    plt.figure(figsize=(8,4.5))
-    plt.subplots_adjust(left=0.18, right=0.95, top=0.95, bottom=0.18)
+    if(xbounds == None):
+        xmin  = rmin
+        xmax  = rmax 
+    else:
+        xmin  = xbounds[0]
+        xmax  = xbounds[1]
 
-    
+    x1 = np.argmin(np.absolute(rad - xmin))
+    x2 = np.argmin(np.absolute(rad - xmax))
+
     if(plotrange == None):
-        ymin = np.amin(dg)
-        ymax = np.amax(dg)
+        ymin = np.amin(dg[x1:x2])
+        ymax = np.amax(dg[x1:x2])
     else:
         ymin = plotrange[0]
         ymax = plotrange[1]
+        
+    tslice  = time[start]/period0
+    tstring = "{:.0f}".format(tslice)
+    title   ='t='+tstring+r'$P_0$'
+    
+    plt.figure(figsize=(8,4.5))
+    plt.subplots_adjust(left=0.18, right=0.95, top=0.9, bottom=0.18)
 
     plt.ylim(ymin,ymax)
-    plt.xlim(rmin,rmax)
+    plt.xlim(xmin,xmax)
 
-    
     plt.plot(rad,dg,linewidth=2)
-
     plt.rc('font',size=fontsize,weight='bold')
 
     plt.title(title,weight='bold')
 
-    
     plt.xticks(fontsize=fontsize,weight='bold')
     plt.xlabel('$R/r_0$',fontsize=fontsize)
-    
-    
+        
     plt.yticks(fontsize=fontsize,weight='bold')
     plt.ylabel(r'$\rho_{d0}/\rho_{g0}$',fontsize=fontsize)
  
@@ -656,9 +687,10 @@ def get_hdust(data_cylindrical_axi):
     return Hdust/Hgas
 
 def hdust(loc      = './', 
-                start    = 0, 
-                title    = '',
-                plotrange=None, 
+          start    = 0, 
+          title    = '',
+          plotrange= None, 
+          xbounds  = None,
      ):
 
     '''
@@ -673,19 +705,32 @@ def hdust(loc      = './',
     
     hdust = get_hdust(rhod_cylindrical_axi)
 
-    plt.figure(figsize=(8,4.5))
-    plt.subplots_adjust(left=0.18, right=0.95, top=0.95, bottom=0.18)
+    if(xbounds == None):
+        xmin  = rmin
+        xmax  = rmax 
+    else:
+        xmin  = xbounds[0]
+        xmax  = xbounds[1]
 
-    
+    x1 = np.argmin(np.absolute(rad - xmin))
+    x2 = np.argmin(np.absolute(rad - xmax))
+
     if(plotrange == None):
-        ymin = np.amin(hdust)
-        ymax = np.amax(hdust)
+        ymin = np.amin(hdust[x1:x2])
+        ymax = np.amax(hdust[x1:x2])
     else:
         ymin = plotrange[0]
         ymax = plotrange[1]
+        
+    tslice  = time[start]/period0
+    tstring = "{:.0f}".format(tslice)
+    title   ='t='+tstring+r'$P_0$'
+
+    plt.figure(figsize=(8,4.5))
+    plt.subplots_adjust(left=0.18, right=0.95, top=0.9, bottom=0.18)
 
     plt.ylim(ymin,ymax)
-    plt.xlim(rmin,rmax)
+    plt.xlim(xmin,xmax)
     
     plt.plot(rad,hdust,linewidth=2)
 
