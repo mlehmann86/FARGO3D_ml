@@ -89,8 +89,8 @@ Rmin  = rmin
 Rmax  = rmax*np.sin(thetamin)
 zmin  = rmax*np.cos(thetamax)
 zmax  = rmax*np.cos(thetamin)
-nRad  = nrad
-nzcyl = ntheta*2
+nRad  = np.amin([512, nrad]) 
+nzcyl = np.amin([512, ntheta*2])
 Raxis = np.linspace(Rmin, Rmax, nRad)
 zaxis = np.linspace(zmin, zmax, nzcyl)
 
@@ -490,9 +490,9 @@ def get_surfdens(data_spherical):
 
     return data_vintegrated
 
-'''
 def test(start = 0,
          loc = './',
+         plotrange=None,
      ):
 
     fname = loc+"dust1dens"+str(start)+".dat"
@@ -507,15 +507,59 @@ def test(start = 0,
     rhog_cylindrical = sph_to_cyl_regrid(rhog)
     rhog_cylindrical_axi = np.mean(rhog_cylindrical, axis=2)
   
-    dg  = np.zeros([nzcyl, nRad])
-    res = np.divide(rhod_cylindrical_axi, rhog_cylindrical_axi, out=dg, where=rhog_cylindrical_axi>0.0)
+    data2d= np.zeros([nzcyl, nRad])
+    res   = np.divide(rhod_cylindrical_axi, rhog_cylindrical_axi, out=data2d, where=rhog_cylindrical_axi>0.0)
 
+    data2d[data2d <= 0.0] = 1e-16
+    data2d = np.log10(data2d)
+
+    plt.figure(figsize=(9,4.5))
+    plt.subplots_adjust(left=0.15, right=0.95, top=0.9, bottom=0.18)
+
+    zmin = np.amin(zaxis)
+    zmax = np.amax(zaxis)
+    
+    Rmin = np.amin(Raxis)
+    Rmax = np.amax(Raxis) 
+
+    plt.ylim(zmin, zmax)
+    plt.xlim(Rmin, Rmax)
+
+    if(plotrange == None):
+         minv = np.amin(data2d)
+         maxv = np.amax(data2d)
+    else:
+         minv=plotrange[0]
+         maxv=plotrange[1]
+
+    levels  = np.linspace(minv,maxv,nlev)
+    clevels = np.linspace(minv,maxv,nclev)
+
+    plt.rc('font',size=fontsize,weight='bold')
+
+    cp = plt.contourf(Raxis, zaxis, data2d,
+                         levels,
+                         cmap=cmap
+                         )
+
+    plt.colorbar(cp,ticks=clevels,format='%.2f')
+#    plt.title(title,weight='bold')
+
+    plt.xticks(fontsize=fontsize,weight='bold')
+    plt.xlabel('$R/r_0$',fontsize=fontsize)
+
+    plt.yticks(fontsize=fontsize,weight='bold')
+    plt.ylabel('$z/r_0$',fontsize=fontsize)	
+
+    fname = 'test_'+str(start).zfill(4)
+    plt.savefig(fname,dpi=150)
+
+    '''
     cp = plt.contourf(Raxis, zaxis, dg)
     plt.colorbar(cp)
 
     plt.show()
-'''
-
+    ''' 
 def metal(loc      = './', 
           start    = 0, 
           title    = '',
@@ -550,14 +594,14 @@ def metal(loc      = './',
         ymax = plotrange[1]
         
     if(xbounds == None):
-        xmin  = rmin
-        xmax  = rmax 
+        xmin  = Rmin
+        xmax  = Rmax 
     else:
         xmin  = xbounds[0]
         xmax  = xbounds[1]
 
-    x1 = np.argmin(np.absolute(rad - xmin))
-    x2 = np.argmin(np.absolute(rad - xmax))
+    x1 = np.argmin(np.absolute(Raxis - xmin))
+    x2 = np.argmin(np.absolute(Raxis - xmax))
 
     if(plotrange == None):
         ymin = np.amin(metal[x1:x2])
@@ -576,7 +620,7 @@ def metal(loc      = './',
     plt.ylim(ymin,ymax)
     plt.xlim(xmin,xmax)
 
-    plt.plot(rad,metal,linewidth=2)
+    plt.plot(Raxis,metal,linewidth=2)
 
     plt.rc('font',size=fontsize,weight='bold')
 
@@ -601,7 +645,8 @@ def dgmid(loc      = './',
      ):
 
     '''
-    measure the dust-to-gas ratio at the disk midplane 
+    measure the dust-to-gas ratio at the disk midplane
+    plotted as function of spherical radius  
     '''
 
     fname = loc+"gasdens"+str(start)+".dat"
@@ -650,7 +695,7 @@ def dgmid(loc      = './',
     plt.title(title,weight='bold')
 
     plt.xticks(fontsize=fontsize,weight='bold')
-    plt.xlabel('$R/r_0$',fontsize=fontsize)
+    plt.xlabel('$r/r_0$',fontsize=fontsize)
         
     plt.yticks(fontsize=fontsize,weight='bold')
     plt.ylabel(r'$\rho_{d0}/\rho_{g0}$',fontsize=fontsize)
@@ -676,14 +721,19 @@ def get_hdust(data_cylindrical_axi):
     Hdust = np.zeros(nRad)
     Hgas  = get_Hgas(Raxis)
 
+    z0       = np.argmin(np.absolute(zaxis))
+
     for j in range(0,nRad):
         y        = data_cylindrical_axi[:,j]
         ynonzero = y[np.where(y>0.0)]
         xnonzero = zaxis[np.where(y>0.0)]
-#        hdmax    = Hgas[j];
+        hgas     = Hgas[j]
+        dmid     = y[z0]
+#        popt, pcov = curve_fit(gaussian_dust, xnonzero, ynonzero, p0=[dmid, hgas],bounds=(0.0,[np.inf,np.inf]))
         popt, pcov = curve_fit(gaussian_dust, xnonzero, ynonzero, bounds=(0.0,[np.inf,np.inf]))
+#        popt, pcov = curve_fit(gaussian_dust, xnonzero, ynonzero, p0=[1.0, hgas], bounds=(0.0,[np.inf, hgas]))
         Hdust[j]   = popt[1]
-        
+ 
     return Hdust/Hgas
 
 def hdust(loc      = './', 
@@ -706,14 +756,14 @@ def hdust(loc      = './',
     hdust = get_hdust(rhod_cylindrical_axi)
 
     if(xbounds == None):
-        xmin  = rmin
-        xmax  = rmax 
+        xmin  = Rmin
+        xmax  = Rmax 
     else:
         xmin  = xbounds[0]
         xmax  = xbounds[1]
 
-    x1 = np.argmin(np.absolute(rad - xmin))
-    x2 = np.argmin(np.absolute(rad - xmax))
+    x1 = np.argmin(np.absolute(Raxis - xmin))
+    x2 = np.argmin(np.absolute(Raxis - xmax))
 
     if(plotrange == None):
         ymin = np.amin(hdust[x1:x2])
@@ -732,23 +782,19 @@ def hdust(loc      = './',
     plt.ylim(ymin,ymax)
     plt.xlim(xmin,xmax)
     
-    plt.plot(rad,hdust,linewidth=2)
+    plt.plot(Raxis,hdust,linewidth=2)
 
     plt.rc('font',size=fontsize,weight='bold')
 
     plt.title(title,weight='bold')
-
     
     plt.xticks(fontsize=fontsize,weight='bold')
     plt.xlabel('$R/r_0$',fontsize=fontsize)
     
-    
     plt.yticks(fontsize=fontsize,weight='bold')
     plt.ylabel(r'$H_{d}/H_{g}$',fontsize=fontsize)
  
-    
     fname = 'hdust_'+str(start).zfill(4)
     plt.savefig(fname,dpi=150)
-    
 
     return
