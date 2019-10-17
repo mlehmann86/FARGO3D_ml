@@ -1,0 +1,73 @@
+commit 924098907d20e884bc902a87385aa7b0b7088508
+Author: Leonardo Krapp <krappleo@nbi.ku.dk>
+Date:   Sat Oct 5 18:13:22 2019 +0000
+
+    Bugs in viscosity tensor with the staggering (pull request #17)
+
+diff --git a/src/visctensor_cyl.c b/src/visctensor_cyl.c
+index fcf1313..ec72a8e 100644
+--- a/src/visctensor_cyl.c
++++ b/src/visctensor_cyl.c
+@@ -102,6 +102,7 @@ void visctensor_cyl_cpu(){
+   real div_v;
+   real viscosity;
+   real viscositym;
++  real viscosityzm;
+   real viscosityzmym;
+ //<\INTERNAL>
+ 
+@@ -137,12 +138,14 @@ void visctensor_cyl_cpu(){
+ #ifdef ALPHAVISCOSITY
+ #ifdef ISOTHERMAL
+ 	viscosity     = ALPHA*energy[l]*energy[l]*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
+-	viscositym    = ALPHA*.25*((energy[l]+energy[lym])*(energy[l]+energy[lym]))*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
+-	viscosityzmym = ALPHA*0.0625*((energy[l]+energy[lym]+energy[lzm]+energy[lym-stride])*(energy[l]+energy[lym]+energy[lzm]+energy[lym-stride]))*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscositym    = ALPHA*0.0625*(energy[l]+energy[lxm]+energy[lym]+energy[lxm-pitch])*(energy[l]+energy[lxm]+energy[lym]+energy[lxm-pitch])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscosityzmym = ALPHA*0.0625*(energy[l]+energy[lym]+energy[lzm]+energy[lym-stride])*(energy[l]+energy[lym]+energy[lzm]+energy[lym-stride])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscosityzm   = ALPHA*0.0625*( energy[l]+energy[lzm]+energy[lxm]+energy[lxm-stride] )*( energy[l]+energy[lzm]+energy[lxm]+energy[lxm-stride] )*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
+ #else
+ 	viscosity     = ALPHA*GAMMA*(GAMMA-1.0)*energy[l]/rho[l]*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
+-	viscositym    = ALPHA*GAMMA*(GAMMA-1.0)*(energy[l]+energy[lym])/(rho[l]+rho[lym])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
+-	viscosityzmym = ALPHA*GAMMA*(GAMMA-1.0)*(e[l]+e[lxm]+e[lym]+e[lxm-pitch])/(rho[l]+rho[lxm]+rho[lym]+rho[lxm-pitch]) *sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscositym    = ALPHA*GAMMA*(GAMMA-1.0)*(energy[l]+energy[lxm]+energy[lym]+energy[lxm-pitch])/(rho[l]+rho[lxm]+rho[lym]+rho[lxm-pitch])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscosityzmym = ALPHA*GAMMA*(GAMMA-1.0)*(energy[l]+energy[lym]+energy[lzm]+energy[lym-stride])/(rho[l]+rho[lym]+rho[lzm]+rho[lym-stride])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscosityzm   = ALPHA*GAMMA*(GAMMA-1.0)*(energy[l]+energy[lzm]+energy[lxm]+energy[lxm-stride])/(rho[l]+rho[lzm]+rho[lxm]+rho[lxm-stride])*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
+ #endif
+ #else
+ 	viscosityzmym = viscositym = viscosity = NU;
+@@ -174,7 +177,7 @@ void visctensor_cyl_cpu(){
+ #endif
+ 
+ #if defined(X) && defined(Z)
+-	tauxz[l] = viscosity*.25*(rho[l]+rho[lzm]+rho[lxm]+rho[lxm-stride])*((vx[l]-vx[lzm])/(zmed(k)-zmed(k-1)) + (vz[l]-vz[lxm])/zone_size_x(j,k)); //centered on lower, left "radial" edge in y
++	tauxz[l] = viscosityzm*.25*(rho[l]+rho[lzm]+rho[lxm]+rho[lxm-stride])*((vx[l]-vx[lzm])/(zmed(k)-zmed(k-1)) + (vz[l]-vz[lxm])/zone_size_x(j,k)); //centered on lower, left "radial" edge in y
+ #endif
+ 
+ #if defined(Y) && defined(X)
+diff --git a/src/visctensor_sph.c b/src/visctensor_sph.c
+index 1af88c4..c206d20 100644
+--- a/src/visctensor_sph.c
++++ b/src/visctensor_sph.c
+@@ -137,15 +137,15 @@ void visctensor_sph_cpu(){
+ //<#>
+ #ifdef ALPHAVISCOSITY
+ #ifdef ISOTHERMAL
+-	viscosityzm   = ALPHA*0.25*(energy[l]+energy[lzm])*(energy[l]+energy[lzm])*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
+-	viscosityzmym = ALPHA*0.0625*(energy[l]+energy[lzm]+energy[lym]+energy[lym-stride])*(energy[l]+energy[lzm]+energy[lym]+energy[lym-stride])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
+ 	viscosity     = ALPHA*energy[l]*energy[l]*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
+-	viscositym    = ALPHA*0.25*(energy[l]+energy[lym])*(energy[l]+energy[lym])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscositym    = ALPHA*0.0625*(energy[l]+energy[lxm]+energy[lym]+energy[lxm-pitch])*(energy[l]+energy[lxm]+energy[lym]+energy[lxm-pitch])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscosityzm   = ALPHA*0.0625*(energy[l]+energy[lzm]+energy[lxm]+energy[lxm-stride])*(energy[l]+energy[lzm]+energy[lxm]+energy[lxm-stride])*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
++	viscosityzmym = ALPHA*0.0625*(energy[l]+energy[lzm]+energy[lym]+energy[lym-stride])*(energy[l]+energy[lzm]+energy[lym]+energy[lym-stride])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
+ #else
+-	viscosity     = ALPHA*GAMMA*(GAMMA-1.0)*energy[l]/rho[l]*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
+-	viscositym    = ALPHA*GAMMA*(GAMMA-1.0)*(e[l]+e[lxm]+e[lym]+e[lxm-pitch])/(rho[l]+rho[lxm]+rho[lym]+rho[lxm-pitch])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
+-	viscosityzm   = ALPHA*GAMMA*(GAMMA-1.0)*(e[l]+e[lzm]+e[lxm]+e[lxm-stride])/(rho[l]+rho[lzm]+rho[lxm]+rho[lxm-stride])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
+-	viscosityzmym = ALPHA*GAMMA*(GAMMA-1.0)*(e[l]+e[lym]+e[lzm]+e[lym-stride])/(rho[l]+rho[lym]+rho[lzm]+rho[lym-stride])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscosity     = ALPHA*GAMMA*(GAMMA-1.0)*energy[l]/rho[l]*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));	
++	viscositym    = ALPHA*GAMMA*(GAMMA-1.0)*(energy[l]+energy[lxm]+energy[lym]+energy[lxm-pitch])/(rho[l]+rho[lxm]+rho[lym]+rho[lxm-pitch])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
++	viscosityzm   = ALPHA*GAMMA*(GAMMA-1.0)*(energy[l]+energy[lzm]+energy[lxm]+energy[lxm-stride])/(rho[l]+rho[lzm]+rho[lxm]+rho[lxm-stride])*sqrt(ymed(j)*ymed(j)*ymed(j)/(G*MSTAR));
++	viscosityzmym = ALPHA*GAMMA*(GAMMA-1.0)*(energy[l]+energy[lym]+energy[lzm]+energy[lym-stride])/(rho[l]+rho[lym]+rho[lzm]+rho[lym-stride])*sqrt(ymin(j)*ymin(j)*ymin(j)/(G*MSTAR));
+ #endif
+ #else
+ 	viscosityzmym =  viscosityzm = viscositym = viscosity = NU;
