@@ -91,6 +91,8 @@ zmin  = rmax*np.cos(thetamax)
 zmax  = rmax*np.cos(thetamin)
 nRad  = np.amin([512, nrad]) 
 nzcyl = np.amin([512, ntheta*2])
+#nRad  = nrad
+#nzcyl = ntheta*2
 Raxis = np.linspace(Rmin, Rmax, nRad)
 zaxis = np.linspace(zmin, zmax, nzcyl)
 
@@ -565,6 +567,7 @@ def metal(loc      = './',
           title    = '',
           plotrange= None, 
           xbounds  = None,
+          average  = 0,
      ):
 
     '''
@@ -586,6 +589,9 @@ def metal(loc      = './',
 
     metal = sigd/sigg
        
+    if(average == 1):
+        metal = rad_average(metal, Raxis)
+
     if(plotrange == None):
         ymin = np.amin(metal)
         ymax = np.amax(metal)
@@ -642,6 +648,7 @@ def dgmid(loc      = './',
           title    = '',
           plotrange= None, 
           xbounds  = None,
+          average  = 0,
      ):
 
     '''
@@ -662,6 +669,9 @@ def dgmid(loc      = './',
 
     dg = rhod_mid/rhog_mid
         
+    if(average == 1):
+        dg = rad_average(dg, Raxis)
+
     if(xbounds == None):
         xmin  = rmin
         xmax  = rmax 
@@ -711,6 +721,23 @@ def gaussian_dust(z, dmid, Hdust):
 
     return dmid*np.exp(-0.5*z*z/Hdust/Hdust)
     
+def rad_average(data1d, rad, width = 0.5):
+    '''
+    perform radial average of 1D data, standard half width is 0.5H 
+    (so averaging window is H)
+    '''
+    nx = len(rad)
+    data_output = np.zeros(nx)
+    for j in range(0,nx):
+        R0     = rad[j]
+        window = width*get_Hgas(R0)
+        rminus = R0 - window
+        rplus  = R0 + window
+        r1     = np.argmin(np.abs(rad - rminus))
+        r2     = np.argmin(np.abs(rad - rplus))
+        data_output[j] = np.mean(data1d[r1:r2+1])
+
+    return data_output
 
 def get_hdust(data_cylindrical_axi):
     '''
@@ -741,6 +768,7 @@ def hdust(loc      = './',
           title    = '',
           plotrange= None, 
           xbounds  = None,
+          average  = 0,
      ):
 
     '''
@@ -754,6 +782,9 @@ def hdust(loc      = './',
     rhod_cylindrical_axi = np.mean(rhod_cylindrical, axis=2)
     
     hdust = get_hdust(rhod_cylindrical_axi)
+
+    if(average == 1):
+        hdust = rad_average(hdust, Raxis)
 
     if(xbounds == None):
         xmin  = Rmin
