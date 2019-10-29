@@ -699,7 +699,7 @@ def dgmid(loc      = './',
     plt.ylim(ymin,ymax)
     plt.xlim(xmin,xmax)
 
-    plt.plot(rad,dg,linewidth=2)
+    plt.plot(Raxis,dg,linewidth=2)
     plt.rc('font',size=fontsize,weight='bold')
 
     plt.title(title,weight='bold')
