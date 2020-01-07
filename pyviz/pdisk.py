@@ -670,7 +670,7 @@ def dgmid(loc      = './',
     dg = rhod_mid/rhog_mid
         
     if(average == 1):
-        dg = rad_average(dg, Raxis)
+        dg = rad_average(dg, rad)
 
     if(xbounds == None):
         xmin  = rmin
@@ -688,7 +688,9 @@ def dgmid(loc      = './',
     else:
         ymin = plotrange[0]
         ymax = plotrange[1]
-        
+       
+    print(np.amax(dg[x1:x2]))
+ 
     tslice  = time[start]/period0
     tstring = "{:.0f}".format(tslice)
     title   ='t='+tstring+r'$P_0$'
@@ -699,7 +701,7 @@ def dgmid(loc      = './',
     plt.ylim(ymin,ymax)
     plt.xlim(xmin,xmax)
 
-    plt.plot(Raxis,dg,linewidth=2)
+    plt.plot(rad,dg,linewidth=2)
     plt.rc('font',size=fontsize,weight='bold')
 
     plt.title(title,weight='bold')
