@@ -688,8 +688,6 @@ def dgmid(loc      = './',
     else:
         ymin = plotrange[0]
         ymax = plotrange[1]
-       
-    print(np.amax(dg[x1:x2]))
  
     tslice  = time[start]/period0
     tstring = "{:.0f}".format(tslice)
