@@ -89,7 +89,12 @@ void Init() {
        rhod = dgratio*rhog; 
        rhod_c = rhod; 
 
+#ifdef FIXPARTICLESIZE
        tstop   = (STOKES1/omega_kep0)*cs0*rhog0/cs/rhog;
+#endif
+#ifdef STOKESNUMBER
+          tstop  = STOKES1/omega_kep;
+#endif
        St      = tstop*omega_kep;
        StPrime = St/(1.0 + dgratio);
 
@@ -152,8 +157,12 @@ void Init() {
          dgmid  /= 2.0;
          dgratio = dgmid*taper;
  
-
+#ifdef FIXPARTICLESIZE
           tstop   = (STOKES1/omega_kep0)*cs0*rhog0/cs/rhog;
+#endif
+#ifdef STOKESNUMBER
+          tstop  = STOKES1/omega_kep;
+#endif
           St      = tstop*omega_kep;
           StPrime = St/(1.0 + dgratio);
 
@@ -210,7 +219,12 @@ void Init() {
          dgmid  /= 2.0;
          dgratio = dgmid*taper;
 
+#ifdef FIXPARTICLESIZE
           tstop   = (STOKES1/omega_kep0)*cs0*rhog0/cs/rhog;
+#endif
+#ifdef STOKESNUMBER
+          tstop   = STOKES1/omega_kep;
+#endif
           St      = tstop*omega_kep;
           StPrime = St/(1.0 + dgratio);
 
