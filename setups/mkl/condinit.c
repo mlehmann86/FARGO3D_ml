@@ -104,8 +104,8 @@ void Init() {
         vphi_gas += eta*R*omega_kep*( (dgratio/(1.0+dgratio))/(StPrime*StPrime + 1.0) );
 
         omega     = sqrt(G*MSTAR/r/r/r);   
-        vphi_dust = r*omega - R*OMEGAFRAME; 
-        vphi_dust+= eta*R*omega_kep*( (1.0/(1.0+dgratio))/(StPrime*StPrime + 1.0) );
+        vphi_dust = R*omega_kep - R*OMEGAFRAME; 
+        vphi_dust-= eta*R*omega_kep*( (1.0/(1.0+dgratio))/(StPrime*StPrime + 1.0) );
 
 
 #ifdef ISOTHERMAL
