@@ -33,7 +33,7 @@ void Init() {
   H0         = ASPECTRATIO*R0;
   omega_kep0 = sqrt(G*MSTAR/R0/R0/R0);
   cs0        = omega_kep0*H0;
-  rhog0      = SIGMA0/sqrt(2.0*M_PI)/H0;
+  rhog0      = SIGMA0*(1.0 + BUMP_AMP)/sqrt(2.0*M_PI)/H0;
 
   for (k=0; k<Nz+2*NGHZ; k++) {
     for (j=0; j<Ny+2*NGHY; j++) {
