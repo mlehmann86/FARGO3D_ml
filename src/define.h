@@ -96,6 +96,10 @@
 #define VYTEMP 4096L
 #define VZTEMP 8192L
 
+//... find some unused bits
+#define T_GUESS   (1L << 20) // Example: 20th bit
+#define DIV_OLD   (1L << 21) // Example: 21st bit
+
 /////////////////////////////////////////////////////
 //Definitions relative to Fine Grain Monitoring 
 #define MONITORSCALAR (MONITOR_SCALAR+0)

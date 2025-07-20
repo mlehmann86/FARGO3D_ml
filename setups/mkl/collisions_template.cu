@@ -7,11 +7,13 @@
 #define zmin(i) zmin_s[(i)]
 #define ASPECTRATIO ASPECTRATIO_s
 #define FLARINGINDEX FLARINGINDEX_s
+#define GAMMA GAMMA_s
 
 CONSTANT(real, ymin_s, 3846);
 CONSTANT(real, zmin_s, 3846);
 __device__ __constant__ real ASPECTRATIO_s;
 __device__ __constant__ real FLARINGINDEX_s;
+__device__ __constant__ real GAMMA_s;
 
 __global__ void _collisions_kernel(real dt, 
 				   int id1, 
@@ -46,12 +48,12 @@ __global__ void _collisions_kernel(real dt,
   real b[NFLUIDS];
   real m[NFLUIDS*NFLUIDS];  
   real omega;
-  real h;
-  real cs;
-  real bigrad;
   real rho_p;
   real rho_o;
   real rho_q;
+  real bigr;
+  real h;
+  real cs;  
 
   %FLUIDS1;
 
@@ -103,8 +105,10 @@ extern "C" void _collisions_gpu(real dt, int id1, int id2, int id3, int option) 
 
 #undef ASPECTRATIO
 #undef FLARINGINDEX
+#undef GAMMA
 
   real *rho[NFLUIDS];
+  real *e[NFLUIDS];
   real *velocities_input[NFLUIDS];
   real *velocities_output[NFLUIDS];
 
@@ -115,6 +119,9 @@ extern "C" void _collisions_gpu(real dt, int id1, int id2, int id3, int option) 
     INPUT(Fluids[ii]->Density);
     rho[ii]  = Fluids[ii]->Density->field_gpu;
     
+    INPUT(Fluids[ii]->Energy);
+    e[ii] = Fluids[ii]->Energy->field_gpu;	    
+
     //Collisions along X
 #ifdef X
     if (id1 == 1) {
@@ -181,9 +188,10 @@ extern "C" void _collisions_gpu(real dt, int id1, int id2, int id3, int option) 
 #endif
 
   CUDAMEMCPY(ymin_s, ymin_d, sizeof(real)*(Ny+2*NGHY+1), 0, cudaMemcpyDeviceToDevice);
-  CUDAMEMCPY(zmin_s, zmin_d, sizeof(real)*(Nz+2*NGHZ+1), 0, cudaMemcpyDeviceToDevice); 
+  CUDAMEMCPY(zmin_s, zmin_d, sizeof(real)*(Nz+2*NGHZ+1), 0, cudaMemcpyDeviceToDevice);
   cudaMemcpyToSymbol(ASPECTRATIO_s, &ASPECTRATIO, sizeof(real)*(1), 0, cudaMemcpyHostToDevice);
   cudaMemcpyToSymbol(FLARINGINDEX_s, &FLARINGINDEX, sizeof(real)*(1), 0, cudaMemcpyHostToDevice);
+  cudaMemcpyToSymbol(GAMMA_s, &GAMMA, sizeof(real)*(1), 0, cudaMemcpyHostToDevice);
 
   cudaFuncSetCacheConfig(_collisions_kernel, cudaFuncCachePreferL1 );
 

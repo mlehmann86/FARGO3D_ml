@@ -1,0 +1,77 @@
+# You may enter a description between the BEGIN and END labels.
+# BEGIN
+# The "p3diso" setup is a spherical locally isothermal setup that may
+# be used to simulate a "full-disk" (symmetric or not with respect to
+# the equator). If you want to simulate a half disk, you should create
+# another setup (p3diso) slightly different from this one.  In order
+# to run it, do:
+# make SETUP=p3disof_mkl
+# ./fargo3d in/p3disof_mkl.par
+# Note: if you want to simulate a half disk with reflecting boundary
+# conditions at the midplane, use the setup 'p3diso'.
+#
+#
+#MKL modification: change cuda block_x = 1 (for axisymmetric sims)
+#
+# END
+#-------------------------------------------------------------------------
+
+FLUIDS := 0 1 
+NFLUIDS = 2
+FARGO_OPT += -DNFLUIDS=${NFLUIDS}
+
+#MONITOR_2D = MASS | MOM_X
+#MONITOR_SCALAR = TORQ
+
+FARGO_OPT +=  -DX
+FARGO_OPT +=  -DY
+FARGO_OPT +=  -DZ
+
+
+#customized BCs
+#FARGO_OPT += -DHARDBOUNDARIES
+
+#Coordinate System.
+FARGO_OPT +=  -DSPHERICAL
+
+#Equation of State
+FARGO_OPT += -DADIABATIC
+FARGO_OPT += -DGASCOOLING
+
+#Adjust Cooling time near boundaries so as to optimally suppress VSI and COV
+FARGO_OPT += -DBTAPER
+
+FARGO_OPT += -DSTOCKHOLM
+FARGO_OPT += -DVISCOSITY
+FARGO_OPT += -DDUSTDIFFUSION 
+FARGO_OPT += -DPOTENTIAL
+
+#enable planet torque prescription? 
+#profile Q1 for flaringindex = 0 , sigmaslope = 0.5; (locally isothermal disk)
+#profile Q0 for flaringindex = 0.5, sigmaslop = 1;   (globally isothermal disk - need special BC)
+FARGO_OPT += -DPTORQUE 
+FARGO_OPT += -DPTORQUE_PROFILE_Q1
+
+#Drag force between species
+FARGO_OPT += -DDRAGFORCE
+
+#FARGO_OPT += -DSTOKESNUMBER
+FARGO_OPT += -DFIXPARTICLESIZE
+FARGO_OPT += -DFEEDBACK
+FARGO_OPT += -DDTAPER
+
+#artificially implemented Initial dust density slope at R=R0?
+#FARGO_OPT += -DDSLOPE
+
+
+#enforce minimum d/g ratio (hardwired to 1e-16)
+FARGO_OPT += -DDGFLOOR
+
+#Cuda blocks
+#ifeq (${GPU}, 1)
+FARGO_OPT += -DBLOCK_X=1
+FARGO_OPT += -DBLOCK_Y=16
+FARGO_OPT += -DBLOCK_Z=8
+#endif
+
+

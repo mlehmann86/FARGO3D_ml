@@ -1,0 +1,163 @@
+//<FLAGS>
+//#define __GPU
+//#define __NOPROTO
+//<\FLAGS>
+
+//<INCLUDES>
+#include "fargo3d.h"
+//<\INCLUDES>
+
+
+void Edamp_cpu(real dt) {
+
+//<USER_DEFINED>
+  INPUT(Energy);
+  INPUT(Density); // Density is needed to calculate Temperature
+  OUTPUT(Energy);
+  INPUT2D(Chi_profile);
+//<\USER_DEFINED>
+
+//<INTERNAL>
+  int i;
+  int j;
+  int k;
+  int ll;
+  real dr;
+  real dz;
+  real r;
+//<\INTERNAL>
+
+//<EXTERNAL>
+  real* e = Energy->field_cpu;
+  real* rho = Density->field_cpu;
+  real* chi_profile = Chi_profile->field_cpu;
+  real gam = GAMMA;
+  int pitch = Pitch_cpu;
+  int stride = Stride_cpu;
+  int size_x = Nx;
+  int size_y = Ny + 2 * NGHY;
+  int size_z = Nz + 2 * NGHZ;
+  int pitch2d = Pitch2D;
+//<\EXTERNAL>
+
+//<CONSTANT>
+//<\CONSTANT>
+
+//<MAIN_LOOP>
+  for (k=0; k<size_z; k++) {
+    for (j=0; j<size_y; j++) {
+      for (i=0; i<size_x; i++) {
+//<#>
+        ll = i + j * pitch + k * stride;
+
+#ifdef THERMALDIFFUSION
+        int Ny_loc = size_y - 2 * NGHY;
+        int Nz_loc = size_z - 2 * NGHZ;
+
+        // This 'if' block protects the stencil calculation, ensuring it only
+        // runs on physical (non-ghost) cells where all neighbors have valid data.
+        // The ghost zones for Energy and Density are filled by the main loop's
+        // FillGhosts(PrimitiveVariables()) call.
+        if (j >= NGHY && j < Ny_loc + NGHY && k >= NGHZ && k < Nz_loc + NGHZ) {
+
+            // Robust calculation of grid spacings
+            dr = ymed(j+1) - ymed(j);
+#ifdef Z
+            dz = zmed(k+1) - zmed(k);
+#endif
+#ifdef X
+            int Nx_loc = size_x;
+            real dphi = (real)(2.0 * M_PI / (double) Nx_loc);
+#endif
+            r = ymed(j);
+
+            // -- 1. Compute T at cell and neighbors
+            real T_c  = e[ll] * (gam - 1.0) / rho[ll];
+            real T_rp = e[ll + pitch] * (gam - 1.0) / rho[ll + pitch];
+            real T_rm = e[ll - pitch] * (gam - 1.0) / rho[ll - pitch];
+#ifdef Z
+            real T_zp = e[ll + stride] * (gam - 1.0) / rho[ll + stride];
+            real T_zm = e[ll - stride] * (gam - 1.0) / rho[ll - stride];
+#endif
+#ifdef X
+            int ip1 = (i + 1) % Nx_loc;
+            int im1 = (i - 1 + Nx_loc) % Nx_loc;
+            int l_ip1 = ip1 + j * pitch + k * stride;
+            int l_im1 = im1 + j * pitch + k * stride;
+            real T_pp = e[l_ip1] * (gam - 1.0) / rho[l_ip1];
+            real T_pm = e[l_im1] * (gam - 1.0) / rho[l_im1];
+#endif
+
+            // -- 2. χ values at interfaces from precomputed profile
+            real chi_c       = chi_profile[l2D];
+            real chi_r_plus  = 0.5 * (chi_profile[l2D] + chi_profile[l2D+1]);
+            real chi_r_minus = 0.5 * (chi_profile[l2D-1] + chi_profile[l2D]);
+
+            // -- 3. Radial (r) term (conservative)
+            real dT_dr_plus   = (T_rp - T_c) / dr;
+            real dT_dr_minus  = (T_c - T_rm) / dr;
+            real flux_r_plus  = chi_r_plus  * dT_dr_plus;
+            real flux_r_minus = chi_r_minus * dT_dr_minus;
+            real div_r = ((r + 0.5 * dr) * flux_r_plus
+                        - (r - 0.5 * dr) * flux_r_minus) / (r * dr);
+
+#ifdef X
+            // -- 4. Azimuthal (phi) term
+            real dT_dphi_plus   = (T_pp - T_c) / dphi;
+            real dT_dphi_minus  = (T_c - T_pm) / dphi;
+            real flux_phi_plus  = chi_c * dT_dphi_plus;
+            real flux_phi_minus = chi_c * dT_dphi_minus;
+            real div_phi = (flux_phi_plus - flux_phi_minus) / (r * dphi);
+            div_phi = div_phi / r;
+#else
+            real div_phi = 0.0;
+#endif
+
+#ifdef Z
+            // -- 5. Vertical (z) term
+            real dT_dz_plus   = (T_zp - T_c) / dz;
+            real dT_dz_minus  = (T_c - T_zm) / dz;
+            real flux_z_plus  = chi_c * dT_dz_plus;
+            real flux_z_minus = chi_c * dT_dz_minus;
+            real div_z = (flux_z_plus - flux_z_minus) / dz;
+#else
+            real div_z = 0.0;
+#endif
+
+            // -- 6. Combine and update
+            real diffusion_term = div_r + div_phi + div_z;
+            real T_new = T_c + dt * diffusion_term;
+            e[ll] = rho[ll] * T_new / (gam - 1.0);
+        }
+#endif
+#ifdef BETACOOLING
+        // This is the original beta cooling prescription, which is not used
+        // when THERMALDIFFUSION is active. It is preserved here.
+        real bigrad, Hg, R3, omk, cs, cs2, tauc;
+#ifdef SPHERICAL
+        bigrad = ymed(j) * sin(zmed(k));
+#endif
+#ifdef CYLINDRICAL
+        bigrad = ymed(j);
+#endif
+        Hg = ASPECTRATIO * pow(bigrad / R0, FLARINGINDEX) * bigrad;
+        R3 = bigrad * bigrad * bigrad;
+        omk = sqrt(G * MSTAR / R3);
+        cs = omk * Hg;
+        cs2 = cs * cs;
+        tauc = BETA / omk;
+
+        e[ll] *= 1.0 / (1.0 + dt / tauc);
+        e[ll] += rho[ll] * cs2 / ((1.0 + tauc / dt) * (gam - 1.0));
+#endif
+
+//<\#>
+      }
+    }
+  }
+//<\MAIN_LOOP>
+
+}
+```
+
+This corrected version of the simple forward-Euler scheme should now be robust. Please give this a try. If the disturbance vanishes, we'll know the issue lies within the predictor-corrector logic. If it persists, it points to something more fundamental about how the diffusion term interacts with the boundari

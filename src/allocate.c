@@ -61,6 +61,12 @@ Fluid *CreateFluid(char *name, int fluidtype) {
   f->Energy  = CreateField(fieldname, ENERGY, 0,0,0);  
   f->VxMed   = CreateField2D ("VxMed", YZ);
 
+
+//NEW
+//T_guess = CreateField("T_guess", 0, 0, 0, 0);
+//Div_old = CreateField("Div_old", 0, 0, 0, 0);
+
+
 #ifdef X
   sprintf(fieldname,"%s%s",name,"vx");
   f->Vx      = CreateField(fieldname, VX, 1,0,0);

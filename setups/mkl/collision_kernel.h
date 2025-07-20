@@ -14,35 +14,28 @@
 idm = lxm*id1 + lym*id2 + lzm*id3;
 
 #if defined(STOKESNUMBER) || defined(FIXPARTICLESIZE)
-//omega = (id1+id3)*sqrt(G*MSTAR/(ymed(j)*ymed(j)*ymed(j))) +
-//  id2*sqrt(G*MSTAR/(ymin(j)*ymin(j)*ymin(j)));
 
-
-if(id1 == 1){
-bigrad = ymed(j);
-#ifdef Z
-bigrad*= sin(zmed(k));
-#endif
-}
-if(id2 == 1){
-bigrad = ymin(j);
-#ifdef Z
-bigrad*= sin(zmed(k));
-#endif
-}
-if(id3 == 1){
-bigrad = ymed(j);
-#ifdef Z
-bigrad*= sin(zmin(k));
-#endif
-}
-
-omega = sqrt(G*MSTAR/bigrad/bigrad/bigrad);
-h = ASPECTRATIO*pow(bigrad/R0, FLARINGINDEX)*bigrad;
-cs = omega*h; 
-
+#ifdef CYLINDRICAL
+bigr = ymed(j)*(id1+id3) + ymin(j)*id2;
 #endif
 
+#ifdef SPHERICAL
+bigr = ymed(j)*(sin(zmed(k)*id1 + zmin(k)*id3)) + ymin(j)*sin(zmed(k))*id2; 
+#endif
+
+omega = sqrt(G*MSTAR/bigr/bigr/bigr);
+h = ASPECTRATIO*pow(bigr/R0, FLARINGINDEX)*bigr;
+
+#ifdef ISOTHERMAL
+//cs = omega*h;
+cs = 0.5*(e[0][l] + e[0][idm]);
+#endif
+
+#ifdef ADIABATIC
+cs = 0.5*(sqrt((GAMMA-1.0)*e[0][l]/rho[0][l]) + sqrt((GAMMA-1.0)*e[0][idm]/rho[0][idm]));
+#endif
+
+#endif
 
 #ifdef CONSTANTSTOKESNUMBER
 #ifdef SHEARINGBOX
@@ -52,12 +45,10 @@ omega = 1.0;
 #endif
 #endif
 
-
-//enforce minimum d/g: moved to separate routine (dgfloor.c; applied after default FLOOR routine) 
-//for(o=1; o<NFLUIDS; o++){
-//rho[o][l] = rho[o][l]/rho[0][l] > 1.0e-16 ? rho[o][l]:1.0e-16*rho[0][l];
-//rho[o][l] = rho[o][l]/rho[0][l] > 0.0 ? rho[o][l]:0.0;
-//}
+//Enforce minimum dust-to-gas ratio. Temporary fix here.
+for(o=1; o<NFLUIDS; o++){
+  rho[o][l] = rho[o][l]/rho[0][l] > 1.0e-16 ? rho[o][l]:1.0e-16*rho[0][l];
+ }
 
 // In the implementation below, alpha --> 1/St
 
@@ -79,13 +70,12 @@ for (o=0; o<NFLUIDS; o++) {
       if ( p > o )  m[p+o*NFLUIDS] = -dt*omega*alpha[p+o*NFLUIDS]*rho_p/rho_o;
       else          m[p+o*NFLUIDS] = -dt*omega*alpha[p+o*NFLUIDS];
 #endif
+#ifdef CONSTANTDRAG
+      m[p+o*NFLUIDS] = -dt*alpha[p+o*NFLUIDS]/rho_o;
+#endif
 
 #ifdef FIXPARTICLESIZE
      m[p+o*NFLUIDS] = -dt*alpha[p+o*NFLUIDS]*cs*rho_p;
-#endif
-
-#ifdef CONSTANTDRAG
-      m[p+o*NFLUIDS] = -dt*alpha[p+o*NFLUIDS]/rho_o;
 #endif
     }
     
@@ -108,33 +98,29 @@ for (o=0; o<NFLUIDS; o++) {
 	  /* In the line below, the collision term should be
 	     alpha[p+q*NFLUIDS], however, we use alpha[q+p*NFLUIDS] to
 	     have the possibility of disabling feedback if necessary.*/
-
-          if( q > p ) sum += alpha[q+p*NFLUIDS]*rho_q/rho_p;
-          else        sum += alpha[q+p*NFLUIDS]; 
-
+	  
+	  if( q > p ) sum += alpha[q+p*NFLUIDS]*rho_q/rho_p;
+	  else        sum += alpha[q+p*NFLUIDS];
 #endif
-
-#ifdef FIXPARTICLESIZE
-          sum += alpha[q+p*NFLUIDS]*rho_q;
-#endif 
-
 #ifdef CONSTANTDRAG
 	  sum += alpha[q+p*NFLUIDS];
 #endif	  
+#ifdef FIXPARTICLESIZE
+          sum += alpha[q+p*NFLUIDS]*rho_q;
+#endif
 	}
       }
       
 #if defined(STOKESNUMBER) || defined(CONSTANTSTOKESNUMBER)
-     //The factors were not present in the sum (see **)
-      m[p+p*NFLUIDS] = 1.0 + dt*omega*sum;
+      m[p+p*NFLUIDS] = 1.0 + dt*omega*sum; //The factors were not present in the sum (see **)
+#endif
+      
+#ifdef CONSTANTDRAG
+      m[p+p*NFLUIDS] = 1.0 + dt*sum/rho_p; //The factors were not present in the sum (see **)
 #endif
 
 #ifdef FIXPARTICLESIZE
-      m[p+p*NFLUIDS] = 1.0 + dt*cs*sum;     
-#endif
-
-#ifdef CONSTANTDRAG
-      m[p+p*NFLUIDS] = 1.0 + dt*sum/rho_p; //The factors were not present in the sum (see **)
+      m[p+p*NFLUIDS] = 1.0 + dt*cs*sum;
 #endif
     }
   }

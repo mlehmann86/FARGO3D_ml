@@ -1,0 +1,20 @@
+#Boundaries configuration file for p3diso.bound
+#----------------------------------------------
+
+Density:
+	Ymin: UNPERTRBCDENSUS2D
+	Ymax: UNPERTRBCDENSUS2D
+
+Vx:
+	Ymin: UNPERTRBCVPHIUS2D
+	Ymax: UNPERTRBCVPHIUS2D
+
+Vy:
+	Ymin:   UNPERTRBCVY
+	Ymax:   UNPERTRBCVY
+
+Energy:
+	Ymin: UNPERTRBCENERGYUS2D
+	Ymax: UNPERTRBCENERGYUS2D
+
+

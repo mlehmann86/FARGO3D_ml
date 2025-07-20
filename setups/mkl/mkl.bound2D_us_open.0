@@ -1,0 +1,32 @@
+#Boundaries configuration file for p3diso.bound
+#----------------------------------------------
+
+Density:
+	Ymin: UNPERTRBCDENSUS
+	Ymax: UNPERTRBCDENSUS
+	Zmin: SYMMETRIC
+	Zmax: SYMMETRIC
+
+Vx:
+	Ymin: UNPERTRBCVPHIUS
+	Ymax: UNPERTRBCVPHIUS  
+	Zmin: SYMMETRIC
+	Zmax: SYMMETRIC
+
+Vy:
+	Ymin: PLUTORBCVRAD
+	Ymax: PLUTORBCVRAD
+	Zmin: SYMMETRIC
+	Zmax: SYMMETRIC
+
+Vz:
+	Ymin: PLUTORBCVTHETA
+	Ymax: PLUTORBCVTHETA
+	Zmin: OPENINNER
+	Zmax: OPENOUTER
+
+Energy:
+	Ymin: UNPERTRBCENERGYUS
+	Ymax: UNPERTRBCENERGYUS
+	Zmin: SYMMETRIC
+	Zmax: SYMMETRIC

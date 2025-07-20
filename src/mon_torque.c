@@ -86,6 +86,11 @@ void mon_torq_cpu () {
 	dx = ymed(j)*cos(xmed(i))-Xplanet;
 	dy = ymed(j)*sin(xmed(i))-Yplanet;
 #ifdef Z
+#ifdef UNSTRAT
+
+#else
+	dz = 0.0;
+#endif
 	dz = zmed(k)-Zplanet;
 #endif
 #endif

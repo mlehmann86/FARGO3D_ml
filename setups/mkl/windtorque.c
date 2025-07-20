@@ -1,0 +1,148 @@
+//<FLAGS>
+//#define __GPU
+//#define __NOPROTO
+//<\FLAGS>
+
+//<INCLUDES>
+#include "fargo3d.h"
+//<\INCLUDES>
+
+void windtorque_cpu(real dt) {
+
+//<USER_DEFINED>
+  INPUT(Vx_temp);
+  OUTPUT(Vx_temp);
+
+  real orbits;
+  real planetmass_taper;
+  
+  orbits = PhysicalTime/(2.0*M_PI); 
+
+  if (orbits < PTORQUEON) {
+  planetmass_taper = 0.0; 
+  } else if( (orbits >= PTORQUEON) && (orbits < (PTORQUEON + PTORQUETAPER)) ){
+  planetmass_taper = pow(sin(0.5*M_PI*(orbits-PTORQUEON)/PTORQUETAPER), 2.0);
+  } else {
+  planetmass_taper = 1.0; 
+  }
+
+//<\USER_DEFINED>
+
+//<EXTERNAL>
+  real* rho = Density->field_cpu;
+  real* vx = Vx->field_cpu;
+  real* vx_temp = Vx_temp->field_cpu;
+  int pitch  = Pitch_cpu;
+  int stride = Stride_cpu;
+  int size_x = XIP;
+  int size_y = Ny+2*NGHY-1;
+  int size_z = Nz+2*NGHZ-1;
+  real taper = planetmass_taper; 
+  real r0 = R0;
+  real bigg = G;
+  real mstar= MSTAR;
+  real aspectratio = ASPECTRATIO;
+  real ptorquemass = PTORQUEMASS;
+  real lam = LAMBDA;
+  real b = BB;
+//<\EXTERNAL>
+
+//<INTERNAL>
+  int i;
+  int j;
+  int k;
+  real x;
+  real z; 
+  real bigrad;
+  real curlyf;
+  real gamma;
+  real ex1;
+  real ex2;
+  real h0 = aspectratio*r0;
+  real omk; 
+#ifdef PTORQUE_PROFILE_Q1
+  real p1 = 0.0297597;
+  real p2 = 1.09770;
+  real p3 = 0.938567;
+  real p4 = 0.0421186;
+  real p5 = 0.902328;
+  real p6 = 1.03579;
+  real p7 = 0.0981183;
+  real p8 = 4.68108;
+#endif 
+#ifdef PTORQUE_PROFILE_Q0
+  real p1 = 0.0303427;
+  real p2 = 1.11959;
+  real p3 = 0.928609;
+  real p4 = 0.0408822;
+  real p5 = 0.861233;
+  real p6 = 1.15412;
+  real p7 =-0.181823;
+  real p8 = 3.07328;
+#endif
+  real delta=1.3;
+  real cconst=0.798; 
+//<\INTERNAL>
+
+//<CONSTANT>
+// real ymin(Ny+2*NGHY+1);
+// real zmin(Nz+2*NGHZ+1);
+//<\CONSTANT>
+
+
+//<MAIN_LOOP>
+  for (k=1; k<size_z; k++) {
+    for (j=1; j<size_y; j++) {
+      for (i=XIM; i<size_x; i++) {
+//<#>
+	bigrad = ymed(j)*sin(zmed(k));
+	x = (bigrad - r0)/h0;
+
+	ex1 = (x+p2)/p3;
+	ex1*= ex1;
+	ex2 = (x-p5)/p6;
+	ex2*= ex2;
+	curlyf = p1*exp(-ex1) + p4*exp(-ex2);
+	curlyf*= tanh(p7 - p8*x);
+	lambda =-curlyf*pow(omega0*r0, 2.0);
+	lambda*= pow(ptorquemass*taper, 2.0);
+	lambda*= pow(1.0/aspectratio, 4.0)/bigrad;
+
+
+
+//apply first the torque density mimmicking the magnetic wind torque
+
+        gamma = -omk*omk*bigrad*bigrad*b;
+        gamma *= rho[l]*(lam-1.0)/(2.0*M_PI);
+	
+
+//next we extract mass at the upper and lower disc boundary to mimmick massloss by the magnetic wind
+
+	
+	
+
+
+/*
+        z = ymed(j)*cos(zmed(k));
+        lambda*= exp(-0.5*z*z/h0/h0);
+*/
+
+/*
+        lambda = cconst*R0*pow(PTORQUEMASS*taper,2.0);
+        lambda*= pow(R0*omega0, 2.0);
+        lambda/= 2.0*bigrad*bigrad;
+        if (x < -delta){
+        lambda *= -pow(R0/(bigrad-R0),4.0);
+        } else if (x > delta){
+        lambda *=  pow(R0/(bigrad-R0),4.0);
+        } else {
+        lambda *=0.0; 
+        }
+*/
+        vx_temp[l] += dt*lambda; 
+//<\#>
+      }
+    }
+  }
+//<\MAIN_LOOP>
+}

@@ -1,0 +1,91 @@
+Setup			mkl             Name of setup folder 
+
+### Disk parameters
+
+AspectRatio     	0.028571429     Thickness over Radius in the disc
+Sigma0			6.3661977237e-4	Surface Density at r=1
+Nu			1.0e-12		Uniform kinematic viscosity
+NuDxy			1.0e-12		Uniform dust diffusion viscosity
+NuDz			1.0e-7		Uniform dust diffusion viscosity
+SigmaSlope	        1.0		Slope of surface
+FlaringIndex	       -0.5            Power law index of H/R (Flare = 0 => constant aspect-ratio)
+BUMP_AMP                0.0             Amplitude of initial gas surface density bump
+BUMP_WIDTH              1.0             Width of  initial gas surface density bump 
+BUMP_RAD                1.0		Location of Bump Center
+
+NOISE_AMP     		0.0001
+
+
+### Dust parameters
+
+Stokes1                 1.0e-1	    Stokes number for dust1
+Metallicity            	6.0e-3      Dust-to-gas mass ratio / metallicity (initial) 
+DustTaper               0.8         Taper off initial dust/gas ratio near radial boundaries 
+
+
+### Planet parameters
+
+PlanetConfig		planets/zero.cfg        Location of planet file relative to location of fargo3d executable 
+ThicknessSmoothing 	0.1  	  		Smoothing parameters in disk thickness
+PTorqueMass             0.0             	mplanet/mstar for toarque prescription 
+PTorqueOn               0.0             	when to switch on torque prescription 
+PTorqueTaper            1.0             	switch on torque over this many orbits 
+
+### Numerical method parameters
+
+Disk			YES             Include this evolution?
+OmegaFrame     		1.0             Rotating frame angular velocity 
+Frame			F               Frame of reference 
+IndirectTerm		No              Indirect potential of disk and  planet?  
+
+Beta                    1.0e-3            Cooling  time * Om
+Gamma			1.4
+Betataper               0.0            
+
+
+Apar 			2.1		Fukuhara+23 vertical coling profile paramaters
+Bpar 			0.9
+Beta0par 		2.0e-3  
+Beta1par 		0.5
+
+
+
+### Mesh parameters
+Nz                      1024                      Vertical number of zones
+Nx			1			Azimuthal number of zones 
+Ny               	2560			Radial number of zones
+Ymin			0.971			Inner boundary radius
+Ymax			1.028			Outer boundary radius
+Spacing                 uni                     Use log spacing or uniform spacing in radius 
+Xmin			0.0                     Minimum azimuth
+Xmax			6.283185307179586       Maximum azimuth 
+Zmin                    -0.04                   Minimum z
+Zmax                    0.04                    Maximum Z
+PeriodicZ               YES
+PeriodicZ               YES
+PeriodicZ               YES
+PeriodicZ               YES
+
+
+### Stockholm
+
+DampingZone 		1.03		Radial range for damping (in period-ratios). DEFAULT=1.15
+TauDamp 		0.3		Characteristic time for damping in units of the inverse of the local orbital frequency.	 DEFAULT=0.3
+
+CFL			0.44			DEF 0.44
+
+### Output control parameters
+
+Ntot			20010			  Total number of time steps (default 20010)
+Ninterm	 		160			  Time steps between outputs (for dt=pi/10, ninterm=20 is 1 orbit)
+DT			0.314159265359		  Time step length. 2PI = 1 orbit
+OutputDir		@outputs/cos_bet1dm3_St1dm1_Z6dm3_r2H_z08H_HR128k_LY21_kawasnew   Output directory relative to location of fargo3d executable
+
+###use customized func_arch file 
+FuncArchFile            setups/mkl/func_arch.cfg  Location of func_arch file relative to location of fargo3d executable
+
+#Field 			gasdens
+#PlotLine		field[-1,:,:]
+
+
+

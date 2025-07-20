@@ -310,6 +310,8 @@ OMEGAFRAME (which is used afterwards to build the initial Vx field. */
   for (i = begin_i; i<=NTOT; i++) { // MAIN LOOP
     if (NINTERM * (TimeStep = (i / NINTERM)) == i) {
 
+//TIME START
+
 #if defined(MHD) && defined(DEBUG)
       FARGO_SAFE(ComputeDivergence(Bx, By, Bz));
 #endif
@@ -439,6 +441,8 @@ OMEGAFRAME (which is used afterwards to build the initial Vx field. */
       WritePlanetSystemFile(TimeStep, YES);
       SolveOrbits (Sys);
     }
+
+//TIME END
   }
   
   MPI_Finalize();

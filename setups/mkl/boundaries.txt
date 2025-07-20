@@ -132,8 +132,20 @@ PLUTORBCVPHI:
         Centered: |(vphi+Ymed(jact)*sin(Zmed(k))*'OMEGAFRAME')*sqrt(Ymed(jact)/Ymed(jgh)) - Ymed(jgh)*sin(Zmed(k))*'OMEGAFRAME'|vphi|
 
 
+
+##############################################################
+### vertically stratified, spherical                      ####
+###							  ####	
+###							  ####
+##############################################################
+
+
 UNPERTVBCDENS:
 	Centered: |'SIGMA0'*pow(Ymed(j)*sin(Zmed(kgh))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(kgh))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(j)*sin(Zmed(kgh))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+
+UNPERTVBCENERGY:
+	Centered: |'(pow((sqrt('G'*'MSTAR'/pow(Ymed(j)*sin(Zmed(kgh)),3.0))*'ASPECTRATIO'*pow(Ymed(j)*sin(Zmed(kgh))/'R0','FLARINGINDEX')*Ymed(j)*sin(Zmed(kgh))),2.0))/('GAMMA'-1.0)*'SIGMA0'*pow(Ymed(j)*sin(Zmed(kgh))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(kgh))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(j)*sin(Zmed(kgh))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
 
 
 UNPERTVBCVPHI:
@@ -144,12 +156,146 @@ UNPERTRBCDENS:
 	Centered: |'SIGMA0'*pow(Ymed(jgh)*sin(Zmed(k))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(k))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
 
 
+UNPERTRBCENERGY:
+	Centered: |(pow((sqrt('G'*'MSTAR'/pow(Ymed(jgh)*sin(Zmed(k)),3.0))*'ASPECTRATIO'*pow(Ymed(jgh)*sin(Zmed(k))/'R0','FLARINGINDEX')*Ymed(jgh)*sin(Zmed(k))),2.0))/('GAMMA'-1.0)*'SIGMA0'*pow(Ymed(jgh)*sin(Zmed(k))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(k))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+
+UNPERTRBCDENSDUST:
+	Centered: |'METALLICITY'*'SIGMA0'*pow(Ymed(jgh)*sin(Zmed(k))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(k))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
 UNPERTRBCVPHI: 
 	Centered:|sqrt('G'*'MSTAR'/(Ymed(jgh)*sin(Zmed(k))))*sqrt(1.0 - ('SIGMASLOPE'-'FLARINGINDEX'+2.0)*pow('ASPECTRATIO',2.0)*pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX') + (1.0-2.0*'FLARINGINDEX')*(sin(Zmed(k))-1.0)) -  Ymed(jgh)*sin(Zmed(k))*'OMEGAFRAME'   |vphi|
-	       
+
 
 UNPERTRBCVPHIDUST:
         Centered:|sqrt('G'*'MSTAR'/Ymed(jgh))-Ymed(jgh)*sin(Zmed(k))*'OMEGAFRAME'|vphi|
+
+
+
+##############################################################
+### vertically unstratified, cylindrical                  ####
+###							  ####	
+###							  ####
+##############################################################
+
+######RADIAL######
+
+UNPERTRBCDENSUS:
+	Centered: |'SIGMA0'*pow(Ymed(jgh)/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+
+UNPERTRBCENERGYUS:
+	Centered: |(pow((sqrt('G'*'MSTAR'/pow(Ymed(jgh),3.0))*'ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh)),2.0))/('GAMMA'-1.0)*'SIGMA0'*pow(Ymed(jgh)/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+
+UNPERTRBCVPHIUS: 
+	Centered:|sqrt('G'*'MSTAR'/(Ymed(jgh)))*sqrt(1.0 - ('SIGMASLOPE'-'FLARINGINDEX'+2.0)*pow('ASPECTRATIO',2.0)*pow(Ymed(jgh)/'R0',2.0*'FLARINGINDEX')) -  Ymed(jgh)*'OMEGAFRAME'   |vphi|
+
+#####VERTICAL#####
+
+UNPERTVBCDENSUS:
+	Centered: |'SIGMA0'*pow(Ymed(j)/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+
+UNPERTVBCENERGYUS:
+	Centered: |(pow((sqrt('G'*'MSTAR'/pow(Ymed(j),3.0))*'ASPECTRATIO'*pow(Ymed(j)/'R0','FLARINGINDEX')*Ymed(j)),2.0))/('GAMMA'-1.0)*'SIGMA0'*pow(Ymed(j)/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+
+UNPERTVBCVPHIUS: 
+	Centered:|sqrt('G'*'MSTAR'/(Ymed(j)))*sqrt(1.0 - ('SIGMASLOPE'-'FLARINGINDEX'+2.0)*pow('ASPECTRATIO',2.0)*pow(Ymed(j)/'R0',2.0*'FLARINGINDEX')) -  Ymed(j)*'OMEGAFRAME'   |vx|
+
+UNPERTRBCVY:
+        Staggered: |0.0|0.0|vy|
+
+UNPERTRBCVZ:
+	Centered: |0.0|vz|
+
+UNPERTVBCVY:
+	Centered: |0.0|vy|
+UNPERTVBCVZ:
+	Staggered: |0.0|0.0|vz|
+
+
+
+###################2D RAZOR THIN###########################################
+UNPERTRBCDENSUS2D:
+	Centered: |'SIGMA0'*pow(Ymed(jgh)/'R0',-'SIGMASLOPE')|ds|
+
+
+UNPERTRBCENERGYUS2D:
+	Centered: |(pow((sqrt('G'*'MSTAR'/pow(Ymed(jgh),3.0))*'ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh)),2.0))/('GAMMA'-1.0)*'SIGMA0'*pow(Ymed(jgh)/'R0',-'SIGMASLOPE')|ds|
+
+
+UNPERTRBCVPHIUS2D: 
+	Centered:|sqrt('G'*'MSTAR'/(Ymed(jgh)))*sqrt(1.0 - ('SIGMASLOPE'-2.0*'FLARINGINDEX'+1.0)*pow('ASPECTRATIO',2.0)*pow(Ymed(jgh)/'R0',2.0*'FLARINGINDEX')) -  Ymed(jgh)*'OMEGAFRAME'   |vphi|
+
+
+####################DUST##########################################
+
+UNPERTRBCDENSDUSTUS:
+	Centered: |('METALLICITY')*'SIGMA0'*pow(Ymed(jgh)/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+UNPERTRBCVPHIDUSTUS:
+        Centered:|sqrt('G'*'MSTAR'/Ymed(jgh))-Ymed(jgh)*'OMEGAFRAME'|vphi|
+
+
+
+UNPERTRBCVPHIUS1F: 
+	Centered:|sqrt('G'*'MSTAR'/Ymed(jgh))*(1.0-('SIGMASLOPE' - 'FLARINGINDEX' +2.0)*pow('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX'),2.0)/(1.0+'METALLICITY'))-Ymed(jgh)*'OMEGAFRAME'   |vphi|
+
+
+#############################################################################
+### vertically unstratified, cylindrical  + dust VG + presettled layer   ####
+###							                 ####	
+###							                 ####
+#############################################################################
+
+UNPERTRBCDENSDUSTPRES:
+	Centered: |('METALLICITY'*('ZMAX'-'ZMIN')/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh))/'HDHGFAC'/sqrt(2.0*3.1415926535897)*exp(-0.5*pow(Zmed(k)/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh))/'HDHGFAC',2.0)))*'SIGMA0'*pow(Ymed(jgh)/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+
+
+UNPERTRBCDENSDUSTPRESZ005:
+	Centered: |(0.05*('ZMAX'-'ZMIN')/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh))/'HDHGFAC'/sqrt(2.0*3.1415926535897)*exp(-0.5*pow(Zmed(k)/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh))/'HDHGFAC',2.0)))*'SIGMA0'*pow(Ymed(jgh)/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+UNPERTRBCVPHI1FPRES: 
+	Centered:|sqrt('G'*'MSTAR'/Ymed(jgh))*( 1.0-0.5*('SIGMASLOPE' - 'FLARINGINDEX' + 2.0)*pow('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX'),2.0)/(1.0+('METALLICITY'*('ZMAX'-'ZMIN')/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh))/'HDHG'/sqrt(2.0*3.1415926535897)*exp(-0.5*pow(Zmed(k)/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh))/'HDHG',2.0)))) )-Ymed(jgh)*'OMEGAFRAME'|vphi|
+
+
+
+#############################################################################
+### vertically unstratified, cylindrical  + dust VG + vertical diffusion ####
+###							                 ####	
+###							                 ####
+#############################################################################
+
+UNPERTRBCDENSDUSTDIFF:
+	Centered: |('METALLICITY'*('ZMAX'-'ZMIN')/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh))*sqrt('STOKES1'/('NUDZ'*pow(1.0/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')),2.0)))/sqrt(2.0*3.1415926535897) *exp(-0.5*('STOKES1'/('NUDZ'*pow(1.0/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')),2.0)))*pow(Zmed(k)/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh)),2.0)))*'SIGMA0'*pow(Ymed(jgh)/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+
+UNPERTRBCVPHI1FDIFF: 
+	Centered:|sqrt('G'*'MSTAR'/(Ymed(jgh)))*(1.0-('SIGMASLOPE' - 'FLARINGINDEX' +2.0)*pow('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX'),2.0)/(1.0+('METALLICITY'*('ZMAX'-'ZMIN')/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh))*sqrt('STOKES1'/('NUDZ'*pow(1.0/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')),2.0)))/sqrt(2.0*3.1415926535897) *exp(-0.5*('STOKES1'/('NUDZ'*pow(1.0/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')),2.0)))*pow(Zmed(k)/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh)),2.0)))))-Ymed(jgh)*'OMEGAFRAME'   |vphi|
+
+
+
+
+
+UNPERTRBCVZDUST:
+        Centered:|-'STOKES1'*Zmed(k)*sqrt('G'*'MSTAR'/pow(Ymed(jgh),3.0))|vtheta|
+
+##############################################################
+### Misc.     						  ####
+###							  ####	
+###							  ####
+##############################################################
+
+VISCRBCVRAD: 
+	Staggered: |-3.0*'NU'*(1.0 + 2.0*'SIGMASLOPE')/(2.0*Ymed(jgh))|-3.0*'NU'*(1.0 + 2.0*'SIGMASLOPE')/(2.0*Ymed(jgh))|vr|
+
+	       
+
+
+
 
 
 RBCNODUST:

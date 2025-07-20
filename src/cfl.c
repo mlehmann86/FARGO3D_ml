@@ -155,6 +155,9 @@ void cfl_cpu() {
 	soundspeed2 = GAMMA*cs[ll]*pow(rho[ll],GAMMA-1.0); //In polytropic setups we use cs[] to store the entropy
 #endif
 
+
+
+
 #ifdef MHD
 	if (fluidtype == GAS) {
 	  soundspeed2 += ((bx[ll]*bx[ll]+by[ll]*by[ll]+bz[ll]*bz[ll])/(MU0*rho[ll]));
@@ -217,10 +220,16 @@ void cfl_cpu() {
 	cfl8 = 4.0*eta*pow(max3(cfl7_a,cfl7_b,cfl7_c),2);
 #endif
 
+
+
 	dtime[ll] = CFL/sqrt(cfl1*cfl1 + cfl2*cfl2 + 
 			     cfl3*cfl3 + cfl4*cfl4 + 
 			     cfl5*cfl5 + cfl6*cfl6 + 
 			     cfl7*cfl7 + cfl8*cfl8 );
+
+
+
+
 
 //<\#>
 #ifdef X

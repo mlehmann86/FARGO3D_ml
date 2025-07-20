@@ -122,7 +122,6 @@ CUDAOPT_LINUX = -O3 -w #-arch=sm_61
 PARAINC_LINUX = 
 PARALIB_LINUX =
 CUDAINC_LINUX = -I${CUDA}/include/
-CUDALIB_LINUX = -L${CUDA}/lib64/  -lcudart
 CUDALIB_LINUX = -L${CUDA}/lib64/  -lcudart -lstdc++
 CXX_LINUX     = g++ -stdlib=libstdc++
 CXXPARA_LINUX = mpic++ -stdlib=libstdc++

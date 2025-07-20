@@ -1,0 +1,2 @@
+MAINOBJ += ptorque.o dgfloor.o
+GPUOBJ  += ptorque_gpu.o dgfloor_gpu.o

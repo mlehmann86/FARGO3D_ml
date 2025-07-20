@@ -1,2 +1,13 @@
-MAINOBJ += ptorque.o dgfloor.o
-GPUOBJ  += ptorque_gpu.o dgfloor_gpu.o
+MAINOBJ += dgfloor.o
+GPUOBJ  += dgfloor_gpu.o
+MAINOBJ += edamp.o
+GPUOBJ  += edamp_gpu.o
+MAINOBJ += edamp_predict.o
+GPUOBJ  += edamp_predict_gpu.o
+MAINOBJ += edamp_correct.o
+GPUOBJ  += edamp_correct_gpu.o
+MAINOBJ += edamp_fillghosts.o
+GPUOBJ  += edamp_fillghosts_gpu.o
+
+
+

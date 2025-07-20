@@ -115,9 +115,13 @@ void ChangeArch() {
   VanLeerX_PPA_c    = VanLeerX_PPA_c_cpu;
   VanLeerX_PPA_d    = VanLeerX_PPA_d_cpu;
   VanLeerX_PPA_d_2d = VanLeerX_PPA_d_2d_cpu;
-
-  PTorque = PTorque_cpu;
+  // edit mlehmann 17.09.2021
+  Edamp = Edamp_cpu;
+  Edamp_predict = Edamp_predict_cpu;
+  Edamp_correct = Edamp_correct_cpu;
+  Edamp_fillghosts = Edamp_fillghosts_cpu;
   dgfloor = dgfloor_cpu;
+  // end of edit
 
   while (fgets(s, MAXLINELENGTH-1, func_arch) != NULL) {
     success = sscanf(s, "%s", name);
@@ -455,23 +459,48 @@ if (strcmp(name, "computetotaldensity") == 0) {
 	  printf("Floor runs on the GPU\n");
 	}
       }
+//edit mlehmann 17.09.2021
+if (strcmp(name, "edamp") == 0) {
+  if(strval[0] == 'g'){
+    Edamp = Edamp_gpu;
+    printf("Edamp runs on the GPU\n");
+  }
+}
+if (strcmp(name, "edamp_predict") == 0) {
+  if(strval[0] == 'g'){
+    Edamp_predict = Edamp_predict_gpu;
+    printf("Edamp_predict runs on the GPU\n");
+  } else {
+    Edamp_predict = Edamp_predict_cpu;
+    printf("Edamp_predict runs on the CPU\n");
+  }
+}
 
-//new from MKL 
-    if (strcmp(name, "ptorque") == 0) {
-       if(strval[0] == 'g'){
-         PTorque = PTorque_gpu;
-         printf("PTorque runs on the GPU\n");
-       }
-     }
-
-    if (strcmp(name, "dgfloor") == 0) {
-       if(strval[0] == 'g'){
-         dgfloor = dgfloor_gpu;
-         printf("dgfloor runs on the GPU\n");
-       }
-     }
-//end new from MKL 
-
+if (strcmp(name, "edamp_correct") == 0) {
+  if(strval[0] == 'g'){
+    Edamp_correct = Edamp_correct_gpu;
+    printf("Edamp_correct runs on the GPU\n");
+  } else {
+    Edamp_correct = Edamp_correct_cpu;
+    printf("Edamp_correct runs on the CPU\n");
+  }
+}
+if (strcmp(name, "edamp_fillghosts") == 0) {
+  if(strval[0] == 'g'){
+    Edamp_fillghosts = Edamp_fillghosts_gpu;
+    printf("Edamp_fillghosts runs on the GPU\n");
+  } else {
+    Edamp_fillghosts = Edamp_fillghosts_cpu;
+    printf("Edamp_fillghosts runs on the CPU\n");
+  }
+}
+if (strcmp(name, "dgfloor") == 0) {
+  if(strval[0] == 'g'){
+    dgfloor = dgfloor_gpu;
+    printf("Dgfloor runs on the GPU\n");
+  }
+}
+//end of edit
 #endif
     }
   }

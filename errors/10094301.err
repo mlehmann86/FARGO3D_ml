@@ -1,0 +1,805 @@
+[cpn3429:2120585] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=74) failed: Destination is unreachable
+[cpn3429:2120585] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 74
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120565] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=51) failed: Destination is unreachable
+[cpn3429:2120565] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 51
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120585] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120565] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120587] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=72) failed: Destination is unreachable
+[cpn3429:2120587] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 72
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[cpn3429:2120588] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=79) failed: Destination is unreachable
+[cpn3429:2120588] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 79
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120601] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=87) failed: Destination is unreachable
+[cpn3429:2120601] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 87
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120591] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=69) failed: Destination is unreachable
+[cpn3429:2120591] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 69
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120587] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120588] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120601] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120591] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974971] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=29) failed: Destination is unreachable
+[cpn3187:2974971] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 29
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974981] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=32) failed: Destination is unreachable
+[cpn3187:2974981] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 32
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120598] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=90) failed: Destination is unreachable
+[cpn3429:2120598] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 90
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120608] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=95) failed: Destination is unreachable
+[cpn3429:2120608] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 95
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974951] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=11) failed: Destination is unreachable
+[cpn3187:2974951] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 11
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120574] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=63) failed: Destination is unreachable
+[cpn3429:2120574] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 63
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[cpn3187:2974971] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974981] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120598] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974959] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=18) failed: Destination is unreachable
+[cpn3429:2120595] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=86) failed: Destination is unreachable
+[cpn3429:2120595] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 86
+[cpn3187:2974959] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 18
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[cpn3429:2120608] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120574] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974951] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120589] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=78) failed: Destination is unreachable
+[cpn3429:2120589] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 78
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974972] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=30) failed: Destination is unreachable
+[cpn3187:2974972] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 30
+[cpn3429:2120603] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=92) failed: Destination is unreachable
+[cpn3429:2120603] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 92
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[cpn3429:2120595] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120592] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=80) failed: Destination is unreachable
+[cpn3429:2120592] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 80
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974983] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=36) failed: Destination is unreachable
+[cpn3429:2120589] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974983] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 36
+[cpn3429:2120603] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[cpn3429:2120592] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974959] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974962] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=22) failed: Destination is unreachable
+[cpn3187:2974962] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 22
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974954] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=14) failed: Destination is unreachable
+[cpn3187:2974954] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 14
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974972] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974982] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=39) failed: Destination is unreachable
+[cpn3187:2974982] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 39
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974963] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=12) failed: Destination is unreachable
+[cpn3187:2974963] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 12
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974949] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=0) failed: Destination is unreachable
+[cpn3187:2974949] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 0
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974953] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=4) failed: Destination is unreachable
+[cpn3187:2974953] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 4
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974983] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974962] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974954] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974982] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974963] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974956] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=15) failed: Destination is unreachable
+[cpn3187:2974956] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 15
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974949] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974953] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974956] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974969] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=27) failed: Destination is unreachable
+[cpn3187:2974969] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 27
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974969] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974946] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=2) failed: Destination is unreachable
+[cpn3187:2974946] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 2
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120600] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=88) failed: Destination is unreachable
+[cpn3429:2120600] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 88
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974946] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120573] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=62) failed: Destination is unreachable
+[cpn3429:2120573] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 62
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120600] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120573] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120593] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=82) failed: Destination is unreachable
+[cpn3429:2120593] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 82
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120559] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=46) failed: Destination is unreachable
+[cpn3429:2120559] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 46
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120593] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120559] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120584] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=75) failed: Destination is unreachable
+[cpn3429:2120584] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 75
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120607] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=89) failed: Destination is unreachable
+[cpn3429:2120607] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 89
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120584] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120607] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120572] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=53) failed: Destination is unreachable
+[cpn3429:2120572] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 53
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120586] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=65) failed: Destination is unreachable
+[cpn3429:2120586] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 65
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120572] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120561] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=48) failed: Destination is unreachable
+[cpn3429:2120561] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 48
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120583] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=70) failed: Destination is unreachable
+[cpn3429:2120583] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 70
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120586] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120561] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120583] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120558] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=44) failed: Destination is unreachable
+[cpn3429:2120558] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 44
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120563] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=45) failed: Destination is unreachable
+[cpn3429:2120563] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 45
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120597] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=84) failed: Destination is unreachable
+[cpn3429:2120597] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 84
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120558] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120604] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=85) failed: Destination is unreachable
+[cpn3429:2120604] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 85
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120563] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120597] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120560] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=47) failed: Destination is unreachable
+[cpn3429:2120560] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 47
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120604] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120557] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=43) failed: Destination is unreachable
+[cpn3429:2120557] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 43
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120560] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120557] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120556] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=42) failed: Destination is unreachable
+[cpn3429:2120556] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 42
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120567] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=55) failed: Destination is unreachable
+[cpn3429:2120567] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 55
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120556] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120605] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=94) failed: Destination is unreachable
+[cpn3429:2120605] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 94
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120576] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=57) failed: Destination is unreachable
+[cpn3429:2120576] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 57
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120575] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=60) failed: Destination is unreachable
+[cpn3429:2120575] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 60
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120590] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=76) failed: Destination is unreachable
+[cpn3429:2120590] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 76
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120609] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=93) failed: Destination is unreachable
+[cpn3429:2120609] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 93
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120554] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=40) failed: Destination is unreachable
+[cpn3429:2120554] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 40
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120577] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=67) failed: Destination is unreachable
+[cpn3429:2120577] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 67
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120567] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120582] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=68) failed: Destination is unreachable
+[cpn3429:2120582] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 68
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120605] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120571] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=59) failed: Destination is unreachable
+[cpn3429:2120571] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 59
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120596] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=73) failed: Destination is unreachable
+[cpn3429:2120596] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 73
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120599] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=77) failed: Destination is unreachable
+[cpn3429:2120599] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 77
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120570] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=58) failed: Destination is unreachable
+[cpn3429:2120570] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 58
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120594] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=83) failed: Destination is unreachable
+[cpn3429:2120594] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 83
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120578] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=66) failed: Destination is unreachable
+[cpn3429:2120578] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 66
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120590] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120581] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=71) failed: Destination is unreachable
+[cpn3429:2120581] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 71
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120576] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120580] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=61) failed: Destination is unreachable
+[cpn3429:2120580] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 61
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120562] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=50) failed: Destination is unreachable
+[cpn3429:2120562] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 50
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120568] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=49) failed: Destination is unreachable
+[cpn3429:2120568] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 49
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120575] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120606] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=91) failed: Destination is unreachable
+[cpn3429:2120606] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 91
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120602] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=81) failed: Destination is unreachable
+[cpn3429:2120602] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 81
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120569] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=56) failed: Destination is unreachable
+[cpn3429:2120569] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 56
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120579] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=64) failed: Destination is unreachable
+[cpn3429:2120579] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 64
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120609] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120566] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=54) failed: Destination is unreachable
+[cpn3429:2120566] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 54
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120555] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=41) failed: Destination is unreachable
+[cpn3429:2120555] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 41
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120554] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120582] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120577] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120596] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120599] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120594] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120581] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120564] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=52) failed: Destination is unreachable
+[cpn3429:2120564] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 52
+[cpn3429:2120606] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3429:2120602] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120571] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120570] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120578] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120562] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120568] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120569] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120579] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120579] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=128) failed: Destination is unreachable
+[cpn3429:2120579] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 128
+Error in MPI_Isend(27034304, 1, 0x6cab20, 128, -27, 7120672) (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+[cpn3429:2120566] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+[cpn3429:2120580] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120555] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120554] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=160) failed: Destination is unreachable
+[cpn3429:2120554] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 160
+Error in MPI_Isend(21933696, 1, 0x6cab20, 160, -27, 7120672) (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+[cpn3429:2120564] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3429:2120561] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=160) failed: Destination is unreachable
+[cpn3429:2120561] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 160
+Error in MPI_Isend(13561448, 1, 0x6cab20, 160, -27, 7120672) (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+[cpn3187:2974979] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=28) failed: Destination is unreachable
+[cpn3187:2974979] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 28
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974958] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=8) failed: Destination is unreachable
+[cpn3187:2974958] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 8
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974952] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=10) failed: Destination is unreachable
+[cpn3187:2974952] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 10
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974967] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=25) failed: Destination is unreachable
+[cpn3187:2974967] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 25
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974979] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974974] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=31) failed: Destination is unreachable
+[cpn3187:2974974] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 31
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974955] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=9) failed: Destination is unreachable
+[cpn3187:2974955] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 9
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974965] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=23) failed: Destination is unreachable
+[cpn3187:2974965] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 23
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859317] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=124) failed: Destination is unreachable
+[cpn3039:859317] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 124
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859318] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=115) failed: Destination is unreachable
+[cpn3039:859318] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 115
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859316] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=121) failed: Destination is unreachable
+[cpn3039:859316] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 121
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859319] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=125) failed: Destination is unreachable
+[cpn3039:859319] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 125
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974944] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=1) failed: Destination is unreachable
+[cpn3187:2974944] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 1
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859320] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=119) failed: Destination is unreachable
+[cpn3039:859320] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 119
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859305] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=113) failed: Destination is unreachable
+[cpn3039:859305] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 113
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974948] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=7) failed: Destination is unreachable
+[cpn3187:2974948] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 7
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[cpn3039:859321] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=123) failed: Destination is unreachable
+[cpn3039:859321] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 123
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859314] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=117) failed: Destination is unreachable
+[cpn3039:859314] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 117
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859313] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=120) failed: Destination is unreachable
+[cpn3039:859313] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 120
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859310] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=116) failed: Destination is unreachable
+[cpn3039:859310] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 116
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859312] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=122) failed: Destination is unreachable
+[cpn3039:859312] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 122
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859307] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=112) failed: Destination is unreachable
+[cpn3039:859307] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 112
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859315] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=126) failed: Destination is unreachable
+[cpn3039:859315] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 126
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859322] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=127) failed: Destination is unreachable
+[cpn3039:859322] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 127
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859308] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=118) failed: Destination is unreachable
+[cpn3039:859308] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 118
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859306] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=114) failed: Destination is unreachable
+[cpn3187:2974947] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=5) failed: Destination is unreachable
+[cpn3187:2974947] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 5
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3039:859306] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 114
+[cpn3187:2974952] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[cpn3187:2974958] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974961] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=17) failed: Destination is unreachable
+[cpn3187:2974961] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 17
+[cpn3187:2974976] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=34) failed: Destination is unreachable
+[cpn3187:2974976] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 34
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974967] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974968] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=16) failed: Destination is unreachable
+[cpn3187:2974968] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 16
+[cpn3187:2974966] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=26) failed: Destination is unreachable
+[cpn3187:2974966] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 26
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974950] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=6) failed: Destination is unreachable
+[cpn3187:2974950] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 6
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974973] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=33) failed: Destination is unreachable
+[cpn3187:2974980] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=35) failed: Destination is unreachable
+[cpn3187:2974980] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 35
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974945] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=3) failed: Destination is unreachable
+[cpn3187:2974945] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 3
+[cpn3187:2974973] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 33
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974960] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=19) failed: Destination is unreachable
+[cpn3187:2974960] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 19
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974978] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=38) failed: Destination is unreachable
+[cpn3187:2974978] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 38
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974975] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=24) failed: Destination is unreachable
+[cpn3187:2974975] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 24
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974970] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=20) failed: Destination is unreachable
+[cpn3187:2974970] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 20
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974957] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=13) failed: Destination is unreachable
+[cpn3187:2974957] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 13
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974974] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974941] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=109) failed: Destination is unreachable
+[cpn3187:2974941] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 109
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974928] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=97) failed: Destination is unreachable
+[cpn3187:2974928] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 97
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974934] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=101) failed: Destination is unreachable
+[cpn3187:2974934] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 101
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974938] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=105) failed: Destination is unreachable
+[cpn3187:2974938] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 105
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974939] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=107) failed: Destination is unreachable
+[cpn3187:2974939] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 107
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974935] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=103) failed: Destination is unreachable
+[cpn3187:2974935] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 103
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974931] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=99) failed: Destination is unreachable
+[cpn3187:2974931] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 99
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974943] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=108) failed: Destination is unreachable
+[cpn3187:2974943] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 108
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974929] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=96) failed: Destination is unreachable
+[cpn3187:2974929] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 96
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974930] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=98) failed: Destination is unreachable
+[cpn3187:2974930] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 98
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974932] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=100) failed: Destination is unreachable
+[cpn3187:2974932] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 100
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974937] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=104) failed: Destination is unreachable
+[cpn3187:2974937] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 104
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974940] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=110) failed: Destination is unreachable
+[cpn3187:2974940] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 110
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974933] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=102) failed: Destination is unreachable
+[cpn3187:2974933] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 102
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974936] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=106) failed: Destination is unreachable
+[cpn3187:2974936] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 106
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974942] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=111) failed: Destination is unreachable
+[cpn3187:2974942] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 111
+[LOG_CAT_COMMPATTERNS]   isend failed in  comm_allreduce_pml at iterations 4 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974977] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=37) failed: Destination is unreachable
+[cpn3187:2974977] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 37
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974955] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974964] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=21) failed: Destination is unreachable
+[cpn3187:2974964] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 21
+[LOG_CAT_COMMPATTERNS]   first send failed in comm_allreduce_pml 
+
+[LOG_CAT_P2P] hmca_bcol_ucx_p2p address preexchange allreduce failed
+[cpn3187:2974965] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974944] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974948] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974976] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974947] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974961] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974966] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974968] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859317] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859320] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859314] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859315] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859318] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974980] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859321] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859307] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859308] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974978] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974960] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859319] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859312] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859313] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859322] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974975] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974970] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974957] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974977] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859310] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859316] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859305] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3039:859306] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974964] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974973] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974950] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974945] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974943] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974929] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974941] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974937] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974930] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974936] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974938] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974942] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974935] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974928] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974933] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974940] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974934] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974932] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974939] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974931] Error: ../../../../../ompi/mca/coll/hcoll/coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[cpn3187:2974929] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:426  Error: ucp_ep_create(proc=96) failed: Destination is unreachable
+[cpn3187:2974929] ../../../../../ompi/mca/pml/ucx/pml_ucx.c:477  Error: Failed to resolve UCX endpoint for rank 96
+Error in MPI_Isend(41028168, 1, 0x6cab20, 96, -27, 7120672) (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+Error in NBC_Start_round() (-1)
+May 08 16:38:00.887386 1203697 slurmstepd   0x14c59673e700: error: *** JOB 10094301 ON cpn3033 CANCELLED AT 2024-05-08T16:38:00 ***

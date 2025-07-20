@@ -23,6 +23,10 @@ ex void init_var(char*, char*, int, int, char*);
 //new from MKL
 ex void PTorque_cpu(real);
 ex void dgfloor_cpu(void);
+ex void Edamp_cpu(real);  //added 23.09.2021
+ex void Edamp_predict_cpu(real);  //added 23.09.2021
+ex void Edamp_correct_cpu(real);  //added 23.09.2021
+ex void Edamp_fillghosts_cpu(real);  //added 23.09.2021
 //end new from MKL
 ex void ReadVarFile(char*);
 ex void var_assign(void);
@@ -89,6 +93,9 @@ ex void SaveState(void);
 ex void SaveStateSecondary(void);
 ex void RestoreState(void);
 ex void Check_CUDA_Blocks_Consistency (void);
+
+//NEW FOR DEBUGGING in LowTasks.c / main.c
+void CheckPrimitiveFields(const char *);
 
 ex void copy_velocities_cpu (int);
 ex void copy_velocities_gpu (int);
@@ -567,6 +574,10 @@ ex void addviscosity_sph_gpu(real);
 //new from MKL
 ex void PTorque_gpu(real);
 ex void dgfloor_gpu(void);
+ex void Edamp_gpu(real);  // added 23.09.2021
+ex void Edamp_predict_gpu(real);  // added 23.09.2021
+ex void Edamp_correct_gpu(real);  // added 23.09.2021
+ex void Edamp_fillghosts_gpu(real);  // added 23.09.2021
 //end new from MKL
 
 ex void Reset_field_gpu(Field *);

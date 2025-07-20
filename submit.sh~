@@ -1,0 +1,42 @@
+#!/bin/bash
+###### Job name ######
+#PBS -N fargo3d
+###### Output files ######
+#PBS -o fargo3d.out
+#PBS -e fargo3d.err
+###### Number of nodes and cores ######
+#PBS -l nodes=8:ppn=16
+#PBS -l walltime=48:00:00
+###### Queue name ######
+#PBS -q medium
+###### Sends mail to yourself when the job begins and ends ######
+#PBS -M mlehmann@asiaa.sinica.edu.tw
+#PBS -m be
+###### Specific the shell types ######
+#PBS -S /bin/bash
+
+###### Enter this job's working directory ######
+cd $PBS_O_WORKDIR
+
+###### Load modules to setup environment ######
+. /etc/profile.d/modules.sh
+#module purge
+#module load openmpi/2.1.5_ic18.0
+#module load intel/2018
+
+
+###### Run your jobs with parameters ######
+if [ -n "$PBS_NODEFILE" ]; then
+  if [ -f $PBS_NODEFILE ]; then
+    NPROCS=`wc -l < $PBS_NODEFILE`
+  fi
+fi
+
+# make clean
+#make PARALLEL=1
+#$OPENMPI_HOME/bin/mpirun -v -machinefile $PBS_NODEFILE -np $NPROCS ./fargo3d setups/fargo/fargo.par 
+##$OPENMPI_HOME/bin/mpirun -v -machinefile $PBS_NODEFILE -np $NPROCS ./fargo3d -t setups/fargo_multifluid/fargo_multifluid.par 
+
+
+$OPENMPI_HOME/bin/mpirun -v -machinefile $PBS_NODEFILE -np $NPROCS ./fargo3d -t setups/mkl/mkl.par -> mkl_z001_notaper_nu2dm8_pbamp01_pbw10_ib05_ob15.out
+#$OPENMPI_HOME/bin/mpirun -v -machinefile $PBS_NODEFILE -np $NPROCS ./fargo3d -S 617 setups/mkl/mkl.par ->fargo3d_mkl_z005_manger2020_notaper_nu1dm8_dustinnerob.out

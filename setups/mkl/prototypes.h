@@ -23,6 +23,10 @@ ex void init_var(char*, char*, int, int, char*);
 //new from MKL
 ex void PTorque_cpu(real);
 ex void dgfloor_cpu(void);
+ex void Edamp_cpu(real);  //added 23.09.2021
+ex void Edamp_predict_cpu(real);  //added 25.05.2025
+ex void Edamp_correct_cpu(real);  //added 25.05.2025
+ex void Edamp_fillghosts_cpu(real);
 //end new from MKL
 ex void ReadVarFile(char*);
 ex void var_assign(void);
@@ -219,6 +223,7 @@ ex void planet2d(void);
 ex void compute_potential(real);
 //planets.c Prototypes
 ex void Potential_cpu(void);
+
 ex Force ComputeForce(real, real, real, real, real);
 ex void  _ComputeForce_cpu(real, real, real, real, real);
 ex void AdvanceSystemFromDisk(real);
@@ -567,6 +572,10 @@ ex void addviscosity_sph_gpu(real);
 //new from MKL
 ex void PTorque_gpu(real);
 ex void dgfloor_gpu(void);
+ex void Edamp_gpu(real);  // added 23.09.2021
+ex void Edamp_predict_gpu(real);  // added 25.05.2025
+ex void Edamp_correct_gpu(real);  // added 25.05.2025
+ex void Edamp_fillghosts_gpu(real);  // added 25.05.2025
 //end new from MKL
 
 ex void Reset_field_gpu(Field *);

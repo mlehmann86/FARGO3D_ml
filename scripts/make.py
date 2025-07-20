@@ -67,7 +67,7 @@ def complete_parameters(base,params):
     return params
 
 def check_coherence(base,params):
-    for key in params.keys():
+    for key in list(params.keys()):
             if key in base:
                 continue
             else:
@@ -149,7 +149,7 @@ njobs = jobs_check(sys.argv) #Number of threads
 if njobs != None:
     njobs = int(njobs)
 else:
-    njobs = 8
+    njobs = 4
 
 base = last
 if not last:
@@ -172,8 +172,8 @@ for key in final_params.keys():
     line += key + "=" + final_params[key] + " "
 os.system(line+">.tmp")
 
-os.system("python "+ SCRIPTSDIR +"param.py")
-os.system("python "+ SCRIPTSDIR +"global.py")
+os.system("python3 "+ SCRIPTSDIR +"param.py")
+os.system("python3 "+ SCRIPTSDIR +"global.py")
 
 line = make + " rescale.c "
 for key in final_params.keys():

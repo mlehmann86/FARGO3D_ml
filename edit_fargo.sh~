@@ -1,0 +1,14 @@
+
+
+
+FILE=/tiara/home/mlehmann/data/FARGO3D/setups/mkl/mkl.pare
+if [ -f "$FILE" ]; then
+    mv mkl.pare mkl.par
+#else 
+#    echo "$FILE does not exist."
+fi
+
+
+
+
+gedit /tiara/home/mlehmann/data/FARGO3D/setups/mkl/{mkl.par,mkl.opt,condinit.c,mkl.bound.0,mkl.bound.1}  /tiara/home/mlehmann/data/FARGO3D/{submit.sh,outputs/plot_fargo.pro,outputs/plot_fargo_3D.pro,outputs/plot_vsicompare.pro} &

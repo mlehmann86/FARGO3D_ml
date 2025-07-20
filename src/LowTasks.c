@@ -565,6 +565,7 @@ void SelectFluid(int n) {
 }
 
 void CreateFields() {
+  masterprint("DEBUG: ==> Entered CreateFields().\n"); // <-- ADD THIS
 
   Reduction2D = CreateField2D ("Reduction2D", YZ);
 
@@ -585,6 +586,34 @@ void CreateFields() {
   Nxhy   = CreateFieldInt2D ("Nxhy");
   Nxhz   = CreateFieldInt2D ("Nxhz");
 #endif
+
+
+// 1. Create the viscosity field with a unique name matching the variable.
+  Viscosity_profile = CreateField2D("Viscosity_profile", YZ);
+  // 2. Add a check to ensure it was created successfully.
+  if (Viscosity_profile == NULL) {
+    mastererr("FATAL: Viscosity_profile is NULL after creation in CreateFields()!\n");
+    prs_exit(1);
+  }
+  masterprint("DEBUG: Viscosity_profile created at address %p\n", (void *)Viscosity_profile);
+
+
+// Also create your thermal diffusion profile here for consistency.
+  Chi_profile = CreateField2D("Chi_profile", YZ);
+  if (Chi_profile == NULL) {
+    mastererr("FATAL: Chi_profile is NULL after creation in CreateFields()!\n");
+    prs_exit(1);
+  }
+  masterprint("DEBUG: Chi_profile created at address %p\n", (void *)Chi_profile);
+  
+
+// --- V V V --- ADD THE CODE BLOCK BELOW HERE --- V V V ---
+#if (defined(ADIABATIC) && defined(THERMALDIFFUSION) && defined(PREDICTORCORRECTOR))
+  // CORRECTED: Replace the '0' with the bitmask ID
+  T_guess = CreateField("T_guess", T_GUESS, 0, 0, 0);
+  Div_old = CreateField("Div_old", DIV_OLD, 0, 0, 0);
+#endif
+// --- ^ ^ ^ --- END OF CODE BLOCK TO ADD --- ^ ^ ^ ---
 
 #if (defined(Y) || defined(MHD))
   Mpy     = CreateField("Moment_Plus_Y" , 0,0,1,0);
@@ -650,6 +679,10 @@ void CreateFields() {
   Divergence = CreateField("divb", 0, 0,0,0);  
 
 #endif
+
+// ... other CreateField calls ...
+
+  masterprint("DEBUG: <== Exiting CreateFields().\n"); // <-- ADD THIS
 
 }
 
@@ -999,4 +1032,69 @@ void RestartDat(Field *field, int n) {
       MPI_Finalize();
     }
   }
+}
+
+
+
+// Add this entire function to the end of the file.
+void CheckPrimitiveFields(const char *caller_name) {
+  if (!CPU_Master) return; // Only master rank needs to print this
+
+  int i;
+  Field *pField;
+  const char* field_name;
+
+  printf("\n--- Checking Primitive Fields from: %s ---\n", caller_name);
+
+  for (i = 0; i < NFLUIDS; i++) {
+    printf("Fluid %d (%s):\n", i, Fluids[i]->name);
+
+    pField = Fluids[i]->Density;
+    field_name = "Density";
+    if (pField == NULL) {
+      printf("  [FATAL] %s is NULL\n", field_name);
+    } else {
+      printf("  [ OK ]  %s at %p\n", field_name, (void*)pField);
+    }
+
+    pField = Fluids[i]->Energy;
+    field_name = "Energy";
+    if (pField == NULL) {
+      printf("  [FATAL] %s is NULL\n", field_name);
+    } else {
+      printf("  [ OK ]  %s at %p\n", field_name, (void*)pField);
+    }
+
+#ifdef X
+    pField = Fluids[i]->Vx;
+    field_name = "Vx";
+    if (pField == NULL) {
+      printf("  [FATAL] %s is NULL\n", field_name);
+    } else {
+      printf("  [ OK ]  %s at %p\n", field_name, (void*)pField);
+    }
+#endif
+
+#ifdef Y
+    pField = Fluids[i]->Vy;
+    field_name = "Vy";
+    if (pField == NULL) {
+      printf("  [FATAL] %s is NULL\n", field_name);
+    } else {
+      printf("  [ OK ]  %s at %p\n", field_name, (void*)pField);
+    }
+#endif
+
+#ifdef Z
+    pField = Fluids[i]->Vz;
+    field_name = "Vz";
+    if (pField == NULL) {
+      printf("  [FATAL] %s is NULL\n", field_name);
+    } else {
+      printf("  [ OK ]  %s at %p\n", field_name, (void*)pField);
+    }
+#endif
+  }
+  printf("--- Finished Checking ---\n\n");
+  fflush(stdout);
 }

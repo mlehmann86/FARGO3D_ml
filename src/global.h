@@ -8,6 +8,8 @@ boolean CPU_Master = YES;
 
 
 boolean Resistivity_Profiles_Filled = NO;
+boolean Viscosity_Profile_Filled = NO;
+boolean Chi_Profile_Filled = NO;
 boolean VxIsResidual = NO;
 boolean LogGrid = NO;
 boolean GuidingCenter = NO;
@@ -123,6 +125,10 @@ Field *Sdiffyfzc;
 Field *Sdiffyczf;
 Field *Sdiffyfzf;
 
+//NEW
+Field *T_guess;
+Field *Div_old;
+
 
 // Below: fields specific to FARGO algorithms
 Field2D *VxMed;
@@ -134,6 +140,9 @@ Field2D *Reduction2D;
 Field2D *Eta_profile_xi;
 Field2D *Eta_profile_xizi;
 Field2D *Eta_profile_zi;
+
+Field2D *Viscosity_profile;
+Field2D *Chi_profile;
 
 FieldInt2D *Nxhy;
 FieldInt2D *Nxhz;
@@ -375,5 +384,9 @@ void (*boundary_zmax[NFLUIDS])();
 //new from MKL
 void (*PTorque)(real);
 void (*dgfloor)();
+void (*Edamp)(real); //added 17.09.2021
+void (*Edamp_predict)(real); 
+void (*Edamp_correct)(real); 
+void (*Edamp_fillghosts)(real); 
 //end new from MKL
 

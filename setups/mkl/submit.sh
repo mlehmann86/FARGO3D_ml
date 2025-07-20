@@ -1,0 +1,1 @@
+$OPENMPI_HOME/bin/mpirun -v -machinefile $PBS_NODEFILE -np $NPROCS ./fargo3d_mkl_z002_notaper_nu2dm8_pbamp04_pbw10_ib05_ob15_STOKES1dm2_1D setups/mkl/parfiles/mkl_z002_notaper_nu2dm8_pbamp04_pbw10_ib05_ob15_STOKES1dm2_1D.par  -> mkl_z002_notaper_nu2dm8_pbamp04_pbw10_ib05_ob15_STOKES1dm2_1D.out

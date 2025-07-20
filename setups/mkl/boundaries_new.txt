@@ -1,0 +1,213 @@
+# To define the boundaries it is possible to use any variable or pure
+# macro defined in the code. For example, it's allowed to use the
+# geometrical variables/macros xmin/xmed(i), ymin/ymed(i),
+# zmin/zmax(i), and macros like zone_size_x/y/z. However, it is not
+# possible to use macros that are expanded into new macros, like
+# Surf_x/y/z nor InvVol, Vol...
+
+# It is also possible to use any variable defined in your SETUP.par.
+# All the global variables must be embedded with "'",
+# e.g. |...'global_variable'...|, with "'"!
+
+# Example:
+
+# SYMMETRIC:
+# Centered: |'OMEGAFRAME'**2+2*'FLARINGINDEX'+'MSTAR'+xmed(i)-ymed(j)+active|active|
+
+# The boundary-related files are case-insensitive, so you can also
+# define the following:
+
+# Centered: |'omegaframe'**2+2*'flaring'+'mstar'+xmed(i)-ymed(j)+active|active|
+
+# Be sure that the word "active" is not inside your variables.
+
+# Example of a wrong implementation: |'omegactive'|active|
+
+# Explanation: the parser first substitutes 'omegactive' --> 'omegavariable',
+# and then uses 'omegavariable' when applying the boundaries.
+# "varible" is a variable defined in the .bound file.
+
+
+################################################################################
+### BELOW: STANDARD BOUNDARIES
+################################################################################
+
+SYMMETRIC:
+	   Centered:	|a|a|
+	   Staggered:   |a|a|a|
+
+ANTISYMMETRIC:
+	   Staggered:	|-a|0|a|
+
+NOBOUNDARY:
+	    Centered:	|a|a|
+	    Staggered:	|a|a|a|
+
+
+################################################################################
+### BELOW: BOUNDARY CONDITIONS FOR THE ENERGY IN THE
+### RAYLEIGH-TAYLOR TEST. HYDROSTATIC EQUILIBRIUM EXTRAPOLATED.
+################################################################################
+
+ENERGY_RT_LEFT:
+	    Centered:    |(energy[i+(NGHY+1)*pitch]-energy[i+NGHY*pitch])/(Ymed(NGHY+1)-Ymed(NGHY))*(Ymed(jgh)-Ymed(NGHY))+energy[i+NGHY*pitch]|active|
+
+ENERGY_RT_RIGHT:
+	    Centered:  |(energy[i+(Ny+NGHY+1)*pitch]-energy[i+(Ny+NGHY)*pitch])/(Ymed(Ny+NGHY+1)-Ymed(Ny+NGHY))*(Ymed(jgh)-Ymed(Ny+NGHY))+energy[i+(Ny+NGHY)*pitch]|active|
+
+
+##############################################################
+### BELOW: BOUNDARY CONDITIONS FOR 2D KEPLERIAN DISKS WITH PRESSURE
+### SUPPORT IN THEIR ROTATIONAL EQUILIBRIUM
+##############################################################
+ 
+KEPLERIAN2DDENS:    #Analytic extension of surface density profile
+            Centered:            |surfdens*pow(Ymed(jact)/Ymed(jgh),'SIGMASLOPE')|surfdens|
+
+KEPLERIAN2DVAZIM:   #Analytic Keplerian extrapolation of velocity profile
+  Centered: |(vt+Ymed(jact)*'OmegaFrame')*sqrt(Ymed(jact)/Ymed(jgh))-Ymed(jgh)*'OmegaFrame'|vt|
+
+EXTRAPOLATE_LEFT:
+	    Centered:    |(density[i+(NGHY+1)*pitch]-density[i+NGHY*pitch])/(Ymed(NGHY+1)-Ymed(NGHY))*(Ymed(jgh)-Ymed(NGHY))+density[i+NGHY*pitch]|active|
+
+EXTRAPOLATE_RIGHT:   #Used for periodic runs
+	    Centered:  |(density[i+(Ny+NGHY-1)*pitch]-density[i+(Ny+NGHY-2)*pitch])/(Ymed(Ny+NGHY-1)-Ymed(Ny+NGHY-2))*(Ymed(jgh)-Ymed(Ny+NGHY-1))+density[i+(Ny+NGHY-1)*pitch]|active|
+
+################################################################################
+################################################################################
+### BELOW: BOUNDARY CONDITIONS FOR 3D KEPLERIAN DISKS WITH PRESSURE SUPPORT IN
+### THEIR ROTATIONAL EQUILIBRIUM. THE SOUND SPEED IS ASSUMED TO BE A FUNCTION OF
+### THE SPHERICAL RADIUS ONLY. IN ALL THE SUBSEQUENT EXPRESSIONS, THE LAST
+### MULTIPLICATIVE FACTOR ACCOUNTS FOR THE POSSIBLE RADIAL VARIATION OF THE
+### ASPECT RATIO. IN THE CASE THE ASPECT RATIO IS CONSTANT (VANISHING FLARING
+### INDEX), THE EXPRESSIONS ARE SIMPLER AS THEY ARE SEPARABLE IN RADIUS AND
+### COLATITUDE. 
+################################################################################
+################################################################################
+ 
+KEPLERIAN3DSPHDENSRAD: #Approximate extrapolation in radius
+	Centered: |ds*pow(Ymed(jact)/Ymed(jgh),'SIGMASLOPE'+'FLARINGINDEX'+1.)*exp(-pow(cos(Zmed(k)),2.)/('ASPECTRATIO'*'ASPECTRATIO')*(1.-Ymed(jgh)/(.5*(Ymed(jact)+Ymed(jgh))))*'FLARINGINDEX'*pow(.5*(Ymed(jgh)+Ymed(jact))/'R0',-2.*'FLARINGINDEX'-1.))|ds|
+ 
+KEPLERIAN3DSPHVAZIMRAD:
+        Centered: |(vv+'OmegaFrame'*Ymed(jact)*sin(Zmed(k)))*sqrt(Ymed(jact)/Ymed(jgh))*(1.+(2.+'SIGMASLOPE'-'FLARINGINDEX')*(Ymed(jact)-Ymed(jgh))/'R0'*'FLARINGINDEX'*'ASPECTRATIO'*'ASPECTRATIO'*pow((Ymed(jgh)+Ymed(jact))/(2.*'R0'),2.*'FLARINGINDEX'-1.))-Ymed(jgh)*'OmegaFrame'*sin(Zmed(k))|vv|
+
+KEPLERIAN3DSPHDENSCOL: #Approximate extrapolation in COLatitude (Z)
+	Centered: |ds*pow(sin(Zmed(kgh))/sin(Zmed(kact)),'FLARINGINDEX'-2.-'SIGMASLOPE'+1./('ASPECTRATIO'*'ASPECTRATIO')*pow(Ymed(j)/'R0',-2.*'FLARINGINDEX'))|ds|
+
+KEPLERIAN3DSPHVAZIMCOL:
+	Centered: |(vv+'OmegaFrame'*Ymed(j)*sin(Zmed(kact)))*(1.+'FLARINGINDEX'*cos(.5*(Zmed(kgh)+Zmed(kact)))*(Zmed(kact)-Zmed(kgh))) -Ymed(j)*'OmegaFrame'*sin(Zmed(kgh))|vv|
+
+
+
+##############################################################
+### VBC taken from PLUTO                                  ####
+###							  ####	
+###							  ####
+##############################################################
+
+PLUTOVBCDENS:
+	Centered: |ds*pow(sin(Zmed(kgh))/sin(Zmed(kact)),1.0-2.0*'FLARINGINDEX')*exp(pow('R0'/Ymed(j),2.0*'FLARINGINDEX')*(pow(sin(Zmed(kgh)),1.0-2.0*'FLARINGINDEX')-pow(sin(Zmed(kact)),1.0-2.0*'FLARINGINDEX'))/'ASPECTRATIO'/'ASPECTRATIO'/(1.0-2.0*'FLARINGINDEX'))|ds|
+
+PLUTOVBCDENSISO:
+	Centered: |ds*pow(sin(Zmed(kgh))/sin(Zmed(kact)),'R0'/Ymed(j)/'ASPECTRATIO'/'ASPECTRATIO')|ds|
+
+PLUTOVBCVRAD:
+	Centered: |0.0|vr|
+PLUTOVBCVTHETA:
+	Staggered: |0.0|0.0|vt|
+PLUTOVBCVPHI:
+        Centered: |sqrt('G'*'MSTAR'/Ymed(j)) - Ymed(j)*sin(Zmed(kgh))*'OMEGAFRAME'|vphi|
+
+##############################################################
+### RBC taken from PLUTO                                  ####
+###							  ####	
+###							  ####
+##############################################################
+
+PLUTORBCVRAD:
+        Staggered: |0.0|0.0|vr|
+PLUTORBCVTHETA:
+	Centered: |0.0|vtheta|
+PLUTORBCVPHI:
+        Centered: |(vphi+Ymed(jact)*sin(Zmed(k))*'OMEGAFRAME')*sqrt(Ymed(jact)/Ymed(jgh)) - Ymed(jgh)*sin(Zmed(k))*'OMEGAFRAME'|vphi|
+
+
+UNPERTVBCDENS:
+	Centered: |'SIGMA0'*pow(Ymed(j)*sin(Zmed(kgh))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(kgh))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(j)*sin(Zmed(kgh))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+
+UNPERTVBCENERGY:
+	Centered: |'(pow((sqrt('G'*'MSTAR'/pow(Ymed(j)*sin(Zmed(kgh)),3.0))*'ASPECTRATIO'*pow(Ymed(j)*sin(Zmed(kgh))/'R0','FLARINGINDEX')*Ymed(j)*sin(Zmed(kgh))),2.0))/('GAMMA'-1.0)*'SIGMA0'*pow(Ymed(j)*sin(Zmed(kgh))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(kgh))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(j)*sin(Zmed(kgh))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+
+UNPERTVBCVPHI:
+	Centered:|sqrt('G'*'MSTAR'/(Ymed(j)*sin(Zmed(kgh))))*sqrt(1.0 - ('SIGMASLOPE'-'FLARINGINDEX'+2.0)*pow('ASPECTRATIO',2.0)*pow(Ymed(j)*sin(Zmed(kgh))/'R0',2.0*'FLARINGINDEX') + (1.0-2.0*'FLARINGINDEX')*(sin(Zmed(kgh))-1.0)) -  Ymed(j)*sin(Zmed(kgh))*'OMEGAFRAME'   |vphi|
+
+
+UNPERTRBCDENS:
+	Centered: |'SIGMA0'*pow(Ymed(jgh)*sin(Zmed(k))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(k))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+
+UNPERTRBCDENSUS:
+	Centered: |'SIGMA0'*pow(Ymed(jgh)/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((1.0-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(jgh)/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+
+UNPERTRBCENERGY:
+	Centered: |(pow((sqrt('G'*'MSTAR'/pow(Ymed(jgh)*sin(Zmed(k)),3.0))*'ASPECTRATIO'*pow(Ymed(jgh)*sin(Zmed(k))/'R0','FLARINGINDEX')*Ymed(jgh)*sin(Zmed(k))),2.0))/('GAMMA'-1.0)*'SIGMA0'*pow(Ymed(jgh)*sin(Zmed(k))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(k))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+UNPERTRBCENERGYUS:
+	Centered: |(pow((sqrt('G'*'MSTAR'/pow(Ymed(jgh),3.0))*'ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh)),2.0))/('GAMMA'-1.0)*'SIGMA0'*pow(Ymed(jgh)/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((1.0-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(jgh)/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+####################################################################################################################################################
+
+
+ #     dgratio='METALLICITY'*('ZMAX'-'ZMIN')/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh))*sqrt('STOKES1'/('NUD'*pow(1.0/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')),2.0)))/sqrt(2.0*3.1415926535897) *exp(-0.5*('STOKES1'/('NUD'*pow(1.0/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')),2.0)))*pow(Zmed(k)/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh)),2.0))
+
+     
+####################################################################################################################################################
+
+UNPERTRBCDENSDUST:
+	Centered: |('EPSILON')*'SIGMA0'*pow(Ymed(jgh)*sin(Zmed(k))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(k))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+UNPERTRBCDENSDUSTUS:
+	Centered: |('METALLICITY'*('ZMAX'-'ZMIN')/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh))*sqrt('STOKES1'/('NUD'*pow(1.0/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')),2.0)))/sqrt(2.0*3.1415926535897) *exp(-0.5*('STOKES1'/('NUD'*pow(1.0/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')),2.0)))*pow(Zmed(k)/('ASPECTRATIO'*pow(Ymed(jgh)/'R0','FLARINGINDEX')*Ymed(jgh)),2.0)))*'SIGMA0'*pow(Ymed(jgh)/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((1.0-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(jgh)/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|ds|
+
+
+
+
+UNPERTRBCVPHI: 
+	Centered:|sqrt('G'*'MSTAR'/(Ymed(jgh)*sin(Zmed(k))))*sqrt(1.0 - ('SIGMASLOPE'-'FLARINGINDEX'+2.0)*pow('ASPECTRATIO',2.0)*pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX') + (1.0-2.0*'FLARINGINDEX')*(sin(Zmed(k))-1.0)) -  Ymed(jgh)*sin(Zmed(k))*'OMEGAFRAME'   |vphi|
+
+UNPERTRBCVPHIUS: 
+	Centered:|sqrt('G'*'MSTAR'/(Ymed(jgh)))*sqrt(1.0 - ('SIGMASLOPE'-'FLARINGINDEX'+2.0)*pow('ASPECTRATIO',2.0)*pow(Ymed(jgh)/'R0',2.0*'FLARINGINDEX') + (1.0-2.0*'FLARINGINDEX')*(1.0-1.0)) -  Ymed(jgh)*'OMEGAFRAME'   |vphi|
+
+
+
+
+VISCRBCVRAD: 
+	Staggered: |-3.0*'NU'*(1.0 + 2.0*'SIGMASLOPE')/(2.0*Ymed(jgh))|-3.0*'NU'*(1.0 + 2.0*'SIGMASLOPE')/(2.0*Ymed(jgh))|vr|
+
+	       
+
+UNPERTRBCVPHIDUST:
+        Centered:|sqrt('G'*'MSTAR'/Ymed(jgh))-Ymed(jgh)*sin(Zmed(k))*'OMEGAFRAME'|vphi|
+
+
+UNPERTRBCVPHIDUSTUS:
+        Centered:|sqrt('G'*'MSTAR'/Ymed(jgh))-Ymed(jgh)*'OMEGAFRAME'|vphi|
+
+
+
+
+RBCNODUST:
+        Centered:|1.0e-16*'SIGMA0'*pow(Ymed(jgh)*sin(Zmed(k))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(k))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(jgh)*sin(Zmed(k))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|rhod| 
+
+VBCNODUST:
+        Centered:|1.0e-16*'SIGMA0'*pow(Ymed(j)*sin(Zmed(kgh))/'R0',-('SIGMASLOPE'+'FLARINGINDEX'+1.0))*exp((sin(Zmed(kgh))-1.0)/pow('ASPECTRATIO',2.0)/pow(Ymed(j)*sin(Zmed(kgh))/'R0',2.0*'FLARINGINDEX'))/sqrt(2.0*3.1415926535897)/'ASPECTRATIO'/'R0'|rhod|
+
+
+#### Allow outflow only at inner mesh edge
+OPENINNER:
+	Staggered: |(a>0.0 ? 0.0: a)|(a>0.0 ? 0.0: a)|a|
+OPENOUTER:
+        Staggered: |(a<0.0 ? 0.0: a)|(a<0.0 ? 0.0: a)|a|

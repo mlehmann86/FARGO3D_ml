@@ -1,0 +1,190 @@
+//<FLAGS>
+//#define __GPU
+//#define __NOPROTO
+//<\FLAGS>
+
+//<INCLUDES>
+#include "fargo3d.h"
+//<\INCLUDES>
+
+void Edamp_cpu(real dt) {
+
+//<USER_DEFINED>
+  INPUT(Energy);
+  OUTPUT(Energy);
+//<\USER_DEFINED>
+
+//<INTERNAL>
+  int i;
+  int j;
+  int k;
+  real bigrad;
+  real Hg;
+  real R3;
+  real omk;
+  real cs;
+  real e0;
+  real H0;
+  real rhog;
+  real cs2;
+  real bump;
+  real vert;
+  real tauc;
+  real DeltaR;
+  real DeltaRin;
+  real DeltaRout;
+  real TaperRin;
+  real TaperRout;
+  real taper;
+  real taucbcgas;
+  real taucbcdust;
+  real betadust;
+  real bnd;
+//<\INTERNAL>
+
+//<EXTERNAL>
+  real* e = Energy->field_cpu;
+  real* rho = Density->field_cpu;
+  real beta = BETA;
+  int pitch  = Pitch_cpu;
+  int stride = Stride_cpu;
+  int size_x = Nx;
+////  int size_x = XIP; 
+  int size_y = Ny+2*NGHY;
+  int size_z = Nz+2*NGHZ;
+  real r0 = R0;
+  real bigg = G;
+  real mstar= MSTAR;
+  real asp = ASPECTRATIO;
+  real flar =  FLARINGINDEX;
+  real sig0 = SIGMA0;
+  real ss = SIGMASLOPE;
+  real ba = BUMP_AMP;
+  real bw = BUMP_WIDTH;
+  real gam = GAMMA;
+  real ymin = YMIN;
+  real ymax = YMAX;
+  int fltype = Fluidtype;
+//<\EXTERNAL>
+
+
+
+//<CONSTANT>
+// real ymin(Ny+2*NGHY+1);
+// real zmin(Nz+2*NGHZ+1);
+//<\CONSTANT>
+
+
+
+
+//	  masterprint ("Calling Edamp");
+
+//<MAIN_LOOP>
+  for (k=0; k<size_z; k++) {
+    for (j=0; j<size_y; j++) {
+      for (i=0; i<size_x; i++) {
+//<#>
+
+
+
+
+#ifdef SPHERICAL
+	bigrad = ymed(j)*sin(zmed(k));
+#endif
+
+#ifdef CYLINDRICAL
+	bigrad = ymed(j);
+#endif
+
+         Hg = asp*pow(bigrad/r0,flar)*bigrad;
+
+         R3 = bigrad*bigrad*bigrad;
+
+         omk = sqrt(bigg*mstar/R3);
+         cs    = omk*Hg;
+         cs2= cs*cs;
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////// GAS //////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+	if(fltype == GAS) {
+	
+	 tauc=beta/omk; //this is the spatially variable cooling time corresponding to constant beta cooling
+
+
+#ifdef BTAPER
+
+bnd=0.2; //DEFAULT=0.2
+
+TaperRin=ymin-bnd*(DeltaRin);
+
+TaperRout=ymax-bnd*(DeltaRout);
+
+taucbcgas=0.125; //set the cooling time to 0.125 at the boundaries such that VSI and COV are largely suppressed ?
+
+tauc=beta + (beta-taucbcgas)*tanh(100.*(bigrad-TaperRin));
+
+tauc=tauc - (beta-taucbcgas)*tanh(100.*(bigrad-TaperRout));
+
+tauc=0.5*(tauc-beta) +taucbcgas;
+
+
+	 tauc=tauc/omk; //this is the spatially variable cooling time corresponding to constant beta cooling
+#endif
+
+
+
+          e[l] *= 1.0/(1.0+dt/tauc);
+         
+          e[l] += rho[l]*cs2/((1.+tauc/dt)*(gam-1.));
+
+
+//	  masterprint ("Executing Edamp For Gas!");
+
+
+	}
+///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////// DUST /////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+//	if(fltype == DUST) {
+
+//apply dust cooling away from boundaries to keep e_dust=0 but avoid boundary issue arising when substep2b for dust is avoided
+
+//		TaperRin=ymin-0.2*(DeltaRin);
+
+//		TaperRout=ymax-0.2*(DeltaRout);
+
+//		taucbcdust=1.0e5; // very large cooling time at boundaries
+//		betadust=1.0e-5; // small cooling time away from boundaries
+
+//		tauc=betadust + (betadust-taucbcdust)*tanh(100.*(bigrad-TaperRin));
+
+//		tauc=tauc - (betadust-taucbcdust)*tanh(100.*(bigrad-TaperRout));
+
+//		tauc=0.5*(tauc-(betadust)) +taucbcdust;
+
+
+//		tauc=tauc/omk; //this is the spatially variable cooling time corresponding to constant beta cooling
+
+
+//        	e[l] *= 1.0/(1.0+dt/tauc);
+
+//	}
+         
+
+
+
+
+
+
+
+//<\#>
+      }
+    }
+  }
+//<\MAIN_LOOP>
+
+
+
+}

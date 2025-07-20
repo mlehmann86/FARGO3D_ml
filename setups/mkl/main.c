@@ -309,7 +309,7 @@ OMEGAFRAME (which is used afterwards to build the initial Vx field. */
   
   for (i = begin_i; i<=NTOT; i++) { // MAIN LOOP
     if (NINTERM * (TimeStep = (i / NINTERM)) == i) {
-
+//      printf("begin loop\n");
 #if defined(MHD) && defined(DEBUG)
       FARGO_SAFE(ComputeDivergence(Bx, By, Bz));
 #endif
@@ -360,7 +360,8 @@ OMEGAFRAME (which is used afterwards to build the initial Vx field. */
 
 //new from MKL
 #ifdef DGFLOOR
-      FARGO_SAFE(dgfloor());
+    //  FARGO_SAFE(dgfloor());
+	dgfloor();
 #endif
 //end new from MKL
 
@@ -370,8 +371,25 @@ OMEGAFRAME (which is used afterwards to build the initial Vx field. */
   }
 #endif
 
+
+
+if (Viscosity_Profile_Filled == NO) {
+  FARGO_SAFE(Fill_Viscosity_Profile());
+
+}
+
+
+if (Chi_Profile_Filled == NO) {
+    FARGO_SAFE(Fill_Chi_Profile());
+}
+
+
+
       // CFL condition is applied below ----------------------------------------
       MULTIFLUID(cfl());
+
+
+
 
       CflFluidsMin(); /*Fills StepTime with the " global min " of the
 			cfl, computed from each fluid.*/
@@ -380,7 +398,7 @@ OMEGAFRAME (which is used afterwards to build the initial Vx field. */
       dtemp+=dt;
       if(dtemp>DT)  dt = DT - (dtemp-dt); //updating dt
       //------------------------------------------------------------------------
-      
+//      printf("CFL cond\n");
       //------------------------------------------------------------------------
       /* We now compute the total density of the mesh. We need first
 	 reset an array and then fill it by adding the density of each
@@ -392,26 +410,28 @@ OMEGAFRAME (which is used afterwards to build the initial Vx field. */
 #ifdef COLLISIONPREDICTOR
       FARGO_SAFE(Collisions(0.5*dt, 0)); // 0 --> V is used and we update v_half.
 #endif
+
+
       
       MULTIFLUID(Sources(dt)); //v_half is used in the R.H.S
 
 #ifdef DRAGFORCE
       FARGO_SAFE(Collisions(dt, 1)); // 1 --> V_temp is used.
 #endif
-
+//      printf("collisions\n");
 #ifdef DUSTDIFFUSION
       FARGO_SAFE(DustDiffusion_Main(dt));
 #endif
-      
+//      printf("diffusion\n");
       MULTIFLUID(Transport(dt));
-
+//      printf("transport\n");
       PhysicalTime+=dt;
       Timestepcount++;
 
 #ifdef STOCKHOLM
       MULTIFLUID(StockholmBoundary(dt));
 #endif
-
+//    printf("stockholm\n");    
       //We apply comms and boundaries at the end of the step
       MULTIFLUID(FillGhosts(PrimitiveVariables()));
 

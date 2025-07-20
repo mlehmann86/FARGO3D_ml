@@ -52,12 +52,12 @@ PlanetHeating		No
 Resonance		0.5
 
 # Radial range for damping (in period-ratios).
-# Values smaller than one prevent damping.
+# Values smaller than one prevent damping. DEFAULT=1.15!!!!!!!!
 
-DampingZone 1.15
+DampingZone 1.03
 
 # Characteristic time for damping,
-# in units of the inverse of the local orbital frequency.
+# in units of the inverse of the local orbital frequency. DEFAULT=0.3!!!!!!!
 
 TauDamp 0.3
 

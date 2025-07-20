@@ -1,6 +1,7 @@
 # If you want your environment variables to have precedence
 # you must execute the makefile with the flag "-e" (e.g.: make -e).
 #------------------------OPTIONS FILE---------------------------------
+.SUFFIXES:
 
 SETUPSDIR=../setups
 BINDIR=../bin
@@ -12,6 +13,13 @@ SCRIPTSDIR=../scripts
 GIT_VERSION := $(shell git describe --abbrev=8 --dirty --always --tags 2>/dev/null)
 ARCH_CREATE := $(shell mkdir -p $(ARCHDIR))
 SHORTARCH := $(shell echo $(ARCHDIR) | sed -e 's|../||')
+
+ifneq (, $(shell which python3))
+	PYTHON := $(shell which python3)
+else
+	PYTHON := $(shell which python2)
+endif
+
 
 #------------------------OPTIONS FILE---------------------------------
 
@@ -90,7 +98,7 @@ endif
 include ${FARGO_OPT_FILE} #The name must not contain digits
 #--------------------FARGO_VARIABLES----------------------------------
 ifndef FARGO_ARCH
-FARGO_ARCH  = LINUX
+FARGO_ARCH  = DICOS_V100
 endif
 ifeq (-DGPU,${findstring -DGPU,${FARGO_OPT}})
 	FARGO_GPU   = 1
@@ -108,24 +116,144 @@ ifndef PYTHON_INCLUDE
 PYTHON_INCLUDE = /usr/include/python2.7
 endif
 #---------------------------------------------------------------------
-#LINUX PLATFORM (GENERIC, default)
-#FARGO_ARCH must be set to LINUX
-CC_LINUX      = gcc 
-SEQOPT_LINUX  = -O3 -ffast-math
-PARAOPT_LINUX = ${SEQOPT_LINUX}
-PARACC_LINUX  = mpicc
-LIBS_LINUX    = -lm
-ENVRANK_LINUX = OMPI_COMM_WORLD_LOCAL_RANK
-INC_LINUX     = 
-NVCC_LINUX    = nvcc
-CUDAOPT_LINUX = -O3 -w -arch=sm_61
-PARAINC_LINUX = 
-PARALIB_LINUX =
-CUDAINC_LINUX = -I${CUDA}/include/
-CUDALIB_LINUX = -L${CUDA}/lib64/  -lcudart
-CUDALIB_LINUX = -L${CUDA}/lib64/  -lcudart -lstdc++
-CXX_LINUX     = g++ -stdlib=libstdc++
-CXXPARA_LINUX = mpic++ -stdlib=libstdc++
+# CPU-ONLY BUILD (GCC + OpenMPI)
+CC_CPU       = gcc
+CXX_CPU      = g++
+SEQOPT_CPU   = -O3 -ffast-math -march=native
+PARACC_CPU   = mpicc
+CXXPARA_CPU  = mpic++
+PARAOPT_CPU  = ${SEQOPT_CPU}
+LIBS_CPU     = -lm
+ENVRANK_CPU  = OMPI_COMM_WORLD_LOCAL_RANK
+INC_CPU      =
+PARAINC_CPU  =
+PARALIB_CPU  =
+#---------------------------------------------------------------------
+#KOLONG PLATFORM (GCC + OpenMPI)
+#FARGO_ARCH must be set to KOLONG
+CC_KOLONG      = gcc
+SEQOPT_KOLONG  = -O3 -ffast-math
+PARAOPT_KOLONG = ${SEQOPT_KOLONG}
+PARACC_KOLONG  = mpicc
+LIBS_KOLONG    = -lm
+ENVRANK_KOLONG = OMPI_COMM_WORLD_LOCAL_RANK
+INC_KOLONG     =
+NVCC_KOLONG    = nvcc
+CUDAOPT_KOLONG = -O3 -w #-arch=sm_70
+PARAINC_KOLONG =
+PARALIB_KOLONG =
+CUDAINC_KOLONG = -I${CUDA_HOME}/include/
+CUDALIB_KOLONG = -L${CUDA_HOME}/lib64/ -lcudart -lstdc++
+CXX_KOLONG     = g++
+CXXPARA_KOLONG = mpic++
+#---------------------------------------------------------------------
+#GP or NGABUL PLATFORM (GENERIC, default)
+#FARGO_ARCH must be set to GP_NGABUL
+CC_GP_NGABUL      = gcc 
+SEQOPT_GP_NGABUL  = -O3 -ffast-math
+PARAOPT_GP_NGABUL = ${SEQOPT_GP_NGABUL}
+PARACC_GP_NGABUL  = mpicc
+LIBS_GP_NGABUL    = -lm
+ENVRANK_GP_NGABUL = OMPI_COMM_WORLD_LOCAL_RANK #for openmpi
+#ENVRANK_GP_NGABUL = PMI_RANK #for intel mpi
+INC_GP_NGABUL     = 
+NVCC_GP_NGABUL    = nvcc
+CUDAOPT_GP_NGABUL = -O3 -w #-arch=sm_70
+PARAINC_GP_NGABUL = 
+PARALIB_GP_NGABUL =
+CUDAINC_GP_NGABUL = -I${CUDA}/include/
+CUDALIB_GP_NGABUL = -L${CUDA}/lib64/  -lcudart
+CUDALIB_GP_NGABUL = -L${CUDA}/lib64/  -lcudart -lstdc++
+CXX_GP_NGABUL     = g++ -stdlib=libstdc++
+CXXPARA_GP_NGABUL = mpic++ -stdlib=libstdc++
+#---------------------------------------------------------------------
+# DICOS A100 GPU PLATFORM (GCC 11.5)
+# FARGO_ARCH must be set to DICOS_A100
+CC_DICOS_A100      = gcc
+SEQOPT_DICOS_A100  = -O3 -ffast-math
+# --- CORRECTED LINE ---
+# Explicitly add the CUDA include path for the C compiler.
+PARAOPT_DICOS_A100 = ${SEQOPT_DICOS_A100} -I${CUDA_HOME}/include/
+PARACC_DICOS_A100  = mpicc
+# --- CORRECTED LINE ---
+# Explicitly add the CUDA library path and runtime lib for the linker.
+LIBS_DICOS_A100    = -lm -L${CUDA_HOME}/lib64/ -lcudart -lstdc++
+ENVRANK_DICOS_A100 = OMPI_COMM_WORLD_LOCAL_RANK
+INC_DICOS_A100     =
+NVCC_DICOS_A100    = nvcc
+CUDAOPT_DICOS_A100 = -O3 -w -arch=sm_80
+PARAINC_DICOS_A100 =
+PARALIB_DICOS_A100 =
+CUDAINC_DICOS_A100 = -I${CUDA_HOME}/include/
+CUDALIB_DICOS_A100 = -L${CUDA_HOME}/lib64/ -lcudart -lstdc++
+CXX_DICOS_A100     = g++
+CXXPARA_DICOS_A100 = mpic++
+#---------------------------------------------------------------------
+# DICOS V100 GPU PLATFORM (NVHPC)
+# FARGO_ARCH must be set to DICOS_V100
+CC_DICOS_V100      = gcc
+SEQOPT_DICOS_V100  = -O3 -fast
+# This flag fixes the compilation of .c files
+PARAOPT_DICOS_V100 = ${SEQOPT_DICOS_V100} -cuda
+PARACC_DICOS_V100  = mpicc
+# --- CORRECTED LINE ---
+# Add the -cuda flag to the LIBS variable to fix the linking stage.
+LIBS_DICOS_V100    = -lm -cuda
+ENVRANK_DICOS_V100 = OMPI_COMM_WORLD_LOCAL_RANK
+INC_DICOS_V100     =
+NVCC_DICOS_V100    = nvcc
+CUDAOPT_DICOS_V100 = -O3 -w -arch=sm_70
+PARAINC_DICOS_V100 =
+PARALIB_DICOS_V100 =
+CUDAINC_DICOS_V100 = -I${CUDA_HOME}/include/
+CUDALIB_DICOS_V100 = -L${CUDA_HOME}/lib64/ -lcudart -lstdc++
+CXX_DICOS_V100     = g++
+CXXPARA_DICOS_V100 = mpic++
+#---------------------------------------------------------------------
+# DICOS_CPU PLATFORM (GCC for all DICOS CPU partitions)
+# FARGO_ARCH must be set to DICOS_CPU
+CC_DICOS_CPU      = gcc
+PARACC_DICOS_CPU  = mpicc
+SEQOPT_DICOS_CPU  = -O3 -w
+PARAOPT_DICOS_CPU = ${SEQOPT_DICOS_CPU}
+LIBS_DICOS_CPU    = -lm
+ENVRANK_DICOS_CPU = OMPI_COMM_WORLD_LOCAL_RANK
+INC_DICOS_CPU     = 
+PARAINC_DICOS_CPU = 
+PARALIB_DICOS_CPU =
+CXX_DICOS_CPU     = g++
+CXXPARA_DICOS_CPU = mpic++
+#---------------------------------------------------------------------
+# KAWAS CPU
+CC_KAWAS_CPU       = gcc
+CXX_KAWAS_CPU      = g++
+SEQOPT_KAWAS_CPU   = -O3 -ffast-math -march=native
+PARACC_KAWAS_CPU   = mpicc
+CXXPARA_KAWAS_CPU  = mpic++
+PARAOPT_KAWAS_CPU  = ${SEQOPT_KAWAS_CPU}
+LIBS_KAWAS_CPU     = -lm
+ENVRANK_KAWAS_CPU  = OMPI_COMM_WORLD_LOCAL_RANK
+INC_KAWAS_CPU      =
+PARAINC_KAWAS_CPU  =
+PARALIB_KAWAS_CPU  =
+#---------------------------------------------------------------------
+# KAWAS GPU PLATFORM (Intel Compiler Version from HPC Guide)
+# FARGO_ARCH must be set to KAWAS_GPU
+CC_KAWAS_GPU      = icc
+SEQOPT_KAWAS_GPU  = -O3 -fp-model fast
+PARAOPT_KAWAS_GPU = ${SEQOPT_KAWAS_GPU}
+PARACC_KAWAS_GPU  = mpicc
+LIBS_KAWAS_GPU    = -lm
+ENVRANK_KAWAS_GPU = OMPI_COMM_WORLD_LOCAL_RANK
+INC_KAWAS_GPU     =
+NVCC_KAWAS_GPU    = nvcc
+CUDAOPT_KAWAS_GPU = -O3 -w -arch=sm_80
+PARAINC_KAWAS_GPU =
+PARALIB_KAWAS_GPU =
+CUDAINC_KAWAS_GPU = -I/usr/local/cuda-11.8/include/
+CUDALIB_KAWAS_GPU = -L/usr/local/cuda-11.8/lib64/ -lcudart -lstdc++
+CXX_KAWAS_GPU     = icpc
+CXXPARA_KAWAS_GPU = mpicpc
 #---------------------------------------------------------------------
 #TAIWANIA (testing mpicuda)
 #FARGO_ARCH must be set to TWNIA
@@ -570,7 +698,7 @@ endif
 var.c: ${PARFILE} stdpar.par #$(VARFILE) default_variables.dat
 	@echo ""
 	@echo "Generating var.c file"
-	@python ${SCRIPTSDIR}/par.py $(PARFILE) ${STDDIR}/stdpar.par
+	@${PYTHON} ${SCRIPTSDIR}/par.py $(PARFILE) ${STDDIR}/stdpar.par
 
 ${SETUP}.units:
 	@touch ${SETUPSDIR}/${SETUP}/${SETUP}.units
@@ -578,7 +706,7 @@ ${SETUP}.units:
 rescale.c: ${PARFILE} ${SCRIPTSDIR}/unitparser.py ${STDDIR}/standard.units ${SETUP}.units
 	@echo ""
 	@echo "Generating rescale.c file"
-	@python ${SCRIPTSDIR}/unitparser.py ${SETUP}
+	@${PYTHON} ${SCRIPTSDIR}/unitparser.py ${SETUP}
 
 .PHONY: clean mrproper force
 gitversion: force
@@ -590,6 +718,7 @@ clean:
 	@echo "Everything has been cleaned"
 	@echo
 
+
 main.o: gitversion
 change_arch.o : change_arch.c ${SCRIPTSDIR}/bound_cpu.code ${SCRIPTSDIR}/bound_gpu.code
 	@echo CC $< "==>" $*.o
@@ -597,11 +726,11 @@ change_arch.o : change_arch.c ${SCRIPTSDIR}/bound_cpu.code ${SCRIPTSDIR}/bound_g
 
 ${SCRIPTSDIR}/bound_proto.code ${SCRIPTSDIR}/bound_cpu.code ${SCRIPTSDIR}/bound_gpu.code:
 	@echo "Generating bound_code files..."
-	@python ${SCRIPTSDIR}/bound_code.py ${SETUP} ${NFLUIDS}
+	@${PYTHON} ${SCRIPTSDIR}/bound_code.py ${SETUP} ${NFLUIDS}
 
 collisions.cu: collisions_template.cu ${GLOBAL}
 	@echo "PARSING collisions.cu"
-	@python ${SCRIPTSDIR}/collisions_gpu.py ${NFLUIDS}
+	@${PYTHON} ${SCRIPTSDIR}/collisions_gpu.py ${NFLUIDS}
 
 %_gpu.o : %.cu ${GLOBAL} #Rule: test_gpu.o is created from test.cu
 	@echo NVCC $< "==>" $*_gpu.o
@@ -610,7 +739,7 @@ collisions.cu: collisions_template.cu ${GLOBAL}
 
 %.cu: %.c
 	@echo C2CUDA $< "==>" $*.cu
-	@python ${SCRIPTSDIR}/c2cuda.py -i $< -o $*.cu -s ${SETUP}	
+	@${PYTHON} ${SCRIPTSDIR}/c2cuda.py -i $< -o $*.cu -s ${SETUP}	
 
 reduction_sum_device.o: reduction_sum_device.cu
 	@echo NVCC $< "==>" $*.o
@@ -621,6 +750,7 @@ reduction_min_device.o: reduction_min_device.cu
 	@echo NVCC $< "==>" $*.o
 	@/bin/cp -f $< $(ARCHDIR)
 	@${NVCC} $^ -c ${CUDAOPT} ${CUDAINC} ${INCLUDE}	${FARGO_OPT}
+
 
 
 # If HARDBOUNDARIES is set in the .opt file, boundaries are not created by the script
@@ -639,9 +769,11 @@ zmax_bound_%.o: zmax_bound_%.c ${GLOBAL}
 	@${COMPILER} zmax_bound_$*.c -c ${INCLUDE} ${OPTIONS} ${FARGO_OPT}
 
 ymin_bound_%.c ymax_bound_%.c zmin_bound_%.c zmax_bound_%.c: boundaries.txt centering.txt ${SETUPSDIR}/${SETUP}/$(SETUP).bound.% ${GLOBAL} ${BOUNDARIES_DEP}
-	@-python ${SCRIPTSDIR}/boundparser.py $^
+	@-${PYTHON} ${SCRIPTSDIR}/boundparser.py $^
 
 endif
+
+
 
 # You may remove the '@' sign in the instructions below if you need a verbose output
 %.o : %.c ${GLOBAL} ${SCRIPTSDIR}/bound_proto.code

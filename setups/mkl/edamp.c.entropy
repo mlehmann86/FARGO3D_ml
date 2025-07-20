@@ -1,0 +1,199 @@
+//<FLAGS>
+//#define __GPU
+//#define __NOPROTO
+//<\FLAGS>
+
+//<INCLUDES>
+#include "fargo3d.h"
+//<\INCLUDES>
+
+
+void Edamp_cpu(real dt) {
+
+//<USER_DEFINED>
+  INPUT(Energy);
+  OUTPUT(Energy);
+  INPUT(Density);
+  INPUT2D(Chi_profile);
+//<\USER_DEFINED>
+
+//<INTERNAL>
+  int i;
+  int j;
+  int k;
+  int ll;
+  real bigrad;
+  real Hg;
+  real R3;
+  real omk;
+  real cs;
+  real cs2;
+  real tauc;
+  real DeltaRin;
+  real DeltaRout;
+  real TaperRin;
+  real TaperRout;
+  real taucbcgas;
+  real betas;
+  real smallq;
+  real dr;
+  real dz;
+  real r;
+//<\INTERNAL>
+
+//<EXTERNAL>
+  real* e = Energy->field_cpu;
+  real* rho = Density->field_cpu;  
+  real* chi_profile = Chi_profile->field_cpu;
+  real beta = BETA;
+  real gam = GAMMA;
+  real r0 = R0;
+  real bigg = G;
+  real mstar = MSTAR;
+  real asp = ASPECTRATIO;
+  real flar = FLARINGINDEX;
+  real a = APAR;
+  real b = BPAR;
+  real beta0 = BETA0PAR;
+  real beta1 = BETA1PAR;
+  real ymin_val = YMIN;
+  real ymax_val = YMAX;
+  real bnd = BETATAPER;
+  int pitch = Pitch_cpu;
+  int stride = Stride_cpu;
+  int size_x = Nx;
+  int size_y = Ny + 2 * NGHY;
+  int size_z = Nz + 2 * NGHZ;
+  int pitch2d = Pitch2D; 
+//<\EXTERNAL>
+
+//<CONSTANT>
+// real ymin(Ny+2*NGHY+1);
+// real zmin(Nz+2*NGHZ+1);   
+//<\CONSTANT>
+
+//<MAIN_LOOP>
+
+  i = j = k = 0;
+
+  for (k=0; k<size_z; k++) {
+    for (j=0; j<size_y; j++) {
+      for (i=0; i<size_x; i++) {
+//<#>
+        ll = i + j * pitch + k * stride;
+#ifdef SPHERICAL
+        bigrad = ymed(j) * sin(zmed(k));
+#endif
+#ifdef CYLINDRICAL
+        bigrad = ymed(j);
+#endif
+
+        Hg = asp * pow(bigrad / r0, flar) * bigrad;
+        R3 = bigrad * bigrad * bigrad;
+        omk = sqrt(bigg * mstar / R3);
+        cs = omk * Hg;
+        cs2 = cs * cs;
+        tauc = beta / omk;
+
+#ifdef BETAZ
+        smallq = 1.0 - 2.0 * flar;
+        betas = beta0 * exp(zmed(k) * zmed(k) / (a * a * Hg * Hg));
+        betas += beta1 * exp(-zmed(k) * zmed(k) / (b * b * Hg * Hg));
+        betas *= pow((bigrad / r0), (smallq + 1.0) / 2.0);
+        tauc = betas / omk;
+#endif
+
+#ifdef BTAPER
+        DeltaRin  = ymin_val - R0;
+        DeltaRout = ymax_val - R0;
+        TaperRin  = ymin_val - bnd * DeltaRin;
+        TaperRout = ymax_val - bnd * DeltaRout;
+        taucbcgas = 0.125;
+        tauc = beta + (beta - taucbcgas) * tanh(100.0 * (bigrad - TaperRin));
+        tauc = tauc - (beta - taucbcgas) * tanh(100.0 * (bigrad - TaperRout));
+        tauc = 0.5 * (tauc - beta) + taucbcgas;
+        tauc = tauc / omk;
+#endif
+
+#ifdef THERMALDIFFUSION
+        
+        // This 'if' block is the DEFINITIVE FIX. It protects the sensitive
+        // Laplacian calculation, ensuring it only runs on physical (non-ghost) cells
+        // where all neighbors are valid.
+
+        int Ny = size_y - 2 * NGHY;
+        int Nz = size_z - 2 * NGHZ;
+        if (j >= NGHY && j < Ny + NGHY && k >= NGHZ && k < Nz + NGHZ) {
+            
+            real lap_r = 0.0;
+            real lap_phi = 0.0;
+            real lap_z = 0.0;
+            real laplacian_S = 0.0;
+            
+            dr = ymed(j+1) - ymed(j);
+#ifdef Z
+            dz = zmed(k+1) - zmed(k);
+#endif
+#ifdef X
+            int Nx_loc = size_x;
+            real dphi = (real)(2.0 * M_PI / (double) Nx_loc);
+#endif
+            real r = ymed(j);
+
+            // Corrected indexing for the 2D chi_profile array using the l2D macro
+            real chi = chi_profile[l2D];
+
+            real S_c  = log(((gam - 1.0) * e[ll]) / pow(rho[ll], gam));
+            real S_rp = log(((gam - 1.0) * e[ll + pitch]) / pow(rho[ll + pitch], gam));
+            real S_rm = log(((gam - 1.0) * e[ll - pitch]) / pow(rho[ll - pitch], gam));
+
+#ifdef Z
+            real S_zp = log(((gam - 1.0) * e[ll + stride]) / pow(rho[ll + stride], gam));
+            real S_zm = log(((gam - 1.0) * e[ll - stride]) / pow(rho[ll - stride], gam));
+#endif
+
+#ifdef X
+            int ip1 = (i + 1) % Nx_loc;
+            int im1 = (i - 1 + Nx_loc) % Nx_loc;
+            int l_ip1 = ip1 + j * pitch + k * stride;
+            int l_im1 = im1 + j * pitch + k * stride;
+            real S_pp = log(((gam - 1.0) * e[l_ip1]) / pow(rho[l_ip1], gam));
+            real S_pm = log(((gam - 1.0) * e[l_im1]) / pow(rho[l_im1], gam));
+#endif
+
+            real dS_dr_plus  = (S_rp - S_c) / dr;
+            real dS_dr_minus = (S_c - S_rm) / dr;
+            lap_r = (1.0 / r) * ((r + 0.5 * dr) * dS_dr_plus - (r - 0.5 * dr) * dS_dr_minus) / dr;
+
+#ifdef X
+            lap_phi = (S_pp - 2.0 * S_c + S_pm) / (dphi * dphi) / (r * r);
+#else
+            lap_phi = 0.0;
+#endif
+
+#ifdef Z
+            lap_z = (S_zp - 2.0 * S_c + S_zm) / (dz * dz);
+#else
+            lap_z = 0.0;
+#endif
+
+            laplacian_S = lap_r + lap_phi + lap_z;
+
+            real update_factor = (1.0 + 0.5 * dt * chi * laplacian_S)
+                       / (1.0 - 0.5 * dt * chi * laplacian_S);
+            e[ll] *= update_factor;
+        }
+#endif
+#ifdef BETACOOLING
+        // This is the beta-cooling part. It runs for ALL cells (physical and ghost)
+        // because the outer loop covers the full domain.
+        e[ll] *= 1.0 / (1.0 + dt / tauc);
+        e[ll] += rho[ll] * cs2 / ((1.0 + tauc / dt) * (gam - 1.0));
+#endif
+
+//<\#>
+      }
+    }
+  }
+//<\MAIN_LOOP>
+}

@@ -1,0 +1,140 @@
+//<FLAGS>
+//#define __GPU
+//#define __NOPROTO
+//<\FLAGS>
+
+//<INCLUDES>
+#include "fargo3d.h"
+//<\INCLUDES>
+
+void Edamp_cpu(real dt) {
+
+//<USER_DEFINED>
+  INPUT(Energy);
+  OUTPUT(Energy);
+//<\USER_DEFINED>
+
+//<INTERNAL>
+  int i;
+  int j;
+  int k;
+  real bigrad;
+  real Hg;
+  real R3;
+  real omk;
+  real cs;
+  real e0;
+  real H0;
+  real rhog;
+  real cs2;
+  real bump;
+  real vert;
+  real tauc;
+  real DeltaR;
+  real DeltaRin;
+  real DeltaRout;
+  real TaperRin;
+  real TaperRout;
+  real taper;
+//<\INTERNAL>
+
+//<EXTERNAL>
+  real* e = Energy->field_cpu;
+  real* rho = Density->field_cpu;
+  real beta = BETA;
+  int pitch  = Pitch_cpu;
+  int stride = Stride_cpu;
+  int size_x = Nx;
+////  int size_x = XIP; 
+  int size_y = Ny+2*NGHY;
+  int size_z = Nz+2*NGHZ;
+  real r0 = R0;
+  real bigg = G;
+  real mstar= MSTAR;
+  real asp = ASPECTRATIO;
+  real flar =  FLARINGINDEX;
+  real sig0 = SIGMA0;
+  real ss = SIGMASLOPE;
+  real ba = BUMP_AMP;
+  real bw = BUMP_WIDTH;
+  real gam = GAMMA;
+  real ymin = YMIN;
+  real ymax = YMAX;
+  real btaper = BETATAPER;
+//<\EXTERNAL>
+
+
+
+//<CONSTANT>
+// real ymin(Ny+2*NGHY+1);
+// real zmin(Nz+2*NGHZ+1);
+//<\CONSTANT>
+
+
+
+
+//	  masterprint ("Calling Edamp");
+
+//<MAIN_LOOP>
+  for (k=0; k<size_z; k++) {
+    for (j=0; j<size_y; j++) {
+      for (i=0; i<size_x; i++) {
+//<#>
+
+
+
+
+
+	bigrad = ymed(j)*sin(zmed(k));
+
+         Hg = asp*pow(bigrad/r0,flar)*bigrad;
+
+         R3 = bigrad*bigrad*bigrad;
+
+         omk = sqrt(bigg*mstar/R3);
+         cs    = omk*Hg;
+         cs2= cs*cs;
+
+	 tauc=beta/omk; //this is the spatially variable cooling time corresponding to constant beta cooling
+
+/////////////////////////////////////////////////////////////////////
+//Artificially raise cooling time near boundaries to damp VSI there.
+//  DeltaRin  = YMIN - r0;
+//  DeltaRout = YMAX - r0;
+//  TaperRin  = btaper*DeltaRin;
+//  TaperRout = btaper*DeltaRout; 
+
+
+//       DeltaR = bigrad - r0;
+//       if(DeltaR <= TaperRin){
+//        taper=pow( (DeltaR-DeltaRin)/(TaperRin - DeltaRin), 4.0);
+//       } else if(DeltaR >= TaperRout){
+//       taper=pow( (DeltaR-DeltaRout)/(TaperRout - DeltaRout), 4.0);
+//       } else {
+//        taper = 1.0;
+//       }
+
+//       taper=(taper+0.01)/(1.+0.01);
+//       taper=1./taper;
+//         tauc *=taper;
+//////////////////////////////////////////////////////////////////////
+
+
+
+          e[l] *= 1.0/(1.0+dt/tauc);
+         
+          e[l] += rho[l]*cs2/((1.+tauc/dt)*(gam-1.));
+
+
+
+
+
+//<\#>
+      }
+    }
+  }
+//<\MAIN_LOOP>
+
+
+
+}

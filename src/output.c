@@ -149,7 +149,12 @@ void WriteTorqueAndWork(int TimeStep, int n) {
   vx = Sys->vx[n];
   vy = Sys->vy[n];
   vz = Sys->vz[n];
+#ifdef UNSTRAT
+  r = sqrt(x*x + y*y);
+#else
   r = sqrt(x*x + y*y + z*z);
+#endif
+
   
   if (ROCHESMOOTHING != 0)
     smoothing = r*pow(m/3./MSTAR,1./3.)*ROCHESMOOTHING;

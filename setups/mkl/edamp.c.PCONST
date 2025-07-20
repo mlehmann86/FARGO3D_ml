@@ -1,0 +1,130 @@
+//<FLAGS>
+//#define __GPU
+//#define __NOPROTO
+//<\FLAGS>
+
+//<INCLUDES>
+#include "fargo3d.h"
+//<\INCLUDES>
+
+void Edamp_cpu(real dt) {
+
+//<USER_DEFINED>
+  INPUT(Energy);
+  OUTPUT(Energy);
+//<\USER_DEFINED>
+
+//<INTERNAL>
+  int i;
+  int j;
+  int k;
+  real bigrad;
+  real z;
+  real Hg;
+  real R3;
+  real omk;
+  real cs;
+  real e0;
+  real H0;
+  real rhog;
+  real cs2;
+  real bump;
+  real vert;
+  real tauc;
+  real DeltaR;
+  real DeltaRin;
+  real DeltaRout;
+  real TaperRin;
+  real TaperRout;
+  real taper;
+//<\INTERNAL>
+
+//<EXTERNAL>
+  real* e = Energy->field_cpu;
+  real* rho = Density->field_cpu;
+  real beta = BETA;
+  int pitch  = Pitch_cpu;
+  int stride = Stride_cpu;
+  int size_x = Nx;
+////  int size_x = XIP; 
+  int size_y = Ny+2*NGHY;
+  int size_z = Nz+2*NGHZ;
+  real r0 = R0;
+  real bigg = G;
+  real mstar= MSTAR;
+  real asp = ASPECTRATIO;
+  real flar =  FLARINGINDEX;
+  real sig0 = SIGMA0;
+  real ss = SIGMASLOPE;
+  real ba = BUMP_AMP;
+  real bw = BUMP_WIDTH;
+  real gam = GAMMA;
+  real ymin = YMIN;
+  real ymax = YMAX;
+  real btaper = BETATAPER;
+//<\EXTERNAL>
+
+
+
+//<CONSTANT>
+// real ymin(Ny+2*NGHY+1);
+// real zmin(Nz+2*NGHZ+1);
+//<\CONSTANT>
+
+
+
+
+//	  masterprint ("Calling Edamp");
+
+//<MAIN_LOOP>
+  for (k=0; k<size_z; k++) {
+    for (j=0; j<size_y; j++) {
+      for (i=0; i<size_x; i++) {
+//<#>
+
+
+
+
+
+	bigrad = ymed(j)*sin(zmed(k));        
+
+         Hg = asp*pow(bigrad/r0,flar)*bigrad;
+
+         R3 = bigrad*bigrad*bigrad;
+
+         omk = sqrt(bigg*mstar/R3);
+         cs    = omk*Hg;
+         cs2= cs*cs;
+
+	 tauc=beta/omk; //this is the spatially variable cooling time corresponding to constant beta cooling
+
+/////////////////////////////////////////////////////////////////////
+      z  = ymed(j)*cos(Zmed(k));
+
+      bump  = 1.0 + ba*exp(-0.5*pow((bigrad-r0)/(bw*asp*r0),2.0));
+    
+      rhog = sig0*pow(bigrad/r0,-ss)/sqrt(2.0*M_PI)/Hg; //midplane gas density 
+      rhog*= bump; //gas surface density bump 
+      vert = (bigg*mstar/cs2)*(1.0/ymed(j) - 1.0/bigrad); 
+      rhog*= exp(vert); 
+//////////////////////////////////////////////////////////////////////
+
+
+
+          e[l] *= 1.0/(1.0+dt/tauc);
+         
+       //   e[l] += rho[l]*cs2/((1.+tauc/dt)*(gam-1.));
+
+            e[l] += rhog*cs2/((1.+tauc/dt)*(gam-1.));
+
+
+
+//<\#>
+      }
+    }
+  }
+//<\MAIN_LOOP>
+
+
+
+}
